@@ -37,12 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $failed_attempts = $user['failed_attempts'] + 1;
 
-            if ($failed_attempts >= 10) {
+            if ($failed_attempts == 10) {  
                 $lock_until = (new DateTime())->modify('+10 minutes')->format('Y-m-d H:i:s');
                 $stmt = $conn->prepare("UPDATE tb_pengguna SET failed_attempts = ?, account_locked_until = ? WHERE email = ?");
-                $stmt->bind_param("sss", $failed_attempts, $lock_until, $username);
-
-                $email = $user['email'];
+                $stmt->bind_param("iss", $failed_attempts, $lock_until, $email);  
             } else {
                 $stmt = $conn->prepare("UPDATE tb_pengguna SET failed_attempts = ? WHERE email = ?");
                 $stmt->bind_param("is", $failed_attempts, $email);

@@ -76,4 +76,8 @@
     font-size: 1rem;
     margin-top: 1rem;
     text-align: center;
+    padding: 10px;
+    background-color: #bee7ad; 
+    border-radius: 4px;
 }
+

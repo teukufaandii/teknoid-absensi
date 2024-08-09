@@ -11,22 +11,22 @@
 </head>
 
 <body class="flex justify-center items-center h-screen w-screen bg-gray-100">
-    <div class="flex w-full h-full max-w-none bg-white shadow-lg">
-        <div class="flex flex-col justify-center w-1/2 p-8">
-            <form class="max-w-md mx-auto" method="POST" action="../db/routes/userLogin.php">
+    <div class="flex flex-col md:flex-row w-full h-full max-w-none bg-white shadow-lg">
+        <div class="flex flex-col justify-center w-full md:w-1/2 p-8">
+            <form class="max-w-md w-full mx-auto" method="POST" action="../db/routes/userLogin.php">
                 <h2 class="text-3xl font-bold text-center mb-6">Login Sistem Absensi</h2>
-                <img src="../../public/logo.png" alt="Logo" class="mb-6 m-auto w-40 h-40 justify-center object-cover items-center">
+                <img src="../../public/logo.png" alt="Logo" class="mb-6 m-auto w-40 h-40 object-cover">
                 
                 <!-- Display success message -->
                 <?php if (isset($_GET['success']) && $_GET['success'] === 'password_reset'): ?>
-                    <div class="success-message">
+                    <div class="success-message mb-4 text-green-600">
                         Reset password berhasil, silakan input ulang email dan password Anda.
                     </div>
                 <?php endif; ?>
                 
                 <!-- Display error message -->
                 <?php if (isset($_GET['error'])): ?>
-                    <div class="error-message">
+                    <div class="error-message mb-4 text-red-600">
                         <?php
                         if ($_GET['error'] === 'locked') {
                             echo 'Akun Anda telah dibekukan selama 10 menit karena terlalu banyak upaya login yang gagal.';
@@ -56,8 +56,11 @@
                 <button type="submit" class="w-full bg-gray-800 text-white py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">Masuk</button>
             </form>
         </div>
-        <div class="flex flex-col items-center justify-center w-1/2 bg-gray-200 p-8">
-            <img src="../../public/loginPage.png" alt="Logo" class="mb-8 w-90 h-90 object-cover">
+        <div class="hidden md:flex flex-col items-center justify-center w-1/2 bg-gray-200 p-8">
+            <img src="../../public/loginPage.png" alt="Login Page" class="mb-8 w-90 h-90 object-cover">
+            <p class="mt-4 text-center text-gray-600">&copy; 2024 TeknoGenius. All rights reserved.</p>
+        </div>
+        <div class="md:hidden flex flex-col items-center justify-center w-full bg-gray-200 p-8">
             <p class="mt-4 text-center text-gray-600">&copy; 2024 TeknoGenius. All rights reserved.</p>
         </div>
     </div>

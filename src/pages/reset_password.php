@@ -3,6 +3,9 @@ session_start();
 
 include '../db/db_connect.php';
 
+$token = null;
+
+// Check if 'token' parameter is present in the URL
 if (isset($_GET['token'])) {
     $token = mysqli_real_escape_string($conn, $_GET['token']);
     $query = "SELECT email FROM password_resets WHERE token = '$token' AND expires_at >= '".date("U")."'";
@@ -12,7 +15,7 @@ if (isset($_GET['token'])) {
         $row = mysqli_fetch_assoc($result);
         $email = $row['email'];
     } else {
-        header("Location: ../../pages/forgot.php?error=invalid_token");
+        header("Location: ../../src/pages/forgot.php?error=invalid_token");
         exit();
     }
 } else {
@@ -37,7 +40,7 @@ if (isset($_GET['token'])) {
 <body class="flex justify-center items-center h-screen w-screen bg-gray-100">
     <div class="flex w-full h-full max-w-none bg-white shadow-lg">
         <div class="flex flex-col justify-center w-1/2 p-8">
-            <form class="max-w-md mx-auto" method="POST" action="../db/routes/userResetPass.php">
+            <form class="max-w-md w-full mx-auto" method="POST" action="../db/routes/userResetPass.php">
                 <h2 class="text-3xl font-bold text-center mb-6">Reset Kata Sandi</h2>
                 <img src="../../public/logo.png" alt="Logo" class="mb-6 m-auto w-40 h-40 justify-center object-cover items-center">
 
@@ -62,6 +65,9 @@ if (isset($_GET['token'])) {
                         <label for="new_password">Kata Sandi Baru</label>
                         <i id="toggleNewPassword" class="fas fa-eye"></i>
                     </div>
+                    <div id="passwordWarning" class="warning-message hidden">
+                        Sandi harus minimal 8 karakter.
+                    </div>
                 </div>
 
                 <div class="mb-4 relative">
@@ -85,6 +91,7 @@ if (isset($_GET['token'])) {
         document.addEventListener('DOMContentLoaded', () => {
             const toggleNewPassword = document.getElementById('toggleNewPassword');
             const newPasswordField = document.getElementById('new_password');
+            const passwordWarning = document.getElementById('passwordWarning');
             
             const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
             const confirmPasswordField = document.getElementById('confirm_password');
@@ -100,6 +107,15 @@ if (isset($_GET['token'])) {
 
             togglePasswordVisibility(toggleNewPassword, newPasswordField);
             togglePasswordVisibility(toggleConfirmPassword, confirmPasswordField);
+
+            // Live validation for password length
+            newPasswordField.addEventListener('input', () => {
+                if (newPasswordField.value.length < 8) {
+                    passwordWarning.classList.remove('hidden');
+                } else {
+                    passwordWarning.classList.add('hidden');
+                }
+            });
         });
     </script>
 </body>

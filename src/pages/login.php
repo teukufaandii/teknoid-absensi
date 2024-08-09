@@ -8,21 +8,22 @@
     <link rel="icon" href="../../public/logo.png">
     <link rel="stylesheet" href="./css/login.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <style>
-        .error-message {
-            color: red;
-            font-size: 1rem;
-            margin-top: 1rem;
-            text-align: center;
-        }
-    </style>
 </head>
+
 <body class="flex justify-center items-center h-screen w-screen bg-gray-100">
     <div class="flex w-full h-full max-w-none bg-white shadow-lg">
         <div class="flex flex-col justify-center w-1/2 p-8">
-            <form class="max-w-md mx-auto" method="POST" action="../db/routes/user.php">
+            <form class="max-w-md mx-auto" method="POST" action="../db/routes/userLogin.php">
                 <h2 class="text-3xl font-bold text-center mb-6">Login Sistem Absensi</h2>
                 <img src="../../public/logo.png" alt="Logo" class="mb-6 m-auto w-40 h-40 justify-center object-cover items-center">
+                
+                <!-- Display success message -->
+                <?php if (isset($_GET['success']) && $_GET['success'] === 'password_reset'): ?>
+                    <div class="success-message">
+                        Reset password berhasil, silakan input ulang email dan password Anda.
+                    </div>
+                <?php endif; ?>
+                
                 <!-- Display error message -->
                 <?php if (isset($_GET['error'])): ?>
                     <div class="error-message">
@@ -30,15 +31,16 @@
                         if ($_GET['error'] === 'locked') {
                             echo 'Akun Anda telah dibekukan selama 10 menit karena terlalu banyak upaya login yang gagal.';
                         } else {
-                            echo 'Nama pengguna atau kata sandi salah.';
+                            echo 'Email pengguna atau kata sandi salah.';
                         }
                         ?>
                     </div>
                 <?php endif; ?>
+                
                 <div class="mb-4 relative">
                     <div class="floating-placeholder">
-                        <input type="text" id="username" name="username" class="floating-input" placeholder=" " required>
-                        <label for="username">Nama pengguna</label>
+                        <input type="email" id="email" name="email" class="floating-input" placeholder="" required>
+                        <label for="email">Email</label>
                     </div>
                 </div>
                 <div class="mb-4 relative password-wrapper">
@@ -49,7 +51,7 @@
                     </div>
                 </div>
                 <div class="flex justify-end items-center mb-4">
-                    <a href="#" class="text-sm text-blue-500 hover:underline">Lupa kata sandi?</a>
+                    <a href="./forgot.php" class="text-sm text-blue-500 hover:underline">Lupa kata sandi?</a>
                 </div>
                 <button type="submit" class="w-full bg-gray-800 text-white py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">Masuk</button>
             </form>

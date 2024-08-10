@@ -37,7 +37,7 @@ Follow these steps to set up the project on your local machine:
 
 1. **Clone the Repository**: Start by cloning the repository into your XAMPP `htdocs` folder:
     ```bash
-    git clone https://github.com/yourusername/teknoid-absensi.git
+    git clone https://github.com/teukufaandii/teknoid-absensi.git
     ```
 
 2. **Open the Project in VSCode or Another IDE**: Navigate to the project folder and open it in Visual Studio Code (VSCode) or your preferred IDE:

@@ -17,7 +17,7 @@
         </h1>
 
 
-        <img src="/public/logo.png" alt="Logo ITB Ahmad Dahlan" class="mx-auto mb-6 w-36 h-36">
+        <img src="./public/logo.png" alt="Logo ITB Ahmad Dahlan" class="mx-auto mb-6 w-36 h-36">
 
         <h2 class="text-xl font-medium text-gray-600 mb-8">Pilih Modul</h2>
 
@@ -28,7 +28,7 @@
                 <span>Surat Menyurat</span>
             </a>
 
-            <a href="/src/pages/login.php" class="flex flex-col items-center bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl px-8 py-6 shadow-lg transform hover:scale-105 transition-transform w-full">
+            <a href="src/pages/login.php" class="flex flex-col items-center bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl px-8 py-6 shadow-lg transform hover:scale-105 transition-transform w-full">
                 <i class="fas fa-calendar fa-2x mb-2"></i> <!-- Font Awesome Calendar Icon -->
                 <span>Absensi</span>
             </a>

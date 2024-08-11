@@ -117,6 +117,16 @@ if (isset($_GET['token'])) {
                 }
             });
         });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const url = new URL(window.location);
+            
+            if (url.searchParams.has('message') || url.searchParams.has('error')) {
+                url.searchParams.delete('message');
+                url.searchParams.delete('error');
+                window.history.replaceState({}, document.title, url.pathname);
+            }
+        });
     </script>
 </body>
 </html>

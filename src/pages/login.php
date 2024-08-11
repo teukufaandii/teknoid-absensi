@@ -17,14 +17,12 @@
                 <h2 class="text-3xl font-bold text-center mb-6">Login Sistem Absensi</h2>
                 <img src="../../public/logo.png" alt="Logo" class="mb-6 m-auto w-40 h-40 object-cover">
                 
-                <!-- Display success message -->
                 <?php if (isset($_GET['success']) && $_GET['success'] === 'password_reset'): ?>
                     <div class="success-message mb-4 text-green-600">
                         Reset password berhasil, silakan input ulang email dan password Anda.
                     </div>
                 <?php endif; ?>
                 
-                <!-- Display error message -->
                 <?php if (isset($_GET['error'])): ?>
                     <div class="error-message mb-4 text-red-600">
                         <?php
@@ -74,6 +72,16 @@
             passwordField.setAttribute('type', type);
             togglePassword.classList.toggle('fa-eye');
             togglePassword.classList.toggle('fa-eye-slash');
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const url = new URL(window.location);
+            
+            if (url.searchParams.has('error') || url.searchParams.has('success')) {
+                url.searchParams.delete('error');
+                url.searchParams.delete('success');
+                window.history.replaceState({}, document.title, url.pathname);
+            }
         });
     </script>
 </body>

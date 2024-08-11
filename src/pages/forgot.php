@@ -42,7 +42,7 @@
                         <label for="email">Masukkan Email Anda</label>
                     </div>
                 </div>
-                <button type="submit" class="form-button submit-button">Submit</button>
+                <button type="submit" class="form-button submit-button">Kirim</button>
 
                 <!-- Back to Login Button -->
                 <div class="mb-4">
@@ -57,5 +57,16 @@
             <p class="mt-4 text-center text-gray-600">&copy; 2024 TeknoGenius. All rights reserved.</p>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const url = new URL(window.location);
+            
+            if (url.searchParams.has('message') || url.searchParams.has('error')) {
+                url.searchParams.delete('message');
+                url.searchParams.delete('error');
+                window.history.replaceState({}, document.title, url.pathname);
+            }
+        });
+    </script>
 </body>
 </html>

@@ -37,26 +37,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $delete_query = "DELETE FROM password_resets WHERE email = '$email'";
                 mysqli_query($conn, $delete_query);
 
-                // Password reset successful, redirect to login page with success message
                 header("Location: ../../pages/login.php?success=password_reset");
                 exit();
             } else {
-                // Database update failed, show an error
                 header("Location: ../../pages/reset_password.php?token=$token&error=update_failed");
                 exit();
             }
         } else {
-            // Token is invalid or expired
             header("Location: ../../src/pages/forgot.php?error=invalid_token");
             exit();
         }
     } else {
-        // Redirect back if required data is not set
         header("Location: ../../pages/reset_password.php?error=missing_data");
         exit();
     }
 } else {
-    // Invalid request method
     header("Location: ../../pages/forgot.php");
     exit();
 }

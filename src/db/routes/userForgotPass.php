@@ -11,6 +11,12 @@ use PHPMailer\PHPMailer\Exception;
 
 require '../../../vendor/autoload.php';
 
+// Load environment variables
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');
+$dotenv->load();
+
+require '../../../vendor/autoload.php';
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
 
@@ -20,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (mysqli_num_rows($result) > 0) {
         // Email exists, generate a unique token
-        $token = bin2hex(random_bytes(50)); // 100 character token
+        $token = bin2hex(random_bytes(50)); 
         $expires = date("U") + 3600; // 1 hour expiration
 
         // Insert token into the database
@@ -35,8 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail->isSMTP();                                            // Send using SMTP
             $mail->Host       = 'smtp.gmail.com';                 // Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-            $mail->Username   = 'itbad.teknoid@gmail.com';               // SMTP username
-            $mail->Password   = 'eexs givp wsbe dgmx';                        // SMTP password
+            $mail->Username   = $_ENV['EMAIL_USER'];                       // SMTP username
+            $mail->Password   = $_ENV['EMAIL_PASS'];                               // SMTP password                        
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption, `PHPMailer::ENCRYPTION_SMTPS` encouraged
             $mail->Port       = 587;                                    // TCP port to connect to
 
@@ -45,11 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail->addAddress($email);                                  // Add a recipient
 
             // Content
-            $resetLink = "http://localhost:8000/src/pages/reset_password.php?token=$token";
+            $resetLink = "http://localhost/teknoid-absensi/src/pages/reset_password.php?token=$token";
             $mail->isHTML(true);                                        
             $mail->Subject = 'Password Reset Request';
             $mail->Body    = "You requested a password reset. Click the link below to reset your password:<br><br>
-                              <a href='$resetLink'>$resetLink</a><br><br>
+                              <a style='color: blue; background-color: white; padding: 10px; border-radius: 5px;' href='$resetLink'>$resetLink</a><br><br>
                               If you did not request a password reset, please ignore this email.";
 
             $mail->send();

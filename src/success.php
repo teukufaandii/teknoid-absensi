@@ -25,12 +25,12 @@
 </head>
 <body class="flex justify-center items-center h-screen w-screen bg-gray-100">
     <div class="flex flex-col justify-center items-center w-full max-w-md p-6 bg-white shadow-lg rounded-lg overflow-hidden relative animate-fade-in" id="successNotification">
-    <div class="text-center mb-4">
-        <i class="fas fa-check-circle text-green-500 text-5xl"></i>
+        <div class="text-center mb-4">
+            <i class="fas fa-check-circle text-green-500 text-5xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold mb-2">Login Berhasil!</h2>
+        <p class="text-gray-700 mb-4">Selamat datang! Anda telah berhasil masuk ke sistem.</p>
     </div>
-    <h2 class="text-2xl font-bold mb-2">Login Berhasil!</h2>
-    <p class="text-gray-700 mb-4">Selamat datang! Anda telah berhasil masuk ke sistem.</p>
-</div>
 
     <script>
         setTimeout(() => {

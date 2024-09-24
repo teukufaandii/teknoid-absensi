@@ -7,7 +7,14 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        customFont: ['"Poppins"', 'sans-serif'],
+        Poppins: ['Poppins', 'sans-serif'],
+      },
+      colors: {
+        purpleNavbar: '#8C85FF',
+        purpleNavbarHover: '#675EFF', 
+        dashboardBoxBlue: '#6A8DE5',
+        dashboardBoxPurple: '#A062E0',
+        mainBgColor: '#EFEFEF',
       },
     },
   },

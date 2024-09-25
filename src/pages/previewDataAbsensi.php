@@ -32,7 +32,7 @@ $token = $_SESSION['token'];
 </head>
 
 <body>
-    <div class="flex flex-row">
+    <div class="flex flex-row h-screen">
       <!-- Side Navigation -->
       <?php include('navbar/sidenav.php') ?>
 
@@ -41,14 +41,9 @@ $token = $_SESSION['token'];
           <?php include('navbar/topnav.php') ?>
 
           <!-- Main Content -->
-          <main class="flex-1 p-6 bg-mainBgColor">
-              <h1 class="text-3xl border-b py-2 font-Poppins font-semibold">Data Pegawai</h1>
-              <a href="">
-                <button class="bg-purpleNavbar text-white px-4 py-2 mt-5 rounded-xl text-base font-medium hover:bg-gray-400">
-                  Tambah <i class="fa-solid fa-circle-plus"></i>
-                </button>
-              </a>
-                          <?php
+          <main class="flex-1 h-full p-6 bg-mainBgColor">
+              <h1 class="text-3xl border-b py-2 font-Poppins font-semibold">Preview Data Absensi <?php echo $username ?></h1>
+                              <?php
                                   $conn = mysqli_connect("localhost", "root", "", "db_absensi");
                                   if ($conn-> connect_error) {
                                   }
@@ -62,7 +57,7 @@ $token = $_SESSION['token'];
                                   $nr_of_rows = $records->num_rows;
 
                                   // kalkulasi nomor per halaman
-                                    $pages = ceil($nr_of_rows / $rows_per_page);
+                                  $pages = ceil($nr_of_rows / $rows_per_page);
 
                                   // start point
                                   if(isset($_GET['page-nr'])){
@@ -74,8 +69,9 @@ $token = $_SESSION['token'];
                                   $stmt=$conn->prepare("SELECT * FROM  tb_pengguna LIMIT $start, $rows_per_page");
                                   $stmt->execute();
                                   $result = $stmt->get_result();
-                          ?>
-                  <div class="overflow-x-auto mt-4">
+                              ?>
+                                                          
+                                                          <div class="overflow-x-auto mt-4">
                     <table class="min-w-full bg-white border rounded-lg shadow-md">
                       <thead>
                         <tr class="bg-purpleNavbar text-white rounded-t-lg">
@@ -93,7 +89,7 @@ $token = $_SESSION['token'];
                           <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
                           <td class="px-6 py-2 text-center">Anomali</td>
                           <td class="px-6 py-2 text-center">
-                              <a href="editDataPegawai.php">
+                              <a href="editDataRekap.php">
                                   <button class="bg-purpleNavbar text-white px-8 py-2 rounded-full hover:bg-purpleNavbarHover transition">Lihat</button>
                               <a>
                           </td>
@@ -104,7 +100,7 @@ $token = $_SESSION['token'];
                           <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
                           <td class="px-6 py-2 text-center">Anomali</td>
                           <td class="px-6 py-2 text-center">
-                              <a href="editDataPegawai.php">
+                              <a href="editDataRekap.php">
                                   <button class="bg-purpleNavbar text-white px-8 py-2 rounded-full hover:bg-purpleNavbarHover transition">Lihat</button>
                               <a>
                           </td>
@@ -115,7 +111,7 @@ $token = $_SESSION['token'];
                           <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
                           <td class="px-6 py-2 text-center">Anomali</td>
                           <td class="px-6 py-2 text-center">
-                              <a href="editDataPegawai.php">
+                              <a href="editDataRekap.php">
                                   <button class="bg-purpleNavbar text-white px-8 py-2 rounded-full hover:bg-purpleNavbarHover transition">Lihat</button>
                               <a>
                           </td>
@@ -123,6 +119,7 @@ $token = $_SESSION['token'];
                       </tbody>
                     </table>
                   </div>
+              </div>
           </main>
       </div>
     </div>

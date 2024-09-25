@@ -24,36 +24,39 @@ $token = $_SESSION['token'];
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
-<body class="flex flex-row h-screen">
-    <!-- Side Navigation -->
-    <?php include('navbar/sidenav.php') ?>
+<body>
 
-    <div class="inline-flex flex-col flex-1">
-        <!-- Top Navigation -->
-        <?php include('navbar/topnav.php') ?>
+    <div class="flex flex-row h-screen">
+        <!-- Side Navigation -->
+        <?php include('navbar/sidenav.php') ?>
 
-        <!-- Main Content -->
-        <main class="flex-1 h-full p-6 bg-mainBgColor">
-            <h1 class="text-3xl border-b py-2 font-Poppins font-semibold"> Dashboard </h1>
-            <div class="grid grid-cols-4 gap-4 mt-4">
-                <div class=" bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow">
-                    <h2 class="text-lg font-medium mb-2 border-b-2 pb-1 border-white text-white"> Pengguna </h2>
-                    <p class="text-white">Konten Pengguna</p>
+        <div class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
+            <!-- Top Navigation -->
+            <?php include('navbar/topnav.php') ?>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-6 bg-mainBgColor">
+                <h1 class="text-3xl border-b py-2 font-Poppins font-semibold"> Dashboard </h1>
+                <div class="grid grid-cols-4 gap-4 mt-4">
+                    <div class=" bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow">
+                        <h2 class="text-lg font-medium mb-2 border-b-2 pb-1 border-white text-white">Pengguna</h2>
+                        <p class="text-white">Konten Pengguna</p>
+                    </div>
+                    <div class=" bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow">
+                        <h2 class="text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Dashboard</h2>
+                        <p class="text-white">Konten Dashboard</p>
+                    </div>
+                    <div class=" bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow">
+                        <h2 class="text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Dashboard</h2>
+                        <p class="text-white">Konten Dashboard</p>
+                    </div>
+                    <div class=" bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow">
+                        <h2 class="text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Dashboard</h2>
+                        <p class="text-white">Konten Dashboard</p>
+                    </div>
                 </div>
-                <div class=" bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow">
-                    <h2 class="text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Dashboard</h2>
-                    <p class="text-white">Konten Dashboard</p>
-                </div>
-                <div class=" bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow">
-                    <h2 class="text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Dashboard</h2>
-                    <p class="text-white">Konten Dashboard</p>
-                </div>
-                <div class=" bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow">
-                    <h2 class="text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Dashboard</h2>
-                    <p class="text-white">Konten Dashboard</p>
-                </div>
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
 </body>
 

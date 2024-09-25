@@ -11,13 +11,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../../../css/vanilla.css" rel="stylesheet">
-    <link href="../../../css/output.css" rel="stylesheet">
-</head>
-
 <style>
     #sideNav.collapsed {
         width: 0px;
@@ -27,7 +20,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 </style>
 
 <body>
-    <div id="sideNav" class="bg-white w-56 h-screen p-4 transition duration-500 ease-in-out">
+    <div id="sideNav" class="bg-white w-56 h-screen p-4 transition duration-500 ease-in-out" style="position: fixed;">
         <div class="flex flex-col items-center">
             <div class="bg-gray-400 rounded-full h-24 w-24 mb-4"></div>
             <p class="text-lg font-semibold"><?php echo $username ?></p>

@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../../../css/output.css" rel="stylesheet">
-</head>
 <body>
 <div id="topNav" class="block justify-end items-center bg-gray-50 drop-shadow-md h-14 transition duration-500 ease-in-out">
     <div class="flex items-center justify-center h-14">

@@ -26,53 +26,53 @@ $token = $_SESSION['token'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preview Absensi</title>
+    <title>Rekap Absensi</title>
     <link href="../../css/output.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
 <body>
     <div class="flex flex-row h-screen">
-      <!-- Side Navigation -->
-      <?php include('navbar/sidenav.php') ?>
+        <!-- Side Navigation -->
+        <?php include('navbar/sidenav.php') ?>
 
-      <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
-          <!-- Top Navigation -->
-          <?php include('navbar/topnav.php') ?>
+        <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
+            <!-- Top Navigation -->
+            <?php include('navbar/topnav.php') ?>
 
-          <!-- Main Content -->
-          <main class="flex-1 h-full p-6 bg-mainBgColor">
-              <h1 class="text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Preview Data Absensi <?php echo $username ?></h1>
-                              <?php
-                                  $conn = mysqli_connect("localhost", "root", "", "db_absensi");
-                                  if ($conn-> connect_error) {
-                                  }
-                                  
-                                  // pengaturan baris
-                                  $start = 0;
-                                  $rows_per_page = 10;
+            <!-- Main Content -->
+            <main class="flex-1 h-full p-6 bg-mainBgColor">
+                <h1 class="text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Absensi</h1>
+                                <?php
+                                    $conn = mysqli_connect("localhost", "root", "", "db_absensi");
+                                    if ($conn-> connect_error) {
+                                    }
+                                    
+                                    // pengaturan baris
+                                    $start = 0;
+                                    $rows_per_page = 10;
 
-                                  // total nomor baris
-                                  $records = mysqli_query($conn, "SELECT * FROM tb_pengguna");
-                                  $nr_of_rows = $records->num_rows;
+                                    // total nomor baris
+                                    $records = mysqli_query($conn, "SELECT * FROM tb_pengguna");
+                                    $nr_of_rows = $records->num_rows;
 
-                                  // kalkulasi nomor per halaman
-                                  $pages = ceil($nr_of_rows / $rows_per_page);
+                                    // kalkulasi nomor per halaman
+                                    $pages = ceil($nr_of_rows / $rows_per_page);
 
-                                  // start point
-                                  if(isset($_GET['page-nr'])){
-                                      $page = $_GET['page-nr'] - 1;
-                                      $start = $page * $rows_per_page;
-                                  }
+                                    // start point
+                                    if(isset($_GET['page-nr'])){
+                                        $page = $_GET['page-nr'] - 1;
+                                        $start = $page * $rows_per_page;
+                                    }
 
-                                  // tabel db suratmasuk
-                                  $stmt=$conn->prepare("SELECT * FROM  tb_pengguna LIMIT $start, $rows_per_page");
-                                  $stmt->execute();
-                                  $result = $stmt->get_result();
-                              ?>
-                                                          
+                                    // tabel db suratmasuk
+                                    $stmt=$conn->prepare("SELECT * FROM  tb_pengguna LIMIT $start, $rows_per_page");
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+                                ?>
+                                                            
                   <div class="overflow-x-auto mt-6 shadow-customTable rounded-lg">
-                    <table class="min-w-full bg-white border">
+                    <table class="min-w-full bg-white border rounded-lg">
                       <thead>
                         <tr class="bg-purpleNavbar text-white rounded-t-lg">
                           <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tl-lg">No</th>
@@ -89,7 +89,7 @@ $token = $_SESSION['token'];
                           <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
                           <td class="px-6 py-2 text-center">Anomali</td>
                           <td class="px-6 py-2 text-center <?php echo $is_last_row ? 'rounded-br-lg' : ''; ?>">
-                              <a href="editDataAbsensi.php">
+                              <a href="previewDataAbsensi.php">
                                   <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
                               <a>
                           </td>
@@ -100,7 +100,7 @@ $token = $_SESSION['token'];
                           <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
                           <td class="px-6 py-2 text-center">Anomali</td>
                           <td class="px-6 py-2 text-center">
-                              <a href="editDataAbsensi.php">
+                              <a href="previewDataAbsensi.php">
                                   <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
                               <a>
                           </td>
@@ -111,7 +111,7 @@ $token = $_SESSION['token'];
                           <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
                           <td class="px-6 py-2 text-center">Anomali</td>
                           <td class="px-6 py-2 text-center">
-                              <a href="editDataAbsensi.php">
+                              <a href="previewDataAbsensi.php">
                                   <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
                               <a>
                           </td>
@@ -119,9 +119,9 @@ $token = $_SESSION['token'];
                       </tbody>
                     </table>
                   </div>
-              </div>
-          </main>
-      </div>
+                </div>
+            </main>
+        </div>
     </div>
 </body>
 

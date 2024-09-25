@@ -16,6 +16,10 @@ module.exports = {
         dashboardBoxPurple: '#A062E0',
         mainBgColor: '#EFEFEF',
       },
+      boxShadow: {
+        customTable: '0 0 20px 0 rgba(0, 0, 0, 0.3)', // Define your custom box-shadow
+        dashboardTag: '0 7px 20px -1px rgba(0, 0, 0, 0.5)',
+      },
     },
   },
   plugins: [],

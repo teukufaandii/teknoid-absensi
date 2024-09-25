@@ -18,7 +18,7 @@ $token = $_SESSION['token'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Pegawai</title>
+    <title>Tambah Pegawai</title>
     <link href="../../css/output.css" rel="stylesheet">
     <link href="../../css/font/poppins-font.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
@@ -35,13 +35,13 @@ $token = $_SESSION['token'];
 
           <!-- Main Content -->
           <main class="flex-1 p-6 bg-mainBgColor">
-              <h1 class="text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Edit Data Pegawai </h1>
+              <h1 class="text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Tambah Data Pegawai </h1>
               <div class="w-full mx-auto p-6">
                 <div class="mb-4">
                   <label class="block text-gray-700 font-semibold mb-2">Nomor Kartu</label>
                   <input
                     type="text"
-                    placeholder="Masukkan Nomor Kartu"
+                    placeholder="Masukkan Nomor kartu"
                     class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar"
                     defaultValue="123456789"
                   />
@@ -61,7 +61,7 @@ $token = $_SESSION['token'];
                   <label class="block text-gray-700 font-semibold mb-2">NIDN</label>
                   <input
                     type="text"
-                    placeholder="Masukkan Nomor Induk"
+                    placeholder="Masukkan Nama Lengkap"
                     class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar"
                   />
                 </div>
@@ -132,7 +132,7 @@ $token = $_SESSION['token'];
                 </div>
 
                 <div class="flex justify-between mt-6">
-                    <button class="bg-red-400 text-white px-6 py-2 rounded-lg hover:bg-red-500 transition duration-200">Hapus</button>
+                    <button class="bg-red-400 text-white px-6 py-2 rounded-lg hover:bg-red-500 transition duration-200">Batal</button>
                     <button class="bg-purpleNavbar text-white px-6 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200">Simpan</button>
                 </div>
 

@@ -4,14 +4,14 @@
 <body>
 <div id="topNav" class="block justify-end items-center bg-gray-50 drop-shadow-md h-14 transition duration-500 ease-in-out">
     <div class="flex items-center justify-center h-14">
-        <div id="profileIcon" class="absolute right-3 w-9 h-9 flex cursor-pointer ">
-            <div class="absolute shadow-lg bg-purpleNavbar w-9 h-9 rounded-full text-md text-white flex items-center justify-center cursor-pointer">
+        <div id="profileIcon" class="absolute right-3 w-9 h-9 flex cursor-pointer">
+            <div class="absolute shadow-lg bg-purpleNavbar w-9 h-9 rounded-full text-md text-white flex items-center justify-center cursor-pointer hover:bg-purpleNavbarHover transition">
                 <i class="fa-solid fa-user"></i>
             </div>
         </div>
 
-        <div id="sideIcon" class="absolute left-3 w-9 h-9 flex cursor-pointer ">
-            <div class="absolute shadow-lg bg-purpleNavbar w-9 h-9 rounded-xl text-lg text-white flex items-center justify-center cursor-pointer">
+        <div id="sideIcon" class="absolute left-3 w-9 h-9 flex cursor-pointer"  onclick="toggleSideNav()">
+            <div class="absolute shadow-lg bg-purpleNavbar w-9 h-9 rounded-xl text-lg text-white flex items-center justify-center cursor-pointer hover:bg-purpleNavbarHover transition">
                 <i class="fa-solid fa-bars"></i>
             </div>
         </div>
@@ -42,14 +42,13 @@
         });
     </script>
     <script>
-        // Get the elements
-        const sideIcon = document.getElementById('sideIcon');
-        const sideNav = document.getElementById('sideNav');
-
-        // Add click event listener to toggle class
-        sideIcon.addEventListener('click', function() {
-            sideNav.classList.toggle('collapsed');
-        });
+        function toggleSideNav() {
+            const sideNav = document.getElementById('sideNav');
+            const content = document.getElementById('content');
+            // Toggle a class that hides or shows the side navigation
+            sideNav.classList.toggle('closed');
+            content.classList.toggle('collapsed');
+        }
     </script>
 
 </html>

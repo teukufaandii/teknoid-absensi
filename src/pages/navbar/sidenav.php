@@ -146,19 +146,27 @@ li:hover .sideNav-text {
     transition: margin-left 0.5s ease;
 }
 
+menu, ol, ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: 80px;
+}
+
 </style>
 
 <body>
     <div id="sideNav" class="bg-white w-56 h-screen p-3 transition duration-500 ease-linear" style="position: fixed;">
         <div class="flex flex-col items-center mt-4">
             <div class="userIcon flex bg-gray-400 rounded-full h-24 w-24 mb-4 text-6xl text-white items-center justify-center">
-                <i class="align-middle fa-solid fa-user text-center"></i>
+                <img src="/teknoid-absensi/public/logo.png" class="align-middle fa-solid fa-user text-center"/>
             </div>
             <p class="text-lg font-semibold sideNav-text"><?php echo $username ?></p>
             <p class="text-green-500 sideNav-text">Online</p>
         </div>
         <nav class="mt-8">
-            <ul>
+            <ul class="apasih">
                 <li class="mb-2">
                     <a href="dashboard.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dashboard.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
                         <span class="sideNav-icon flex items-center justify-center w-8 h-8 border-2 rounded-lg border-none 

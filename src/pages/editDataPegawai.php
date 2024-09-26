@@ -34,7 +34,7 @@ $token = $_SESSION['token'];
           <?php include('navbar/topnav.php') ?>
 
           <!-- Main Content -->
-          <main class="flex-1 p-6 bg-mainBgColor">
+          <main class="flex-1 p-6 bg-mainBgColor mainContent">
               <h1 class="text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Edit Data Pegawai </h1>
               <div class="w-full mx-auto p-6">
                 <div class="mb-4">
@@ -141,5 +141,6 @@ $token = $_SESSION['token'];
       </div>
     </div>
 </body>
+
 
 </html>

@@ -29,12 +29,12 @@ $token = $_SESSION['token'];
         <!-- Side Navigation -->
         <?php include('navbar/sidenav.php') ?>
 
-        <div id="content" class="min-h-screen w-full inline-flex flex-col flex-1 bg-mainBgColor ml-56">
+        <div id="content" class="min-h-screen w-full inline-flex flex-col flex-1 bg-mainBgColor">
             <!-- Top Navigation -->
             <?php include('navbar/topnav.php') ?>
 
             <!-- Main Content -->
-            <main class="flex-1 p-6 bg-mainBgColor">
+            <main class="flex-1 p-6 bg-mainBgColor mainContent">
                 <h1 class="text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Dashboard </h1>
                 <div class="grid grid-cols-4 gap-4 mt-6">
                     <div class=" bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">

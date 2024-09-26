@@ -14,7 +14,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <style>
 /* Closed sidenav state */
 .closed {
-    width: 80px;
+    width: 60px;
     transition: width 0.5s ease;
 }
 
@@ -35,6 +35,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     display: none;
     transition: opacity 0.3s ease, margin-left 0.3s ease;
 }
+
 
 /* Show text when sidebar is opened */
 #sideNav:not(.closed) .sideNav-text {
@@ -79,7 +80,7 @@ ul li a {
 .closed .userIcon{
     position: relative;
     top: 12px;
-    transform:scale(0.5);
+    opacity: 0;
     transition: all 0.3s ease;
 }
 
@@ -136,14 +137,19 @@ li:hover .sideNav-text {
 
 /* Collapsed state */
 #content.collapsed {
-    margin-left: 80px; /* Margin matching the collapsed sidebar */
+    margin-left: 0px; 
+    transition: margin-left 0.5s ease;
+}
+
+#content.collapsed .mainContent {
+    margin-left: 80px;
     transition: margin-left 0.5s ease;
 }
 
 </style>
 
 <body>
-    <div id="sideNav" class="bg-white w-56 h-screen p-4 transition duration-500 ease-linear" style="position: fixed;">
+    <div id="sideNav" class="bg-white w-56 h-screen p-3 transition duration-500 ease-linear" style="position: fixed;">
         <div class="flex flex-col items-center mt-4">
             <div class="userIcon flex bg-gray-400 rounded-full h-24 w-24 mb-4 text-6xl text-white items-center justify-center">
                 <i class="align-middle fa-solid fa-user text-center"></i>
@@ -155,8 +161,8 @@ li:hover .sideNav-text {
             <ul>
                 <li class="mb-2">
                     <a href="dashboard.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dashboard.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
-                        <span class="sideNav-icon flex items-center justify-center w-8 h-8 border-2 rounded-lg    
-                            <?php echo $current_page == 'dashboard.php' ? 'text-white border-white' : 'text-purpleNavbar border-purpleNavbar'; ?>">
+                        <span class="sideNav-icon flex items-center justify-center w-8 h-8 border-2 rounded-lg border-none 
+                            <?php echo $current_page == 'dashboard.php' ? 'text-white' : 'text-purpleNavbar'; ?>">
                             <i class="fa-solid fa-house"></i>
                         </span>
                         <span class="ml-2 font-medium sideNav-text">Dashboard</span>
@@ -164,7 +170,7 @@ li:hover .sideNav-text {
                 </li>
                 <li class="mb-2">
                     <a href="dataPegawai.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dataPegawai.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
-                        <span id="user-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-2 rounded-lg">
+                        <span id="user-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-2 border-none rounded-lg">
                             <i class="fa-solid fa-users-gear"></i>
                         </span>
                         <span class="ml-2 font-medium sideNav-text">Pegawai</span>
@@ -172,7 +178,7 @@ li:hover .sideNav-text {
                 </li>
                 <li class="mb-2">
                     <a href="dataAbsensi.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dataAbsensi.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
-                        <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-2 rounded-lg">
+                        <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-2 border-none rounded-lg">
                             <i class="fa-regular fa-calendar-days"></i>
                         </span>
                         <span class="ml-2 font-medium sideNav-text">Absensi</span>

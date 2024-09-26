@@ -41,7 +41,7 @@ $token = $_SESSION['token'];
           <?php include('navbar/topnav.php') ?>
 
           <!-- Main Content -->
-          <main class="flex-1 p-6 bg-mainBgColor">
+          <main class="flex-1 p-6 bg-mainBgColor mainContent">
               <h1 class="text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Pegawai</h1>
               <a href="tambahPegawai.php">
                 <button class="bg-purpleNavbar text-white px-4 py-2 mt-5 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
@@ -128,5 +128,6 @@ $token = $_SESSION['token'];
       </div>
     </div>
 </body>
+
 
 </html>

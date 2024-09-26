@@ -26,20 +26,26 @@
 </div>
 
     <script>
-        const profileIcon = document.getElementById('profileIcon');
-        const floatingMenu = document.getElementById('floatingMenu');
+        function toggleSideNav() {
+    const sideNav = document.getElementById('sideNav');
+    const content = document.getElementById('content');
+    const topNav = document.getElementById('topNav');
 
-        // Toggle the visibility of the floating menu when the profile icon is clicked
-        profileIcon.addEventListener('click', () => {
-            floatingMenu.classList.toggle('hidden');
-        });
+    // Toggle classes to control the state of sideNav and content
+    sideNav.classList.toggle('closed');
+    content.classList.toggle('collapsed');
 
-        // Optional: Close the floating menu when clicking outside of it
-        document.addEventListener('click', (event) => {
-            if (!profileIcon.contains(event.target) && !floatingMenu.contains(event.target)) {
-                floatingMenu.classList.add('hidden');
-            }
-        });
+    // Add or remove class to adjust topNav width
+    topNav.classList.toggle('topNav-expanded', sideNav.classList.contains('closed'));
+
+    // Save the current state in localStorage
+    if (sideNav.classList.contains('closed')) {
+        localStorage.setItem('sideNavState', 'closed');
+    } else {
+        localStorage.setItem('sideNavState', 'open');
+    }
+}
+
     </script>
     <script>
         function toggleSideNav() {

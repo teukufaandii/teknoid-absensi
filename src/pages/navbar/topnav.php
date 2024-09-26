@@ -2,7 +2,7 @@
 <html lang="en">
 
 <body>
-<div id="topNav" class="block justify-end items-center bg-gray-50 drop-shadow-md h-14 transition duration-500 ease-in-out">
+<div id="topNav" class="relative flex justify-end items-center bg-gray-50 drop-shadow-md h-14 transition duration-500 ease-in-out topNav-expanded">
     <div class="flex items-center justify-center h-14">
         <div id="profileIcon" class="absolute right-3 w-9 h-9 flex cursor-pointer">
             <div class="absolute shadow-lg bg-purpleNavbar w-9 h-9 rounded-full text-md text-white flex items-center justify-center cursor-pointer hover:bg-purpleNavbarHover transition">

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,15 +14,15 @@
     <div class="flex flex-col md:flex-row w-full h-full max-w-none bg-white shadow-lg">
         <div class="flex flex-col justify-center w-full md:w-1/2 p-8">
             <form class="max-w-md w-full mx-auto" method="POST" action="../db/routes/userLogin.php">
-                <h2 class="text-3xl font-bold text-center mb-6">Login AKWOKWOWK</h2>
+                <h2 class="text-3xl font-bold text-center mb-6">Login Sistem Absensi</h2>
                 <img src="../../public/logo.png" alt="Logo" class="mb-6 m-auto w-40 h-40 object-cover">
-
+                
                 <?php if (isset($_GET['success']) && $_GET['success'] === 'password_reset'): ?>
                     <div class="success-message mb-4 text-green-600">
                         Reset password berhasil, silakan input ulang email dan password Anda.
                     </div>
                 <?php endif; ?>
-
+                
                 <?php if (isset($_GET['error'])): ?>
                     <div class="error-message mb-4 text-red-600">
                         <?php
@@ -35,7 +34,7 @@
                         ?>
                     </div>
                 <?php endif; ?>
-
+                
                 <div class="mb-4 relative">
                     <div class="floating-placeholder">
                         <input type="email" id="email" name="email" class="floating-input" placeholder="" required>
@@ -67,7 +66,7 @@
     <script>
         const togglePassword = document.getElementById('togglePassword');
         const passwordField = document.getElementById('password');
-
+        
         togglePassword.addEventListener('click', () => {
             const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordField.setAttribute('type', type);
@@ -77,7 +76,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const url = new URL(window.location);
-
+            
             if (url.searchParams.has('error') || url.searchParams.has('success')) {
                 url.searchParams.delete('error');
                 url.searchParams.delete('success');
@@ -86,5 +85,4 @@
         });
     </script>
 </body>
-
 </html>

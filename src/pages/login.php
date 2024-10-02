@@ -51,7 +51,7 @@
                 <div class="flex justify-end items-center mb-4">
                     <a href="./forgot.php" class="text-sm text-blue-500 hover:underline">Lupa kata sandi?</a>
                 </div>
-                <button type="submit" class="w-full bg-gray-800 text-white py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">Masuk</button>
+                <button type="submit" class="w-full bg-purpleNavbar text-white py-2 rounded-md hover:bg-purpleNavbarHover focus:outline-none focus:ring-2 focus:ring-purpleNavbar">Masuk</button>
             </form>
         </div>
         <div class="hidden md:flex flex-col items-center justify-center w-1/2 bg-gray-200 p-8">

@@ -29,7 +29,7 @@ $token = $_SESSION['token'];
         <!-- Side Navigation -->
         <?php include('navbar/sidenav.php') ?>
 
-        <div id="content" class="min-h-screen w-full inline-flex flex-col flex-1 bg-mainBgColor text-gray-500">
+        <div id="content" class="min-h-screen w-full inline-flex flex-col flex-1 bg-mainBgColor">
             <!-- Top Navigation -->
             <?php include('navbar/topnav.php') ?>
 

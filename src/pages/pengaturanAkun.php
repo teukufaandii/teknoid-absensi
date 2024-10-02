@@ -1,5 +1,6 @@
 <?php
 session_start();
+include '../db/db_connect.php';
 
 if (!isset($_SESSION['token'])) {
     header('Location: login.php');
@@ -10,6 +11,31 @@ $username = htmlspecialchars($_SESSION['name']);
 $role = $_SESSION['role'];
 $id = $_SESSION['user_id'];
 $token = $_SESSION['token'];
+
+$stmt = $conn->prepare("SELECT * FROM tb_pengguna WHERE id_pg = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Check if a record was found
+if ($result->num_rows > 0) {
+    // Fetch all the user data
+    $user = $result->fetch_assoc();
+
+    // Assign the fetched data to variables
+    $username = htmlspecialchars($user['nama']);
+    $email = htmlspecialchars($user['email']);
+    $noinduk = htmlspecialchars($user['noinduk']);
+    $role = htmlspecialchars($user['role']);
+    // Add any other fields you may need
+} else {
+    // Handle case if no user found (redirect or display error)
+    header('Location: login.php?error=usernotfound');
+    exit();
+}
+
+$stmt->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +44,7 @@ $token = $_SESSION['token'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Pegawai</title>
+    <title>Pengaturan Akun</title>
     <link href="../../css/output.css" rel="stylesheet">
     <link href="../../css/font/poppins-font.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
@@ -35,13 +61,13 @@ $token = $_SESSION['token'];
 
           <!-- Main Content -->
           <main class="flex-1 p-6 bg-mainBgColor mainContent">
-              <h1 class="text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Tambah Data Pegawai </h1>
+              <h1 class="text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Edit Data Pribadi </h1>
               <div class="w-full mx-auto p-6">
                 <div class="mb-4">
                   <label class="block text-gray-700 font-semibold mb-2">Nomor Kartu</label>
                   <input
                     type="text"
-                    placeholder="Masukkan Nomor kartu"
+                    placeholder="Masukkan Nomor Kartu"
                     class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar"
                     defaultValue="123456789"
                   />
@@ -53,7 +79,7 @@ $token = $_SESSION['token'];
                     type="text"
                     placeholder="Masukkan Nama Lengkap"
                     class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar"
-                    defaultValue="Jane Doe"
+                    Value="<?php echo $username ?>"
                   />
                 </div>
 
@@ -61,8 +87,9 @@ $token = $_SESSION['token'];
                   <label class="block text-gray-700 font-semibold mb-2">NIDN</label>
                   <input
                     type="text"
-                    placeholder="Masukkan Nama Lengkap"
+                    placeholder="Masukkan Nomor Induk"
                     class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar"
+                    value="<?php echo $noinduk ?>"
                   />
                 </div>
 
@@ -101,6 +128,7 @@ $token = $_SESSION['token'];
                       type="text"
                       placeholder="Masukkan Nama Tempat Lahir"
                       class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar"
+                      value=""
                     />
                   </div>
                   <div style="grid-area: main;">
@@ -141,5 +169,6 @@ $token = $_SESSION['token'];
       </div>
     </div>
 </body>
+
 
 </html>

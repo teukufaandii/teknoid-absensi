@@ -25,7 +25,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 /* Collapse content */
 .collapsed {
-    margin-left: 70px; /* Keep some margin for collapsed sidenav */
+    margin-left: 60px; /* Keep some margin for collapsed sidenav */
     transition: all 0.5s ease;
 }
 
@@ -43,6 +43,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
     opacity: 1;
     margin-left: 0;
     transition: opacity 0.3s ease, margin-left 0.3s ease;
+}
+
+#sideNav.closed ul {
+    bottom: 80px;
+    transition: all 0.3s ease;
 }
 
 .closed .copyright {
@@ -67,6 +72,7 @@ ul li a {
     overflow: hidden;
     transition: width 0.5s ease; 
     width: 100%;
+    transition: all 0.5 ease;
 }
 
 .closed li:hover a {
@@ -142,7 +148,7 @@ li:hover .sideNav-text {
 }
 
 #content.collapsed .mainContent {
-    margin-left: 80px;
+    margin-left: 60px;
     transition: margin-left 0.5s ease;
 }
 
@@ -151,9 +157,13 @@ menu, ol, ul {
     margin: 0;
     padding: 0;
     position: relative;
-    bottom: 80px;
+    bottom: 0px;
 }
 
+input[type="radio"]:checked + span {
+    background-color: #8C85FF; /* Purple background when selected */
+    border-color: white; /* Purple border when selected */
+}
 </style>
 
 <body>
@@ -165,7 +175,7 @@ menu, ol, ul {
             <p class="text-lg font-semibold sideNav-text"><?php echo $username ?></p>
             <p class="text-green-500 sideNav-text">Online</p>
         </div>
-        <nav class="mt-8">
+        <nav class="mt-2">
             <ul class="apasih">
                 <li class="mb-2">
                     <a href="dashboard.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dashboard.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">

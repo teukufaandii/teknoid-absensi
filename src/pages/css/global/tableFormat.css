@@ -1,0 +1,20 @@
+.tableOverflow {
+    overflow-x: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    width: 100%;
+    max-height: 400px;
+    cursor: default !important;
+    position: relative;
+}
+table {
+    position: relative;
+    width: 100%;
+}
+tr{
+    width: 100%;
+}
+th, td {
+    min-width: 180px;
+    text-align: center;
+}

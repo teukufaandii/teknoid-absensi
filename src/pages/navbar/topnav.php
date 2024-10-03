@@ -16,19 +16,14 @@ $stmt->bind_param("i", $id);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Check if a record was found
 if ($result->num_rows > 0) {
-    // Fetch all the user data
     $user = $result->fetch_assoc();
 
-    // Assign the fetched data to variables
     $username = htmlspecialchars($user['nama']);
     $email = htmlspecialchars($user['email']);
     $noinduk = htmlspecialchars($user['noinduk']);
     $role = htmlspecialchars($user['role']);
-    // Add any other fields you may need
 } else {
-    // Handle case if no user found (redirect or display error)
     header('Location: login.php?error=usernotfound');
     exit();
 }
@@ -42,13 +37,13 @@ $conn->close();
     <style>
         /* Profile Menu */
         .profile-menu {
-            position: absolute;
             width: 200px;
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 50;
+            z-index: 1000;
             display: none; /* Hidden initially */
+            position: absolute;
         }
         .profile-header {
             display: flex;
@@ -103,6 +98,10 @@ $conn->close();
             height: 30px;
             border-radius: 50%;
         }
+        #topnav {
+            position: relative;
+            z-index: 99999;
+        }
     </style>
 <body>
 <div id="topNav" class="relative flex justify-end items-center bg-gray-50 drop-shadow-md h-14 transition duration-500 ease-in-out topNav-expanded">
@@ -120,23 +119,24 @@ $conn->close();
         </div>
         
         <!-- Floating Menu -->
-        <div id="profileMenu" class="mt-1 mr-1 right-0 top-14 profile-menu">
-            <div class="profile-header">
+        <div id="profileMenu" class="mt-1 mr-1 right-0 top-14 profile-menu absolute bg-white rounded-lg shadow-lg z-50 hidden">
+            <div class="profile-header flex p-2 text-center border-b">
                 <div class="align-middle justify-center profilePicContainer">
-                    <img src="/teknoid-absensi/public/logo.png" alt="Profile Picture">
+                    <img src="/teknoid-absensi/public/logo.png" alt="Profile Picture" class="w-12 h-12 rounded-full">
                 </div>
                 <div class="ml-4">
-                    <p>Nama</p>
-                    <p>NIDN</p>
+                    <p class="font-bold"><?php echo $username; ?></p>
+                    <p><?php echo $noinduk; ?></p>
                 </div>
             </div>
-            <div class="profile-info">
+            <div class="profile-info p-2">
                 <p>Jabatan: Lecturer</p>
-                <p>Status: <span class="status">Aktif</span></p>
+                <p>Status: <span class="status inline-block px-2 py-1 bg-green-200 text-green-700 rounded text-xs">Aktif</span></p>
             </div>
-            <a href="../pages/pengaturanAkun.php" class="menu-item"><i class="fa-solid fa-gear"></i> Pengaturan Akun</a>
-            <a href="../db/routes/userLogout.php" class="text-red-400 menu-item"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+            <a href="../pages/pengaturanAkun.php" class="menu-item block text-center border-t hover:bg-gray-100 p-2"><i class="fa-solid fa-gear"></i> Pengaturan Akun</a>
+            <a href="../db/routes/userLogout.php" class="text-red-400 menu-item block text-center border-t hover:bg-gray-100 p-2"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
         </div>
+
 
     </div>
 </div>
@@ -163,33 +163,23 @@ $conn->close();
     </script>
     <script>
         function toggleSideNav() {
-    const sideNav = document.getElementById('sideNav');
-    const content = document.getElementById('content');
-    const topNav = document.getElementById('topNav');
-
-    // Toggle classes to control the state of sideNav and content
-    sideNav.classList.toggle('closed');
-    content.classList.toggle('collapsed');
-
-    // Add or remove class to adjust topNav width
-    topNav.classList.toggle('topNav-expanded', sideNav.classList.contains('closed'));
-
-    // Save the current state in localStorage
-    if (sideNav.classList.contains('closed')) {
-        localStorage.setItem('sideNavState', 'closed');
-    } else {
-        localStorage.setItem('sideNavState', 'open');
-    }
-}
-
-    </script>
-    <script>
-        function toggleSideNav() {
             const sideNav = document.getElementById('sideNav');
             const content = document.getElementById('content');
-            // Toggle a class that hides or shows the side navigation
+            const topNav = document.getElementById('topNav');
+
+            // Toggle classes to control the state of sideNav and content
             sideNav.classList.toggle('closed');
             content.classList.toggle('collapsed');
+
+            // Add or remove class to adjust topNav width
+            topNav.classList.toggle('topNav-expanded', sideNav.classList.contains('closed'));
+
+            // Save the current state in localStorage
+            if (sideNav.classList.contains('closed')) {
+                localStorage.setItem('sideNavState', 'closed');
+            } else {
+                localStorage.setItem('sideNavState', 'open');
+            }
         }
     </script>
 

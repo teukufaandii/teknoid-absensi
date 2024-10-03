@@ -28,11 +28,13 @@ $token = $_SESSION['token'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Pegawai</title>
     <link href="../../css/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/global/tableFormat.css">
+    <link href="./css/font/poppins-font.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
 <body>
-    <div class="flex flex-row">
+    <div class="flex flex-col md:flex-row lg:flex-row h-screen">
       <!-- Side Navigation -->
       <?php include('navbar/sidenav.php') ?>
 
@@ -42,12 +44,12 @@ $token = $_SESSION['token'];
 
           <!-- Main Content -->
           <main class="flex-1 p-6 bg-mainBgColor mainContent">
-              <h1 class="text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Pegawai</h1>
-              <a href="tambahPegawai.php">
-                <button class="bg-purpleNavbar text-white px-4 py-2 mt-5 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
-                  Tambah <i class="fa-solid fa-circle-plus"></i>
-                </button>
-              </a>
+            <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Pegawai</h1>
+                <a href="tambahPegawai.php">
+                  <button class="bg-purpleNavbar text-white px-4 py-2 mt-5 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
+                    Tambah <i class="fa-solid fa-circle-plus"></i>
+                  </button>
+                </a>
                           <?php
                                   $conn = mysqli_connect("localhost", "root", "", "db_absensi");
                                   if ($conn-> connect_error) {
@@ -74,8 +76,8 @@ $token = $_SESSION['token'];
                                   $stmt=$conn->prepare("SELECT * FROM  tb_pengguna LIMIT $start, $rows_per_page");
                                   $stmt->execute();
                                   $result = $stmt->get_result();
-
                           ?>
+                          
                   <div class="overflow-x-auto mt-6 shadow-customTable rounded-lg">
                     <table class="min-w-full bg-white border">
                       <thead>
@@ -95,7 +97,7 @@ $token = $_SESSION['token'];
                           <td class="px-6 py-2 text-center">Anomali</td>
                           <td class="px-6 py-2 text-center <?php echo $is_last_row ? 'rounded-br-lg' : ''; ?>">
                               <a href="editDataPegawai.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
+                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Edit</button>
                               <a>
                           </td>
                         </tr>
@@ -106,7 +108,7 @@ $token = $_SESSION['token'];
                           <td class="px-6 py-2 text-center">Anomali</td>
                           <td class="px-6 py-2 text-center">
                               <a href="editDataPegawai.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
+                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Edit</button>
                               <a>
                           </td>
                         </tr>
@@ -117,16 +119,35 @@ $token = $_SESSION['token'];
                           <td class="px-6 py-2 text-center">Anomali</td>
                           <td class="px-6 py-2 text-center">
                               <a href="editDataPegawai.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
+                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Edit</button>
                               <a>
                           </td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
+                  <div class="flex justify-center items-center space-x-1 mt-4">
+                    <!-- Previous Button -->
+                    <button class="px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <!-- Page Numbers -->
+                    <button class="px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition">1</button>
+                    <button class="px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition">2</button>
+                    <button class="px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition">3</button>
+
+                    <!-- Dots -->
+                    <button class="px-3 py-2 text-purple-600 rounded-md hover:text-white hover:bg-purpleNavbarHover transition">...</button>
+
+                    <!-- Next Button -->
+                    <button class="px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
           </main>
       </div>
     </div>
+    
 </body>
 
 

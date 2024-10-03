@@ -20,12 +20,12 @@ $token = $_SESSION['token'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Pegawai</title>
     <link href="../../css/output.css" rel="stylesheet">
-    <link href="../../css/font/poppins-font.css" rel="stylesheet">
+    <link href="./css/font/poppins-font.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
 <body>
-    <div class="flex flex-row">
+  <div class="flex flex-col md:flex-row lg:flex-row h-screen">
       <!-- Side Navigation -->
       <?php include('navbar/sidenav.php') ?>
 
@@ -35,8 +35,8 @@ $token = $_SESSION['token'];
 
           <!-- Main Content -->
           <main class="flex-1 p-6 bg-mainBgColor mainContent">
-              <h1 class="text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Tambah Data Pegawai </h1>
-              <div class="w-full mx-auto p-6">
+              <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Tambah Data Pegawai</h1>
+              <div class="w-full mx-auto py-6">
                 <div class="mb-4">
                   <label class="block text-gray-700 font-semibold mb-2">Nomor Kartu</label>
                   <input
@@ -132,7 +132,7 @@ $token = $_SESSION['token'];
                 </div>
 
                 <div class="flex justify-between mt-6">
-                    <button class="bg-red-400 text-white px-6 py-2 rounded-lg hover:bg-red-500 transition duration-200">Batal</button>
+                    <button class="bg-red-400 text-white px-6 py-2 rounded-lg hover:bg-red-500 transition duration-200"  onclick="window.location.href='dataPegawai.php'">Batal</button>
                     <button class="bg-purpleNavbar text-white px-6 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200">Simpan</button>
                 </div>
 

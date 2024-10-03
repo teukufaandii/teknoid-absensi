@@ -28,11 +28,12 @@ $token = $_SESSION['token'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Preview Absensi</title>
     <link href="../../css/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/global/tableFormat.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
 <body>
-    <div class="flex flex-row h-screen">
+  <div class="flex flex-col md:flex-row lg:flex-row h-screen">
       <!-- Side Navigation -->
       <?php include('navbar/sidenav.php') ?>
 
@@ -42,7 +43,7 @@ $token = $_SESSION['token'];
 
           <!-- Main Content -->
           <main class="flex-1 p-6 bg-mainBgColor mainContent">
-              <h1 class="text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Preview Data Absensi <?php echo $username ?></h1>
+              <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Preview Data Absensi <?php echo $username ?></h1>
                               <?php
                                   $conn = mysqli_connect("localhost", "root", "", "db_absensi");
                                   if ($conn-> connect_error) {
@@ -71,14 +72,16 @@ $token = $_SESSION['token'];
                                   $result = $stmt->get_result();
                               ?>
                                                           
-                  <div class="overflow-x-auto mt-6 shadow-customTable rounded-lg">
-                    <table class="min-w-full bg-white border">
-                      <thead>
+                  <div class="tableOverflow mt-6 shadow-customTable rounded-lg">
+                    <table class="bg-white border">
+                    <thead>
                         <tr class="bg-purpleNavbar text-white rounded-t-lg">
-                          <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tl-lg">No</th>
-                          <th class="px-6 py-4 font-medium uppercase tracking-wider">Nomor Induk</th>
-                          <th class="px-6 py-4 font-medium uppercase tracking-wider">Nama Lengkap</th>
-                          <th class="px-6 py-4 font-medium uppercase tracking-wider">Status</th>
+                          <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tl-lg">Tanggal</th>
+                          <th class="px-6 py-4 font-medium uppercase tracking-wider">jam Kerja</th>
+                          <th class="px-6 py-4 font-medium uppercase tracking-wider">Scan Masuk</th>
+                          <th class="px-6 py-4 font-medium uppercase tracking-wider">Scan Keluar</th>
+                          <th class="px-6 py-4 font-medium uppercase tracking-wider">Durasi (m)</th>
+                          <th class="px-6 py-4 font-medium uppercase tracking-wider">Keterangan</th>
                           <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tr-lg">Aksi</th>
                         </tr>
                       </thead>
@@ -88,9 +91,11 @@ $token = $_SESSION['token'];
                           <td class="px-6 py-2 text-center">215123123123</td>
                           <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
                           <td class="px-6 py-2 text-center">Anomali</td>
+                          <td class="px-6 py-2 text-center">Anomali</td>
+                          <td class="px-6 py-2 text-center">Anomali</td>
                           <td class="px-6 py-2 text-center <?php echo $is_last_row ? 'rounded-br-lg' : ''; ?>">
                               <a href="editDataAbsensi.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
+                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Edit</button>
                               <a>
                           </td>
                         </tr>
@@ -99,9 +104,11 @@ $token = $_SESSION['token'];
                           <td class="px-6 py-2 text-center">215123123123</td>
                           <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
                           <td class="px-6 py-2 text-center">Anomali</td>
+                          <td class="px-6 py-2 text-center">Anomali</td>
+                          <td class="px-6 py-2 text-center">Anomali</td>
                           <td class="px-6 py-2 text-center">
                               <a href="editDataAbsensi.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
+                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Edit</button>
                               <a>
                           </td>
                         </tr>
@@ -110,9 +117,11 @@ $token = $_SESSION['token'];
                           <td class="px-6 py-2 text-center">215123123123</td>
                           <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
                           <td class="px-6 py-2 text-center">Anomali</td>
+                          <td class="px-6 py-2 text-center">Anomali</td>
+                          <td class="px-6 py-2 text-center">Anomali</td>
                           <td class="px-6 py-2 text-center">
                               <a href="editDataAbsensi.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
+                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Edit</button>
                               <a>
                           </td>
                         </tr>

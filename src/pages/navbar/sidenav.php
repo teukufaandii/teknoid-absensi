@@ -127,7 +127,7 @@ li:hover .sideNav-text {
 
 /* Default topNav width */
 #topNav {
-    width: calc(100% - 14rem);
+    width: 100%;
     transition: width 0.5s ease;
 }
 
@@ -139,6 +139,8 @@ li:hover .sideNav-text {
 #content {
     margin-left: 14rem; 
     transition: margin-left 0.5s ease;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 /* Collapsed state */
@@ -150,6 +152,7 @@ li:hover .sideNav-text {
 #content.collapsed .mainContent {
     margin-left: 60px;
     transition: margin-left 0.5s ease;
+    overflow: hidden;
 }
 
 menu, ol, ul {
@@ -167,7 +170,7 @@ input[type="radio"]:checked + span {
 </style>
 
 <body>
-    <div id="sideNav" class="bg-white w-56 h-screen p-3 transition duration-500 ease-linear" style="position: fixed;">
+    <div id="sideNav" class="bg-white w-56 h-screen p-3 transition duration-500 ease-linear <?php echo $sidebarClass; ?>" style="position: fixed;">
         <div class="flex flex-col items-center mt-4">
             <div class="userIcon flex bg-gray-400 rounded-full h-24 w-24 mb-4 text-6xl text-white items-center justify-center">
                 <img src="/teknoid-absensi/public/logo.png" class="align-middle fa-solid fa-user text-center"/>
@@ -176,7 +179,7 @@ input[type="radio"]:checked + span {
             <p class="text-green-500 sideNav-text">Online</p>
         </div>
         <nav class="mt-2">
-            <ul class="apasih">
+            <ul class="">
                 <li class="mb-2">
                     <a href="dashboard.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dashboard.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
                         <span class="sideNav-icon flex items-center justify-center w-8 h-8 border-2 rounded-lg border-none 
@@ -212,18 +215,51 @@ input[type="radio"]:checked + span {
 
 <script>
 
+// Function to toggle sidebar
 function toggleSideNav() {
     const sideNav = document.getElementById('sideNav');
     const content = document.getElementById('content');
     const topNav = document.getElementById('topNav');
 
     // Toggle classes to control the state of sideNav and content
-    sideNav.classList.toggle('closed');
+    const isClosed = sideNav.classList.toggle('closed');
     content.classList.toggle('collapsed');
 
     // Add or remove class to adjust topNav width
-    topNav.classList.toggle('topNav-expanded', sideNav.classList.contains('closed'));
+    topNav.classList.toggle('topNav-expanded', isClosed);
+
+    // Use Fetch API to update session state
+    fetch('update_sidebar_state.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'isClosed=' + (isClosed ? 'true' : 'false'),
+    });
 }
+
+// Function to check window size and collapse sidebar if mobile
+function checkWindowSize() {
+    const sideNav = document.getElementById('sideNav');
+    const content = document.getElementById('content');
+    const topNav = document.getElementById('topNav');
+
+    // Collapse sidebar if window width is less than 768px
+    if (window.innerWidth < 768) {
+        sideNav.classList.add('closed');
+        content.classList.add('collapsed');
+        topNav.classList.remove('topNav-expanded');
+    } else {
+        sideNav.classList.remove('closed');
+        content.classList.remove('collapsed');
+        topNav.classList.add('topNav-expanded');
+    }
+}
+
+// Check window size on page load and on resize
+window.onload = checkWindowSize;
+window.onresize = checkWindowSize;
+
 
 </script>
 

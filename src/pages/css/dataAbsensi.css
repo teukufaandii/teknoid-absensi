@@ -1,0 +1,7 @@
+.hiddenPopup{
+    display: none;
+}
+
+.bg-gray-900 {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}

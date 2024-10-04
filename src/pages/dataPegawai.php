@@ -11,16 +11,9 @@ $role = $_SESSION['role'];
 $id = $_SESSION['user_id'];
 $token = $_SESSION['token'];
 
-
-//mengambil data pengguna
 ?>
 
 <!DOCTYPE html>
-
-
-
-
-
 <html lang="en">
 
 <head>
@@ -44,86 +37,93 @@ $token = $_SESSION['token'];
           <!-- Main Content -->
           <main class="flex-1 p-6 bg-mainBgColor mainContent">
             <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Pegawai</h1>
+
+          <!-- Search Bar & Button Tambah -->
+          <div class="flex justify-between items-center mt-5">
                 <a href="tambahPegawai.php">
-                  <button class="bg-purpleNavbar text-white px-4 py-2 mt-5 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
-                    Tambah <i class="fa-solid fa-circle-plus"></i>
-                  </button>
+                      <button class="bg-purpleNavbar text-white px-4 py-2 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
+                        Tambah <i class="fa-solid fa-circle-plus"></i>
+                      </button>
                 </a>
-                          <?php
-                                  $conn = mysqli_connect("localhost", "root", "", "db_absensi");
-                                  if ($conn-> connect_error) {
-                                  }
-                                  
-                                  // pengaturan baris
-                                  $start = 0;
-                                  $rows_per_page = 10;
 
-                                  // total nomor baris
-                                  $records = mysqli_query($conn, "SELECT * FROM tb_pengguna");
-                                  $nr_of_rows = $records->num_rows;
-
-                                  // kalkulasi nomor per halaman
-                                    $pages = ceil($nr_of_rows / $rows_per_page);
-
-                                  // start point
-                                  if(isset($_GET['page-nr'])){
-                                      $page = $_GET['page-nr'] - 1;
-                                      $start = $page * $rows_per_page;
-                                  }
-
-                                  // tabel db suratmasuk
-                                  $stmt=$conn->prepare("SELECT * FROM  tb_pengguna LIMIT $start, $rows_per_page");
-                                  $stmt->execute();
-                                  $result = $stmt->get_result();
-                          ?>
-                          
+                <div class="relative">
+                    <input 
+                            type="text" 
+                            id="searchInput" 
+                            placeholder="Search here..." 
+                            class="w-60 px-4 py-2 border rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-purpleNavbar text-sm"
+                            onkeyup="searchTable()"
+                    />
+                    <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+        </div>   
+                            
                   <div class="tableOverflow mt-6 shadow-customTable rounded-lg">
-                    <table class="min-w-full bg-white border">
-                      <thead>
-                        <tr class="bg-purpleNavbar text-white rounded-t-lg">
-                          <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tl-lg">No</th>
-                          <th class="px-6 py-4 font-medium uppercase tracking-wider">Nomor Induk</th>
-                          <th class="px-6 py-4 font-medium uppercase tracking-wider">Nama Lengkap</th>
-                          <th class="px-6 py-4 font-medium uppercase tracking-wider">Status</th>
-                          <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tr-lg">Aksi</th>
-                        </tr>
-                      </thead>
-                      <tbody class="divide-y divide-gray-200">
-                        <tr class="bg-gray-100">
-                          <td class="px-6 py-2 text-center <?php echo $is_last_row ? 'rounded-bl-lg' : ''; ?>">1</td>
-                          <td class="px-6 py-2 text-center">215123123123</td>
-                          <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
-                          <td class="px-6 py-2 text-center">Anomali</td>
-                          <td class="px-6 py-2 text-center <?php echo $is_last_row ? 'rounded-br-lg' : ''; ?>">
-                              <a href="editDataPegawai.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Edit</button>
-                              <a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-2 text-center">2</td>
-                          <td class="px-6 py-2 text-center">215123123123</td>
-                          <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
-                          <td class="px-6 py-2 text-center">Anomali</td>
-                          <td class="px-6 py-2 text-center">
-                              <a href="editDataPegawai.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Edit</button>
-                              <a>
-                          </td>
-                        </tr>
-                        <tr class="bg-gray-100">
-                          <td class="px-6 py-2 text-center">3</td>
-                          <td class="px-6 py-2 text-center">215123123123</td>
-                          <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
-                          <td class="px-6 py-2 text-center">Anomali</td>
-                          <td class="px-6 py-2 text-center">
-                              <a href="editDataPegawai.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Edit</button>
-                              <a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                  <table class="min-w-full bg-white border">
+            <thead>
+              <tr class="bg-purpleNavbar text-white rounded-t-lg">
+                <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tl-lg">No</th>
+                <th class="px-6 py-4 font-medium uppercase tracking-wider">Nomor Induk</th>
+                <th class="px-6 py-4 font-medium uppercase tracking-wider">Nama Lengkap</th>
+                <th class="px-6 py-4 font-medium uppercase tracking-wider">Status</th>
+                <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tr-lg">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <?php
+              include '../db/db_connect.php';
+
+              // pengaturan baris
+              $start = 0;
+              $rows_per_page = 10;
+
+              // total nomor baris
+              $records = mysqli_query($conn, "SELECT * FROM tb_pengguna");
+              $nr_of_rows = $records->num_rows;
+
+              // kalkulasi nomor per halaman
+              $pages = ceil($nr_of_rows / $rows_per_page);
+
+              // start point
+              if (isset($_GET['page-nr'])) {
+                $page = $_GET['page-nr'] - 1;
+                $start = $page * $rows_per_page;
+              } else {
+                $page = 0;
+              }
+
+              // ambil data dari tabel dengan batasan jumlah per halaman
+              $stmt = $conn->prepare("SELECT * FROM tb_pengguna LIMIT ?, ?");
+              $stmt->bind_param("ii", $start, $rows_per_page);
+              $stmt->execute();
+              $result = $stmt->get_result();
+
+              if ($result->num_rows > 0) {
+                $counter = $start + 1;
+                while ($row = $result->fetch_assoc()) {
+              ?>
+                  <tr class="bg-gray-100">
+                    <td class="px-6 py-2 text-center"><?php echo $counter++; ?></td>
+                    <td class="px-6 py-2 text-center"><?php echo htmlspecialchars($row["noinduk"]); ?></td>
+                    <td class="px-6 py-2 text-center"><?php echo htmlspecialchars($row["nama"]); ?></td>
+                    <td class="px-6 py-2 text-center"><?php echo htmlspecialchars($row["role"]); ?></td>
+                    <td class="px-6 py-2 text-center">
+                      <a href="editDataPegawai.php?id_pg=<?php echo $row['id_pg']; ?>">
+                        <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Edit</button>
+                      </a>
+                    </td>
+                  </tr>
+              <?php
+                }
+              } else {
+                echo "<tr><td colspan='5' class='text-center'>Tidak ada data</td></tr>";
+              }
+
+              $stmt->close();
+              $conn->close();
+              ?>
+            </tbody>
+          </table>
                   </div>
                   <div class="flex justify-center items-center space-x-1 mt-4">
                       <!-- Previous Button -->
@@ -148,6 +148,7 @@ $token = $_SESSION['token'];
       </div>
     </div>
     
+    <?php include('navbar/profileInfo.php') ?>
 </body>
 
 

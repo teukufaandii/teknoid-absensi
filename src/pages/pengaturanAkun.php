@@ -46,6 +46,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pengaturan Akun</title>
     <link href="../../css/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/dataAbsensi.css">
     <link href="./css/font/poppins-font.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
@@ -166,6 +167,8 @@ $conn->close();
           </main>
       </div>
     </div>
+    
+    <?php include('navbar/profileInfo.php') ?>
 </body>
 
 

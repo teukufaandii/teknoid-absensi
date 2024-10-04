@@ -11,33 +11,6 @@ $role = $_SESSION['role'];
 $id = $_SESSION['user_id'];
 $token = $_SESSION['token'];
 
-// Mengambil data pengguna
-$conn = mysqli_connect("localhost", "root", "", "db_absensi");
-if ($conn-> connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Pengaturan baris
-$start = 0;
-$rows_per_page = 10;
-
-// Total nomor baris
-$records = mysqli_query($conn, "SELECT * FROM tb_pengguna");
-$nr_of_rows = $records->num_rows;
-
-// Kalkulasi nomor per halaman
-$pages = ceil($nr_of_rows / $rows_per_page);
-
-// Start point
-if (isset($_GET['page-nr'])) {
-    $page = $_GET['page-nr'] - 1;
-    $start = $page * $rows_per_page;
-}
-
-// Tabel db pengguna
-$stmt = $conn->prepare("SELECT * FROM tb_pengguna LIMIT $start, $rows_per_page");
-$stmt->execute();
-$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -94,9 +67,22 @@ $result = $stmt->get_result();
                                     $result = $stmt->get_result();
                                 ?>
 
-                <button id="downloadButton" class="bg-purpleNavbar text-white px-4 py-2 mt-5 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
+                <div class="flex justify-between items-center mt-5">
+                    <button id="downloadButton" class="bg-purpleNavbar text-white px-4 py-2  rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
                     Download
-                </button>
+                    </button>
+
+                    <div class="relative">
+                    <input 
+                            type="text" 
+                            id="searchInput" 
+                            placeholder="Search here..." 
+                            class="w-60 px-4 py-2 border rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-purpleNavbar text-sm"
+                            onkeyup="searchTable()"
+                    />
+                    <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
 
                 <!-- Popup Download -->
                 <div id="downloadPopup" class="hidden fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50 z-[9999]">
@@ -122,138 +108,69 @@ $result = $stmt->get_result();
                                                             
                 <div class="tableOverflow mt-6 shadow-customTable rounded-lg">
                     <table class="bg-white border">
-                      <thead>
-                        <tr class="bg-purpleNavbar text-white rounded-t-lg">
-                          <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tl-lg">No</th>
-                          <th class="px-6 py-4 font-medium uppercase tracking-wider">Nomor Induk</th>
-                          <th class="px-6 py-4 font-medium uppercase tracking-wider">Nama Lengkap</th>
-                          <th class="px-6 py-4 font-medium uppercase tracking-wider">Status</th>
-                          <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tr-lg">Aksi</th>
-                        </tr>
-                      </thead>
-                      <tbody class="divide-y divide-gray-200">
-                        <tr>
-                          <td class="px-6 py-2 text-center <?php echo $is_last_row ? 'rounded-bl-lg' : ''; ?>">1</td>
-                          <td class="px-6 py-2 text-center">215123123123</td>
-                          <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
-                          <td class="px-6 py-2 text-center">Anomali</td>
-                          <td class="px-6 py-2 text-center <?php echo $is_last_row ? 'rounded-br-lg' : ''; ?>">
-                              <a href="previewDataAbsensi.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
-                              <a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-2 text-center">2</td>
-                          <td class="px-6 py-2 text-center">215123123123</td>
-                          <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
-                          <td class="px-6 py-2 text-center">Anomali</td>
-                          <td class="px-6 py-2 text-center">
-                              <a href="previewDataAbsensi.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
-                              <a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-2 text-center">3</td>
-                          <td class="px-6 py-2 text-center">215123123123</td>
-                          <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
-                          <td class="px-6 py-2 text-center">Anomali</td>
-                          <td class="px-6 py-2 text-center">
-                              <a href="previewDataAbsensi.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
-                              <a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-2 text-center">4</td>
-                          <td class="px-6 py-2 text-center">215123123123</td>
-                          <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
-                          <td class="px-6 py-2 text-center">Anomali</td>
-                          <td class="px-6 py-2 text-center">
-                              <a href="previewDataAbsensi.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
-                              <a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-2 text-center">5</td>
-                          <td class="px-6 py-2 text-center">215123123123</td>
-                          <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
-                          <td class="px-6 py-2 text-center">Anomali</td>
-                          <td class="px-6 py-2 text-center">
-                              <a href="previewDataAbsensi.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
-                              <a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-2 text-center">6</td>
-                          <td class="px-6 py-2 text-center">215123123123</td>
-                          <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
-                          <td class="px-6 py-2 text-center">Anomali</td>
-                          <td class="px-6 py-2 text-center">
-                              <a href="previewDataAbsensi.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
-                              <a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-2 text-center">7</td>
-                          <td class="px-6 py-2 text-center">215123123123</td>
-                          <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
-                          <td class="px-6 py-2 text-center">Anomali</td>
-                          <td class="px-6 py-2 text-center">
-                              <a href="previewDataAbsensi.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
-                              <a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-2 text-center">8</td>
-                          <td class="px-6 py-2 text-center">215123123123</td>
-                          <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
-                          <td class="px-6 py-2 text-center">Anomali</td>
-                          <td class="px-6 py-2 text-center">
-                              <a href="previewDataAbsensi.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
-                              <a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-2 text-center">9</td>
-                          <td class="px-6 py-2 text-center">215123123123</td>
-                          <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
-                          <td class="px-6 py-2 text-center">Anomali</td>
-                          <td class="px-6 py-2 text-center">
-                              <a href="previewDataAbsensi.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
-                              <a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-2 text-center">10</td>
-                          <td class="px-6 py-2 text-center">215123123123</td>
-                          <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
-                          <td class="px-6 py-2 text-center">Anomali</td>
-                          <td class="px-6 py-2 text-center">
-                              <a href="previewDataAbsensi.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
-                              <a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="px-6 py-2 text-center">11</td>
-                          <td class="px-6 py-2 text-center">215123123123</td>
-                          <td class="px-6 py-2 text-center">King Adam Mentor</td>
-                          <td class="px-6 py-2 text-center">Anomali</td>
-                          <td class="px-6 py-2 text-center">
-                              <a href="previewDataAbsensi.php">
-                                  <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Lihat</button>
-                              <a>
-                          </td>
-                        </tr>
-                      </tbody>
+                        <thead>
+                            <tr class="bg-purpleNavbar text-white rounded-t-lg">
+                                <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tl-lg">No</th>
+                                <th class="px-6 py-4 font-medium uppercase tracking-wider">Nomor Induk</th>
+                                <th class="px-6 py-4 font-medium uppercase tracking-wider">Nama Lengkap</th>
+                                <th class="px-6 py-4 font-medium uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tr-lg">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <?php
+                            include '../db/db_connect.php';
+
+                            // pengaturan baris
+                            $start = 0;
+                            $rows_per_page = 10;
+
+                            // total nomor baris
+                            $records = mysqli_query($conn, "SELECT * FROM tb_pengguna");
+                            $nr_of_rows = $records->num_rows;
+
+                            // kalkulasi nomor per halaman
+                            $pages = ceil($nr_of_rows / $rows_per_page);
+
+                            // start point
+                            if (isset($_GET['page-nr'])) {
+                                $page = $_GET['page-nr'] - 1;
+                                $start = $page * $rows_per_page;
+                            } else {
+                                $page = 0;
+                            }
+
+                            // ambil data dari tabel dengan batasan jumlah per halaman
+                            $stmt = $conn->prepare("SELECT * FROM tb_pengguna LIMIT ?, ?");
+                            $stmt->bind_param("ii", $start, $rows_per_page);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+
+                            if ($result->num_rows > 0) {
+                                $counter = $start + 1;
+                                while ($row = $result->fetch_assoc()) {
+                            ?>
+                                    <tr class="bg-gray-100">
+                                        <td class="px-6 py-2 text-center"><?php echo $counter++; ?></td>
+                                        <td class="px-6 py-2 text-center"><?php echo htmlspecialchars($row["noinduk"]); ?></td>
+                                        <td class="px-6 py-2 text-center"><?php echo htmlspecialchars($row["nama"]); ?></td>
+                                        <td class="px-6 py-2 text-center"><?php echo htmlspecialchars($row["role"]); ?></td>
+                                        <td class="px-6 py-2 text-center">
+                                            <a href="previewDataAbsensi.php?id_pg=<?php echo $row['id_pg']; ?>">
+                                                <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Edit</button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                            <?php
+                                }
+                            } else {
+                                echo "<tr><td colspan='5' class='text-center'>Tidak ada data</td></tr>";
+                            }
+
+                            $stmt->close();
+                            $conn->close();
+                            ?>
+                        </tbody>
                     </table>
                 </div>
                 
@@ -318,6 +235,7 @@ $result = $stmt->get_result();
         downloadFilteredData('bulanan');
     });
     </script>
+    <?php include('navbar/profileInfo.php') ?>
 
 </body>
 

@@ -242,29 +242,6 @@ function toggleSideNav() {
     });
 }
 
-// Function to check window size and collapse sidebar if mobile
-function checkWindowSize() {
-    const sideNav = document.getElementById('sideNav');
-    const content = document.getElementById('content');
-    const topNav = document.getElementById('topNav');
-
-    // Collapse sidebar if window width is less than 768px
-    if (window.innerWidth < 768) {
-        sideNav.classList.add('closed');
-        content.classList.add('collapsed');
-        topNav.classList.remove('topNav-expanded');
-    } else {
-        sideNav.classList.remove('closed');
-        content.classList.remove('collapsed');
-        topNav.classList.add('topNav-expanded');
-    }
-}
-
-// Check window size on page load and on resize
-window.onload = checkWindowSize;
-window.onresize = checkWindowSize;
-
-
 </script>
 
 </html>

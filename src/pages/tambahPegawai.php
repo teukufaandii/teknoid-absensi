@@ -34,8 +34,8 @@ $token = $_SESSION['token'];
           <?php include('navbar/topnav.php') ?>
 
           <!-- Main Content -->
-          <main class="flex-1 p-6 bg-mainBgColor mainContent">
-              <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Tambah Data Pegawai</h1>
+          <main class="flex-1 p-6 bg-mainBgColor md:mt-0 mainContent">
+              <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Tambah Data Pegawai</h1>
               <div class="w-full mx-auto py-6">
                 <div class="mb-4">
                   <label class="block text-gray-700 font-semibold mb-2">Nomor Kartu</label>
@@ -140,6 +140,8 @@ $token = $_SESSION['token'];
           </main>
       </div>
     </div>
+    
+    <?php include('navbar/profileInfo.php') ?>
 </body>
 
 </html>

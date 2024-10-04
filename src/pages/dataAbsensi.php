@@ -49,7 +49,6 @@ $result = $stmt->get_result();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rekap Absensi</title>
     <link href="../../css/output.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/global/tableFormat.css">
     <link rel="stylesheet" href="./css/dataAbsensi.css">
     <link href="./css/font/poppins-font.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
@@ -65,8 +64,8 @@ $result = $stmt->get_result();
             <?php include('navbar/topnav.php') ?>
 
             <!-- Main Content -->
-            <main class="flex-1 h-auto p-4 sm:p-6 lg:p-8 bg-mainBgColor mainContent">
-            <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Absensi</h1>
+            <main class="flex-1 p-6 bg-mainBgColor mainContent">
+                <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Absensi</h1>
                                 <?php
                                     $conn = mysqli_connect("localhost", "root", "", "db_absensi");
                                     if ($conn-> connect_error) {
@@ -95,7 +94,7 @@ $result = $stmt->get_result();
                                     $result = $stmt->get_result();
                                 ?>
 
-                <button id="downloadButton" class="mt-4 bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">
+                <button id="downloadButton" class="bg-purpleNavbar text-white px-4 py-2 mt-5 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
                     Download
                 </button>
 
@@ -114,7 +113,7 @@ $result = $stmt->get_result();
                                 <i class="fa-solid fa-calendar"></i> Bulanan 
                             </button>
                         </div>
-                        <button id="closePopup" class="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
+                        <button id="closePopup" class="mt-4 bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition">
                             Close
                         </button>
                     </div>
@@ -133,7 +132,7 @@ $result = $stmt->get_result();
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200">
-                        <tr class="bg-gray-100">
+                        <tr>
                           <td class="px-6 py-2 text-center <?php echo $is_last_row ? 'rounded-bl-lg' : ''; ?>">1</td>
                           <td class="px-6 py-2 text-center">215123123123</td>
                           <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
@@ -155,7 +154,7 @@ $result = $stmt->get_result();
                               <a>
                           </td>
                         </tr>
-                        <tr class="bg-gray-100">
+                        <tr>
                           <td class="px-6 py-2 text-center">3</td>
                           <td class="px-6 py-2 text-center">215123123123</td>
                           <td class="px-6 py-2 text-center">Adam Ilham Sulaiman</td>
@@ -258,25 +257,26 @@ $result = $stmt->get_result();
                     </table>
                 </div>
                 
-                  <div class="flex justify-center items-center space-x-1 mt-4">
+                <div class="flex justify-center items-center space-x-1 mt-4">
                     <!-- Previous Button -->
-                    <button class="px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition">
+                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">
                         <i class="fas fa-chevron-left"></i>
                     </button>
                     
                     <!-- Page Numbers -->
-                    <button class="px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition">1</button>
-                    <button class="px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition">2</button>
-                    <button class="px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition">3</button>
+                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">1</button>
+                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">2</button>
+                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">3</button>
 
                     <!-- Dots -->
-                    <button class="px-3 py-2 text-purple-600 rounded-md hover:text-white hover:bg-purpleNavbarHover transition">...</button>
+                    <button class="min-w-9 px-3 py-2 bg-white text-purpleNavbar rounded-md hover:text-white hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">...</button>
 
                     <!-- Next Button -->
-                    <button class="px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition">
+                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
+
             </main>
         </div>
     </div>

@@ -12,15 +12,14 @@ $id = $_SESSION['user_id'];
 $token = $_SESSION['token'];
 
 
-//mengambil data pengguna
+// Mengambil data pengguna
+$conn = mysqli_connect("localhost", "root", "", "db_absensi");
+if ($conn-> connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 ?>
 
 <!DOCTYPE html>
-
-
-
-
-
 <html lang="en">
 
 <head>
@@ -28,7 +27,7 @@ $token = $_SESSION['token'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Preview Absensi</title>
     <link href="../../css/output.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/global/tableFormat.css">
+    <link href="./css/font/poppins-font.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 

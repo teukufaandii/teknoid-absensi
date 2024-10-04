@@ -7,6 +7,7 @@
     <link href="../../css/output.css" rel="stylesheet">
     <link rel="icon" href="../../public/logo.png">
     <link rel="stylesheet" href="./css/login.css">
+    <link href="./css/font/poppins-font.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 

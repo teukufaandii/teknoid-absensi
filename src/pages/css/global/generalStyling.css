@@ -1,0 +1,75 @@
+body{
+    font-family: Poppins, 'sans-serif' !important;
+}
+
+/* Custom scrollbar for Webkit Browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 6px;  /* Width of the scrollbar */
+    height: 6px; /* Height of the scrollbar */
+}
+
+/* Style the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+    background-color: rgba(222, 222, 222);  /* Custom scrollbar thumb color */
+    border-radius: 10px;         /* Rounded corners */
+}
+
+/* Hide the scrollbar track */
+::-webkit-scrollbar-track {
+    background: transparent;  /* Fully transparent track */
+    box-shadow: none;         /* Remove the default box shadow */
+}
+
+/* Hide the scrollbar up/down buttons */
+::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    background-color: transparent;  /* Make the buttons transparent */
+}
+
+/* Optional: Hide scrollbar corner (when both vertical and horizontal scrollbars are present) */
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+    box-shadow: none;         /* Remove the default box shadow */
+}
+
+/* Hover effect for the scrollbar thumb */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #8C85FF;  /* Darker shade on hover */
+}
+
+/* Internet Explorer custom scrollbar */
+::-ms-scrollbar {
+    width: 6px;  /* Width of the scrollbar */
+    height: 6px; /* Height of the scrollbar */
+}
+
+/* Style the scrollbar thumb for Internet Explorer */
+::-ms-scrollbar-thumb {
+    background-color: rgba(222, 222, 222);  /* Custom scrollbar thumb color */
+    border-radius: 10px;         /* Rounded corners */
+}
+
+/* Hide the scrollbar track for Internet Explorer */
+::-ms-scrollbar-track {
+    background: transparent;  /* Fully transparent track */
+    box-shadow: none;         /* Remove the default box shadow */
+}
+
+/* Hide the scrollbar up/down buttons for Internet Explorer */
+::-ms-scrollbar-button {
+    width: 0;
+    height: 0;
+    background-color: transparent;  /* Make the buttons transparent */
+}
+
+/* Optional: Hide scrollbar corner for Internet Explorer (when both vertical and horizontal scrollbars are present) */
+::-ms-scrollbar-corner {
+    background-color: transparent;
+    box-shadow: none;         /* Remove the default box shadow */
+}
+
+/* Hover effect for the scrollbar thumb for Internet Explorer */
+::-ms-scrollbar-thumb:hover {
+    background-color: #8C85FF;  /* Darker shade on hover */
+}

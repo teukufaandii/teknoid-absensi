@@ -41,20 +41,16 @@ $conn->close();
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
+            z-index: 1000; /* Higher z-index for the profile menu */
             display: none; /* Hidden initially */
-            position: absolute;
+            position: absolute; /* Positioning is required for z-index to work */
+            margin: 4px;
         }
         .profile-header {
             display: flex;
             padding: 10px;
             text-align: center;
             border-bottom: 1px solid #ddd;
-        }
-        .profile-header img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
         }
         .profile-header p {
             margin: 5px 0;
@@ -104,7 +100,7 @@ $conn->close();
         }
     </style>
 <body>
-<div id="topNav" class="relative flex justify-end items-center bg-gray-50 drop-shadow-md h-14 transition duration-500 ease-in-out topNav-expanded">
+<div id="topNav" class="relative flex justify-end items-center bg-gray-50 drop-shadow-md h-14 transition duration-500 ease-in-out">
     <div class="flex items-center justify-center h-14">
         <div id="profileIcon" class="absolute right-3 w-9 h-9 flex cursor-pointer" onclick="toggleMenu()">
             <div class="absolute shadow-lg bg-purpleNavbar w-9 h-9 rounded-full text-md text-white flex items-center justify-center cursor-pointer hover:bg-purpleNavbarHover transition">
@@ -112,29 +108,33 @@ $conn->close();
             </div>
         </div>
 
-        <div id="sideIcon" class="absolute left-3 w-9 h-9 flex cursor-pointer"  onclick="toggleSideNav()">
+        <div id="sideIcon" class="absolute left-3 w-9 h-9 flex cursor-pointer"  onclick="toggleSideNav(), toggleTopNav()">
             <div class="absolute shadow-lg bg-purpleNavbar w-9 h-9 rounded-xl text-lg text-white flex items-center justify-center cursor-pointer hover:bg-purpleNavbarHover transition">
                 <i class="fa-solid fa-bars"></i>
             </div>
         </div>
         
         <!-- Floating Menu -->
-        <div id="profileMenu" class="mt-1 mr-1 right-0 top-14 profile-menu absolute bg-white rounded-lg shadow-lg z-50 hidden">
+        <div id="profileMenu" class="profile-menu right-0 top-14">
             <div class="profile-header flex p-2 text-center border-b">
                 <div class="align-middle justify-center profilePicContainer">
-                    <img src="/teknoid-absensi/public/logo.png" alt="Profile Picture" class="w-12 h-12 rounded-full">
+                    <img src="/teknoid-absensi/public/gigadam.jpg" alt="Profile Picture" class="w-12 h-auto rounded-lg">
                 </div>
-                <div class="ml-4">
-                    <p class="font-bold"><?php echo $username; ?></p>
-                    <p><?php echo $noinduk; ?></p>
+                <div class="ml-3">
+                    <p class="font-bold text-left"><?php echo $username; ?></p>
+                    <p class="text-left"><?php echo $noinduk; ?></p>
                 </div>
             </div>
-            <div class="profile-info p-2">
+            <div class="profile-info p-2 text-xs">
                 <p>Jabatan: Lecturer</p>
                 <p>Status: <span class="status inline-block px-2 py-1 bg-green-200 text-green-700 rounded text-xs">Aktif</span></p>
             </div>
-            <a href="../pages/pengaturanAkun.php" class="menu-item block text-center border-t hover:bg-gray-100 p-2"><i class="fa-solid fa-gear"></i> Pengaturan Akun</a>
-            <a href="../db/routes/userLogout.php" class="text-red-400 menu-item block text-center border-t hover:bg-gray-100 p-2"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+            <a href="../pages/pengaturanAkun.php" class="menu-item block text-center border-t hover:bg-gray-100 p-2 text-sm">
+                <i class="fa-solid fa-gear"></i> Pengaturan Akun
+            </a>
+            <a href="../db/routes/userLogout.php" class="text-red-400 menu-item block text-center border-t hover:bg-gray-100 rounded-b-md p-2 text-sm ">
+                <i class="fa-solid fa-right-from-bracket"></i> Log Out
+            </a>
         </div>
 
 
@@ -179,6 +179,14 @@ $conn->close();
                 localStorage.setItem('sideNavState', 'closed');
             } else {
                 localStorage.setItem('sideNavState', 'open');
+            }
+        }
+        function toggleTopNav() {
+            var topNav = document.getElementById('topNav');
+            if (topNav.style.position === "absolute") {
+                topNav.style.position = "relative";
+            } else {
+                topNav.style.position = "absolute";
             }
         }
     </script>

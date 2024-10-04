@@ -28,7 +28,6 @@ $token = $_SESSION['token'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Pegawai</title>
     <link href="../../css/output.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/global/tableFormat.css">
     <link href="./css/font/poppins-font.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
@@ -78,7 +77,7 @@ $token = $_SESSION['token'];
                                   $result = $stmt->get_result();
                           ?>
                           
-                  <div class="overflow-x-auto mt-6 shadow-customTable rounded-lg">
+                  <div class="tableOverflow mt-6 shadow-customTable rounded-lg">
                     <table class="min-w-full bg-white border">
                       <thead>
                         <tr class="bg-purpleNavbar text-white rounded-t-lg">
@@ -127,23 +126,24 @@ $token = $_SESSION['token'];
                     </table>
                   </div>
                   <div class="flex justify-center items-center space-x-1 mt-4">
-                    <!-- Previous Button -->
-                    <button class="px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    
-                    <!-- Page Numbers -->
-                    <button class="px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition">1</button>
-                    <button class="px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition">2</button>
-                    <button class="px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition">3</button>
+                      <!-- Previous Button -->
+                      <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">
+                          <i class="fas fa-chevron-left"></i>
+                      </button>
+                      
+                      <!-- Page Numbers -->
+                      <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">1</button>
+                      <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">2</button>
+                      <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">3</button>
 
-                    <!-- Dots -->
-                    <button class="px-3 py-2 text-purple-600 rounded-md hover:text-white hover:bg-purpleNavbarHover transition">...</button>
+                      <!-- Dots -->
+                      <button class="min-w-9 px-3 py-2 bg-white text-purpleNavbar rounded-md hover:text-white hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">...</button>
 
-                    <!-- Next Button -->
-                    <button class="px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
+                      <!-- Next Button -->
+                      <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">
+                          <i class="fas fa-chevron-right"></i>
+                      </button>
+                  </div>
           </main>
       </div>
     </div>

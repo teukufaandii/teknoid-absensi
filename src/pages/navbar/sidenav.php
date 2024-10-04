@@ -10,7 +10,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 <!DOCTYPE html>
 <html lang="en">
-
+<head>
+    <link rel="stylesheet" href="./css/global/generalStyling.css">
+    <link rel="stylesheet" href="./css/global/tableFormat.css">
+    <link href="./css/font/poppins-font.css" rel="stylesheet">
+</head>
 <style>
 /* Closed sidenav state */
 .closed {
@@ -46,7 +50,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 }
 
 #sideNav.closed ul {
-    bottom: 80px;
+    bottom: 90px;
     transition: all 0.3s ease;
 }
 
@@ -112,7 +116,7 @@ li:hover .sideNav-text {
 }
 
 .closed li:hover a {
-    width: 240px; 
+    width: 200px; 
     background-color: #8C85FF;
     border-radius: 12px;
     transition: width 0.5s ease, background-color 0.3s ease;
@@ -152,7 +156,7 @@ li:hover .sideNav-text {
 #content.collapsed .mainContent {
     margin-left: 60px;
     transition: margin-left 0.5s ease;
-    overflow: hidden;
+    margin-top: 3.5rem;
 }
 
 menu, ol, ul {
@@ -170,19 +174,19 @@ input[type="radio"]:checked + span {
 </style>
 
 <body>
-    <div id="sideNav" class="bg-white w-56 h-screen p-3 transition duration-500 ease-linear <?php echo $sidebarClass; ?>" style="position: fixed;">
-        <div class="flex flex-col items-center mt-4">
+    <div id="sideNav" class="bg-white w-56 h-screen pt-3 transition duration-500 ease-linear <?php echo $sidebarClass; ?>" style="position: fixed;">
+        <div class="flex flex-col items-center p-3">
             <div class="userIcon flex bg-gray-400 rounded-full h-24 w-24 mb-4 text-6xl text-white items-center justify-center">
                 <img src="/teknoid-absensi/public/logo.png" class="align-middle fa-solid fa-user text-center"/>
             </div>
             <p class="text-lg font-semibold sideNav-text"><?php echo $username ?></p>
             <p class="text-green-500 sideNav-text">Online</p>
         </div>
-        <nav class="mt-2">
+        <nav class="p-3">
             <ul class="">
                 <li class="mb-2">
                     <a href="dashboard.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dashboard.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
-                        <span class="sideNav-icon flex items-center justify-center w-8 h-8 border-2 rounded-lg border-none 
+                        <span class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg 
                             <?php echo $current_page == 'dashboard.php' ? 'text-white' : 'text-purpleNavbar'; ?>">
                             <i class="fa-solid fa-house"></i>
                         </span>
@@ -191,7 +195,7 @@ input[type="radio"]:checked + span {
                 </li>
                 <li class="mb-2">
                     <a href="dataPegawai.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dataPegawai.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
-                        <span id="user-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-2 border-none rounded-lg">
+                        <span id="user-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
                             <i class="fa-solid fa-users-gear"></i>
                         </span>
                         <span class="ml-2 font-medium sideNav-text">Pegawai</span>
@@ -199,7 +203,7 @@ input[type="radio"]:checked + span {
                 </li>
                 <li class="mb-2">
                     <a href="dataAbsensi.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dataAbsensi.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
-                        <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-2 border-none rounded-lg">
+                        <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
                             <i class="fa-regular fa-calendar-days"></i>
                         </span>
                         <span class="ml-2 font-medium sideNav-text">Absensi</span>
@@ -207,7 +211,7 @@ input[type="radio"]:checked + span {
                 </li>
             </ul>
         </nav>
-        <div class="copyright absolute items-center bottom-0 left-10 text-gray-500 pb-4">
+        <div class="copyright absolute w-full text-center items-center bottom-0 text-gray-500 pb-4">
             © Teknogenius 2024
         </div>
     </div>

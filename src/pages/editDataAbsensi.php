@@ -58,7 +58,7 @@ $token = $_SESSION['token'];
 
                 <div class="mb-4">
                     <label class="block text-gray-700 font-semibold mb-2">Keterangan</label>
-                    <div class="flex items-center justify-start space-x-4">
+                    <div class="flex items-center justify-between space-x-8 sm:justify-start">
                         <label class="flex items-center text-gray-600">
                         <input
                             type="radio"

@@ -46,16 +46,16 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pengaturan Akun</title>
     <link href="../../css/output.css" rel="stylesheet">
-    <link href="../../css/font/poppins-font.css" rel="stylesheet">
+    <link href="./css/font/poppins-font.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
 <body>
-    <div class="flex flex-row">
+    <div class="flex flex-col md:flex-row lg:flex-row h-screen">
       <!-- Side Navigation -->
       <?php include('navbar/sidenav.php') ?>
 
-      <div id="content" class="inline-flex flex-col flex-1 bg-mainBgColor ml-56">
+      <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
           <!-- Top Navigation -->
           <?php include('navbar/topnav.php') ?>
 
@@ -132,13 +132,11 @@ $conn->close();
                     />
                   </div>
                   <div style="grid-area: main;">
-                    <div class="relative">
-                      <input
-                        type="date"
-                        placeholder="Masukkan Tanggal Lahir"
-                        class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar"
-                      />
-                    </div>
+                    <input
+                      type="date"
+                      placeholder="Masukkan Tanggal Lahir"
+                      class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar"
+                    />                    
                   </div>
                 </div>
 

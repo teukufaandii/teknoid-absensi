@@ -1,20 +1,37 @@
 .tableOverflow {
-    overflow-x: auto;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    overflow: auto;
     width: 100%;
     max-height: 400px;
     cursor: default !important;
-    position: relative;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
 }
+
 table {
-    position: relative;
+    width: 100%;
+    border: 1px solid #ddd; /* Optional: Adds a border around the table */
+    border-collapse: collapse;
+}
+
+tr {
     width: 100%;
 }
-tr{
-    width: 100%;
+
+tr:nth-child(even) {
+    background-color: rgba(222, 222, 222, 0.663);
 }
+
 th, td {
-    min-width: 180px;
+    width: max-content;
     text-align: center;
+    white-space: nowrap;
+}
+
+th {
+    background-color: #8C85FF;
+}
+
+@media (max-width: 768px) {
+    th, td {
+        min-width: 100px;
+    }
 }

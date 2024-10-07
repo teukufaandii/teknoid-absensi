@@ -20,7 +20,7 @@ if (!$nama_row) {
     exit();
 }
 
-$nama_pengguna = $nama_row['nama'];
+$nama_pengguna = $nama_row['nama']; 
 
 // Pengaturan baris
 $start = 0;

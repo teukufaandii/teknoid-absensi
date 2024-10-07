@@ -2,8 +2,8 @@
 session_start();
 
 if (!isset($_SESSION['token'])) {
-    header('Location: login.php');
-    exit();
+  header('Location: login.php');
+  exit();
 }
 
 $username = htmlspecialchars($_SESSION['name']);
@@ -17,49 +17,48 @@ $token = $_SESSION['token'];
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Pegawai</title>
-    <link href="../../css/output.css" rel="stylesheet">
-    <link href="./css/font/poppins-font.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Pegawai</title>
+  <link href="../../css/output.css" rel="stylesheet">
+  <link href="./css/font/poppins-font.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
 <body>
-    <div class="flex flex-col md:flex-row lg:flex-row h-screen">
-      <!-- Side Navigation -->
-      <?php include('navbar/sidenav.php') ?>
+  <div class="flex flex-col md:flex-row lg:flex-row h-screen">
+    <!-- Side Navigation -->
+    <?php include('navbar/sidenav.php') ?>
 
-      <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
-          <!-- Top Navigation -->
-          <?php include('navbar/topnav.php') ?>
+    <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
+      <!-- Top Navigation -->
+      <?php include('navbar/topnav.php') ?>
 
-          <!-- Main Content -->
-          <main class="flex-1 p-6 bg-mainBgColor mainContent">
-            <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Pegawai</h1>
+      <!-- Main Content -->
+      <main class="flex-1 p-6 bg-mainBgColor mainContent">
+        <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Pegawai</h1>
 
-          <!-- Search Bar & Button Tambah -->
-          <div class="flex justify-between items-center mt-5">
-                <a href="tambahPegawai.php">
-                      <button class="bg-purpleNavbar text-white px-4 py-2 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
-                        Tambah <i class="fa-solid fa-circle-plus"></i>
-                      </button>
-                </a>
+        <!-- Search Bar & Button Tambah -->
+        <div class="flex justify-between items-center mt-5">
+          <a href="tambahPegawai.php">
+            <button class="bg-purpleNavbar text-white px-4 py-2 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
+              Tambah <i class="fa-solid fa-circle-plus"></i>
+            </button>
+          </a>
 
-                <div class="relative">
-                    <input 
-                            type="text" 
-                            id="searchInput" 
-                            placeholder="Search here..." 
-                            class="w-60 px-4 py-2 border rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-purpleNavbar text-sm"
-                            onkeyup="searchTable()"
-                    />
-                    <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                </div>
-        </div>   
-                            
-                  <div class="tableOverflow mt-6 shadow-customTable rounded-lg">
-                  <table class="min-w-full bg-white border">
+          <div class="relative">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search here..."
+              class="w-60 px-4 py-2 border rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-purpleNavbar text-sm"
+              onkeyup="searchTable()" />
+            <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          </div>
+        </div>
+
+        <div class="tableOverflow mt-6 shadow-customTable rounded-lg">
+          <table class="min-w-full bg-white border">
             <thead>
               <tr class="bg-purpleNavbar text-white rounded-t-lg">
                 <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tl-lg">No</th>
@@ -124,31 +123,31 @@ $token = $_SESSION['token'];
               ?>
             </tbody>
           </table>
-                  </div>
-                  <div class="flex justify-center items-center space-x-1 mt-4">
-                      <!-- Previous Button -->
-                      <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">
-                          <i class="fas fa-chevron-left"></i>
-                      </button>
-                      
-                      <!-- Page Numbers -->
-                      <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">1</button>
-                      <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">2</button>
-                      <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">3</button>
+        </div>
+        <div class="flex justify-center items-center space-x-1 mt-4">
+          <!-- Previous Button -->
+          <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">
+            <i class="fas fa-chevron-left"></i>
+          </button>
 
-                      <!-- Dots -->
-                      <button class="min-w-9 px-3 py-2 bg-white text-purpleNavbar rounded-md hover:text-white hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">...</button>
+          <!-- Page Numbers -->
+          <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">1</button>
+          <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">2</button>
+          <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">3</button>
 
-                      <!-- Next Button -->
-                      <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">
-                          <i class="fas fa-chevron-right"></i>
-                      </button>
-                  </div>
-          </main>
-      </div>
+          <!-- Dots -->
+          <button class="min-w-9 px-3 py-2 bg-white text-purpleNavbar rounded-md hover:text-white hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">...</button>
+
+          <!-- Next Button -->
+          <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </main>
     </div>
-    
-    <?php include('navbar/profileInfo.php') ?>
+  </div>
+
+  <?php include('navbar/profileInfo.php') ?>
 </body>
 
 

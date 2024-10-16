@@ -129,7 +129,6 @@ li:hover .sideNav-text {
     transition: opacity 0.3s ease, margin-left 0.3s ease;
 }
 
-/* Default topNav width */
 #topNav {
     width: 100%;
     transition: width 0.5s ease;
@@ -173,7 +172,9 @@ input[type="radio"]:checked + span {
 }
 </style>
 
+
 <body>
+<?php if ($_SESSION['role'] == 'admin') { ?>
     <div id="sideNav" class="bg-white w-56 h-screen pt-3 transition duration-500 ease-linear <?php echo $sidebarClass; ?>" style="position: fixed;">
         <div class="flex flex-col items-center p-3">
             <div class="userIcon flex bg-gray-400 rounded-full h-24 w-24 mb-4 text-6xl text-white items-center justify-center">
@@ -185,7 +186,7 @@ input[type="radio"]:checked + span {
         <nav class="p-3">
             <ul class="">
                 <li class="mb-2">
-                    <a href="dashboard.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dashboard.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                    <a href="../humas/dashboard.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dashboard.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
                         <span class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg 
                             <?php echo $current_page == 'dashboard.php' ? 'text-white' : 'text-purpleNavbar'; ?>">
                             <i class="fa-solid fa-house"></i>
@@ -194,7 +195,7 @@ input[type="radio"]:checked + span {
                     </a>
                 </li>
                 <li class="mb-2">
-                    <a href="dataPegawai.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dataPegawai.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                    <a href="./dataPegawai.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dataPegawai.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
                         <span id="user-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
                             <i class="fa-solid fa-users-gear"></i>
                         </span>
@@ -202,11 +203,19 @@ input[type="radio"]:checked + span {
                     </a>
                 </li>
                 <li class="mb-2">
-                    <a href="dataAbsensi.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dataAbsensi.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                    <a href="./dataAbsensi.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dataAbsensi.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
                         <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
                             <i class="fa-regular fa-calendar-days"></i>
                         </span>
                         <span class="ml-2 font-medium sideNav-text">Absensi</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dataAbsensi.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                        <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
+                        <i class="fa-regular fa-calendar-plus"></i>
+                        </span>
+                        <span class="ml-2 font-medium sideNav-text">Atur Hari Libur</span>
                     </a>
                 </li>
             </ul>
@@ -215,6 +224,34 @@ input[type="radio"]:checked + span {
             © Teknogenius 2024
         </div>
     </div>
+<?php } elseif ($_SESSION['role'] == 'user') { ?>
+    <div id="sideNav" class="bg-white w-56 h-screen pt-3 transition duration-500 ease-linear <?php echo $sidebarClass; ?>" style="position: fixed;">
+        <div class="flex flex-col items-center p-3">
+            <div class="userIcon flex bg-gray-400 rounded-full h-24 w-24 mb-4 text-6xl text-white items-center justify-center">
+                <img src="/teknoid-absensi/public/logo.png" class="align-middle fa-solid fa-user text-center"/>
+            </div>
+            <p class="text-lg font-semibold sideNav-text"><?php echo $username ?></p>
+            <p class="text-green-500 sideNav-text">Online</p>
+        </div>
+        <nav class="p-3">
+            <ul class="">
+                <li class="mb-2">
+                    <a href="./user/dashboard.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dashboard.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                        <span class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg 
+                            <?php echo $current_page == 'dashboard.php' ? 'text-white' : 'text-purpleNavbar'; ?>">
+                            <i class="fa-solid fa-house"></i>
+                        </span>
+                        <span class="ml-2 font-medium sideNav-text">Dashboard</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="copyright absolute w-full text-center items-center bottom-0 text-gray-500 pb-4">
+            © Teknogenius 2024
+        </div>
+    </div>
+<?php } ?>
+
 </body>
 
 <script>

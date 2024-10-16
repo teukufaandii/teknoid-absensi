@@ -1,3 +1,21 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['role'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
+$redirectUrl = '';
+if ($_SESSION['role'] === 'admin') {
+    $redirectUrl = './pages/humas/dashboard.php';
+} elseif ($_SESSION['role'] === 'user') {
+    $redirectUrl = './pages/user/dashboard.php';
+} else {
+    $redirectUrl = './pages/default/dashboard.php';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -11,7 +29,6 @@
         body {
             font-family: Poppins, 'sans-serif';
         }
-        /* Animation styles */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -35,10 +52,10 @@
         <h2 class="text-2xl font-bold mb-2">Login Berhasil!</h2>
         <p class="text-gray-700 mb-4">Selamat datang! Anda telah berhasil masuk ke sistem.</p>
     </div>
-
+    
     <script>
         setTimeout(() => {
-            window.location.href = './pages/dashboard.php';
+            window.location.href = '<?php echo $redirectUrl; ?>';
         }, 2000); 
     </script>
 </body>

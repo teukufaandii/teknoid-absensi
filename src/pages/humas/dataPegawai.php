@@ -20,19 +20,19 @@ $token = $_SESSION['token'];
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Data Pegawai</title>
-  <link href="../../css/output.css" rel="stylesheet">
-  <link href="./css/font/poppins-font.css" rel="stylesheet">
+  <link href="../../../css/output.css" rel="stylesheet">
+  <link href="../css/font/poppins-font.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
 <body>
   <div class="flex flex-col md:flex-row lg:flex-row h-screen">
     <!-- Side Navigation -->
-    <?php include('navbar/sidenav.php') ?>
+    <?php include('../navbar/sidenav.php') ?>
 
     <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
       <!-- Top Navigation -->
-      <?php include('navbar/topnav.php') ?>
+      <?php include('../navbar/topnav.php') ?>
 
       <!-- Main Content -->
       <main class="flex-1 p-6 bg-mainBgColor mainContent">
@@ -70,7 +70,7 @@ $token = $_SESSION['token'];
             </thead>
             <tbody class="divide-y divide-gray-200">
               <?php
-              include '../db/db_connect.php';
+              include '../../db/db_connect.php';
 
               // pengaturan baris
               $start = 0;
@@ -147,7 +147,7 @@ $token = $_SESSION['token'];
     </div>
   </div>
 
-  <?php include('navbar/profileInfo.php') ?>
+  <?php include('../navbar/profileInfo.php') ?>
 </body>
 
 

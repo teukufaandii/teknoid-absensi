@@ -16,7 +16,7 @@ if ($simpan) {
     // Get the current time and date
     $current_time = date("H:i:s");
     $current_date = date("Y-m-d");
-    $current_day = date("l"); // Get the day of the week
+    $current_day = date("l"); 
 
     // Retrieve id_pg from tb_pengguna based on nomor_kartu
     $user_query = "SELECT id_pg FROM tb_pengguna WHERE nomor_kartu = '$nomor_kartu'";
@@ -32,17 +32,16 @@ if ($simpan) {
         $check_result = mysqli_query($conn, $check_query);
 
         if ($check_result && mysqli_num_rows($check_result) > 0) {
-            echo "Data untuk hari ini sudah ada.";
-        } else {
+            // Insert new entry for today
             // Determine if it's before or after 12 PM
             if (strtotime($current_time) < strtotime("12:00:00")) {
                 // Insert into tb_detail scan_masuk
                 $jam_kerja = ($current_day == 'Sunday') ? 'Libur' : 'Hari Kerja';
-                $insert_query = "INSERT INTO tb_detail(nomor_kartu, id_pg, scan_masuk, tanggal, jam_kerja, durasi) VALUES ('$nomor_kartu', '$id_pg', '$current_date $current_time', '$current_date', '$jam_kerja', NULL)";
+                $insert_query = "UPDATE tb_detail SET scan_masuk = '$current_date $current_time', jam_kerja = '$jam_kerja' WHERE nomor_kartu = '$nomor_kartu' AND DATE(tanggal) = '$current_date'";
             } else {
                 // Insert into tb_detail scan_keluar
                 $jam_kerja = ($current_day == 'Sunday') ? 'Libur' : 'Hari Kerja';
-                $insert_query = "INSERT INTO tb_detail(nomor_kartu, id_pg, scan_keluar, tanggal, jam_kerja, durasi) VALUES ('$nomor_kartu', '$id_pg', '$current_date $current_time', '$current_date', '$jam_kerja', NULL)";
+                $insert_query = "UPDATE tb_detail SET scan_keluar = '$current_date $current_time', jam_kerja = '$jam_kerja' WHERE nomor_kartu = '$nomor_kartu' AND DATE(tanggal) = '$current_date'";
             }
 
             // Execute the insert query
@@ -68,6 +67,8 @@ if ($simpan) {
             } else {
                 echo "Gagal saat menyimpan waktu: " . mysqli_error($conn);
             }
+        } else {
+            echo "Data belum ada";
         }
     } else {
         // If nomor_kartu is not found in tb_pengguna, check tb_anonim

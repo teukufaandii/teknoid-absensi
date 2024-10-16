@@ -8,10 +8,7 @@ if (!isset($_SESSION['token'])) {
 }
 
 // Koneksi ke database
-$conn = mysqli_connect("localhost", "root", "", "db_absensi");
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include '../../db/db_connect.php';
 
 // Ambil filter dari URL (harian, mingguan, bulanan) dan tanggal untuk mingguan dan bulanan
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'harian';

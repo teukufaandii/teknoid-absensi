@@ -13,7 +13,7 @@ $token = $_SESSION['token'];
 
 if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
   $id_pg = $_GET['id_pg']; 
-include '../db/db_connect.php';
+include '../../db/db_connect.php';
 
 $query = "SELECT nama FROM tb_pengguna WHERE id_pg = ?";
 $stmt = $conn->prepare($query);
@@ -39,8 +39,8 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Preview Absensi</title>
-    <link href="../../css/output.css" rel="stylesheet">
-    <link href="./css/font/poppins-font.css" rel="stylesheet">
+    <link href="../../../css/output.css" rel="stylesheet">
+    <link href="../css/font/poppins-font.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -48,11 +48,11 @@ $conn->close();
 <body>
   <div class="flex flex-col md:flex-row lg:flex-row h-screen">
       <!-- Side Navigation -->
-      <?php include('navbar/sidenav.php') ?>
+      <?php include('../navbar/sidenav.php') ?>
 
       <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
           <!-- Top Navigation -->
-          <?php include('navbar/topnav.php') ?>
+          <?php include('../navbar/topnav.php') ?>
 
           <!-- Main Content -->
           <main class="flex-1 p-6 bg-mainBgColor mainContent">
@@ -93,7 +93,7 @@ $conn->close();
 
     // Function to fetch data and pagination
     function fetchAbsensiData(page) {
-    $.get('../db/routes/fetchPreviewData.php', { id_pg: id_pg, 'page-nr': page })
+    $.get('../../db/routes/fetchPreviewData.php', { id_pg: id_pg, 'page-nr': page })
         .done(function(data) {
             $('#absensi-data').html(data);
             renderPagination(page, totalPages);
@@ -155,7 +155,7 @@ $conn->close();
     fetchAbsensiData(currentPage);
 </script>
 
-<?php include('navbar/profileInfo.php') ?>
+<?php include('../navbar/profileInfo.php') ?>
 
 </body>
 

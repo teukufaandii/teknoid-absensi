@@ -1,5 +1,5 @@
 <?php
-include '../db/db_connect.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/teknoid-absensi/src/db/db_connect.php';
 
 if (!isset($_SESSION['token'])) {
     header('Location: login.php');

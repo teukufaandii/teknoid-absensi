@@ -17,10 +17,10 @@
                 <p>Jabatan: Lecturer</p>
                 <p>Status: <span class="status inline-block px-2 py-1 bg-green-200 text-green-700 rounded text-xs">Aktif</span></p>
             </div>
-            <a href="../pages/pengaturanAkun.php" class="menu-item block text-center border-t hover:bg-gray-100 p-2 text-sm">
+            <a href="../pengaturanAkun.php" class="menu-item block text-center border-t hover:bg-gray-100 p-2 text-sm">
                 <i class="fa-solid fa-gear"></i> Pengaturan Akun
             </a>
-            <a href="../db/routes/userLogout.php" class="text-red-400 menu-item block text-center border-t hover:bg-gray-100 rounded-b-md p-2 text-sm ">
+            <a href="../../db/routes/userLogout.php" class="text-red-400 menu-item block text-center border-t hover:bg-gray-100 rounded-b-md p-2 text-sm ">
                 <i class="fa-solid fa-right-from-bracket"></i> Log Out
             </a>
         </div>

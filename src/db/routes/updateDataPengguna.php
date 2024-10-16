@@ -36,7 +36,7 @@ try {
 
     // Bind parameters
     $stmt->bind_param(
-        'sssssi', // Types: s = string, i = integer
+        'ssssss',
         $userData['nomor_kartu'],
         $userData['nama'],
         $userData['noinduk'],

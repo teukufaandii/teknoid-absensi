@@ -21,9 +21,9 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Pegawai</title>
-  <link href="../../css/output.css" rel="stylesheet">
-  <link href="./css/font/poppins-font.css" rel="stylesheet">
-  <link href="./css/responsive/resp.css" rel="stylesheet">
+  <link href="../../../css/output.css" rel="stylesheet">
+  <link href="../css/font/poppins-font.css" rel="stylesheet">
+  <link href="../css/responsive/resp.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -32,11 +32,11 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
 <body>
   <div class="flex flex-col md:flex-row lg:flex-row h-screen">
     <!-- Side Navigation -->
-    <?php include('navbar/sidenav.php') ?>
+    <?php include('../navbar/sidenav.php') ?>
 
     <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
       <!-- Top Navigation -->
-      <?php include('navbar/topnav.php') ?>
+      <?php include('../navbar/topnav.php') ?>
 
       <!-- Main Content -->
       <main class="flex-1 p-6 bg-mainBgColor mainContent">
@@ -120,7 +120,7 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
     </div>
   </div>
 
-  <?php include('navbar/profileInfo.php') ?>
+  <?php include('../navbar/profileInfo.php') ?>
 </body>
 
 <script>
@@ -151,7 +151,7 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
     }).then((result) => {
       if (result.isConfirmed) {
         // Proceed with the fetch call to update data
-        fetch('../db/routes/updateDataPengguna.php', {
+        fetch('../../db/routes/updateDataPengguna.php', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -190,14 +190,10 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
     });
   }
 
-
-
-
-
   function fetchData() {
     const userId = <?php echo json_encode($id_pg); ?>;
 
-    fetch('../db/routes/fetchDataPengguna.php', {
+    fetch('../../db/routes/fetchDataPengguna.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

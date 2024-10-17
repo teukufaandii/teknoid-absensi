@@ -25,8 +25,7 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $nama_pg = htmlspecialchars($row['nama']); 
 } 
-$stmt->close();
-$conn->close();
+
 } else {
   $nama_pg = 'ID Pengguna tidak valid';
 }

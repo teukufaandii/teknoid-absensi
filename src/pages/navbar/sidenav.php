@@ -11,9 +11,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="./css/global/generalStyling.css">
-    <link rel="stylesheet" href="./css/global/tableFormat.css">
-    <link href="./css/font/poppins-font.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/global/generalStyling.css">
+    <link rel="stylesheet" href="../css/global/tableFormat.css">
+    <link href="../css/font/poppins-font.css" rel="stylesheet">
 </head>
 <style>
 /* Closed sidenav state */
@@ -211,7 +211,7 @@ input[type="radio"]:checked + span {
                     </a>
                 </li>
                 <li class="mb-2">
-                    <a href="" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dataAbsensi.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                    <a href="./setDayOff.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'setDayOff.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
                         <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
                         <i class="fa-regular fa-calendar-plus"></i>
                         </span>
@@ -236,12 +236,21 @@ input[type="radio"]:checked + span {
         <nav class="p-3">
             <ul class="">
                 <li class="mb-2">
-                    <a href="./user/dashboard.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dashboard.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                    <a href="./dashboard.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dashboard.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
                         <span class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg 
                             <?php echo $current_page == 'dashboard.php' ? 'text-white' : 'text-purpleNavbar'; ?>">
                             <i class="fa-solid fa-house"></i>
                         </span>
                         <span class="ml-2 font-medium sideNav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="./pengajuanCuti.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'pengajuanCuti.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                        <span class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg 
+                            <?php echo $current_page == 'dashboard.php' ? 'text-white' : 'text-purpleNavbar'; ?>">
+                            <i class="fa-solid fa-house"></i>
+                        </span>
+                        <span class="ml-2 font-medium sideNav-text">Pengajuan Cuti</span>
                     </a>
                 </li>
             </ul>

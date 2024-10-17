@@ -5,6 +5,7 @@ if (!isset($_SESSION['token'])) {
     header('Location: login.php');
     exit();
 }
+
 $username = htmlspecialchars($_SESSION['name']);
 $role = $_SESSION['role'];
 $id = $_SESSION['user_id'];
@@ -17,7 +18,6 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
-
     $username = htmlspecialchars($user['nama']);
     $email = htmlspecialchars($user['email']);
     $noinduk = htmlspecialchars($user['noinduk']);
@@ -28,7 +28,6 @@ if ($result->num_rows > 0) {
 }
 
 $stmt->close();
-$conn->close();
 
 ?>
 
@@ -183,3 +182,7 @@ $conn->close();
     </script>
 
 </html>
+
+<?php
+$conn->close();
+?>

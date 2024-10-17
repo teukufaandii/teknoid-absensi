@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -64,10 +66,22 @@
         </div>
     </div>
 
+    <!-- Toast Notification -->
+    <div id="toast-success" class="hidden fixed bottom-5 right-5 p-4 mb-4 w-80 max-w-xs bg-green-100 border-t-4 border-green-500 rounded-lg shadow-md text-green-800" role="alert">
+        <div class="flex">
+            <div class="py-1">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm font-medium">Berhasil logout.</p>
+            </div>
+        </div>
+    </div>
+
     <script>
         const togglePassword = document.getElementById('togglePassword');
         const passwordField = document.getElementById('password');
-        
+
         togglePassword.addEventListener('click', () => {
             const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordField.setAttribute('type', type);
@@ -77,7 +91,15 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const url = new URL(window.location);
-            
+            const toastSuccess = document.getElementById('toast-success');
+
+            if (url.searchParams.get('success') === 'logout') {
+                toastSuccess.classList.remove('hidden');
+                setTimeout(() => {
+                    toastSuccess.classList.add('hidden');
+                }, 3000);
+            }
+
             if (url.searchParams.has('error') || url.searchParams.has('success')) {
                 url.searchParams.delete('error');
                 url.searchParams.delete('success');

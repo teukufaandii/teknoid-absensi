@@ -6,6 +6,11 @@ include "../db_connect.php";
 // Get the card number from the query parameter
 $nomor_kartu = $_GET['nomor_kartu'];
 
+// Function to generate random ID
+function generateRandomId($length = 20) {
+    return substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', $length)), 0, $length);
+}
+
 // Clear the temporary RFID table
 mysqli_query($conn, "DELETE FROM temprfid");
 
@@ -16,7 +21,7 @@ if ($simpan) {
     // Get the current time and date
     $current_time = date("H:i:s");
     $current_date = date("Y-m-d");
-    $current_day = date("l"); 
+    $current_day = date("l"); // Get the day of the week
 
     // Retrieve id_pg from tb_pengguna based on nomor_kartu
     $user_query = "SELECT id_pg FROM tb_pengguna WHERE nomor_kartu = '$nomor_kartu'";
@@ -30,45 +35,37 @@ if ($simpan) {
         // Check if an entry already exists for today in tb_detail
         $check_query = "SELECT * FROM tb_detail WHERE nomor_kartu = '$nomor_kartu' AND DATE(tanggal) = '$current_date'";
         $check_result = mysqli_query($conn, $check_query);
-
+        
         if ($check_result && mysqli_num_rows($check_result) > 0) {
-            // Insert new entry for today
-            // Determine if it's before or after 12 PM
-            if (strtotime($current_time) < strtotime("12:00:00")) {
-                // Insert into tb_detail scan_masuk
-                $jam_kerja = ($current_day == 'Sunday') ? 'Libur' : 'Hari Kerja';
-                $insert_query = "UPDATE tb_detail SET scan_masuk = '$current_date $current_time', jam_kerja = '$jam_kerja' WHERE nomor_kartu = '$nomor_kartu' AND DATE(tanggal) = '$current_date'";
-            } else {
-                // Insert into tb_detail scan_keluar
-                $jam_kerja = ($current_day == 'Sunday') ? 'Libur' : 'Hari Kerja';
-                $insert_query = "UPDATE tb_detail SET scan_keluar = '$current_date $current_time', jam_kerja = '$jam_kerja' WHERE nomor_kartu = '$nomor_kartu' AND DATE(tanggal) = '$current_date'";
-            }
+            // Check the last scan time
+            $last_scan_row = mysqli_fetch_assoc($check_result);
+            $last_scan_time = strtotime($last_scan_row['scan_masuk'] ?? $last_scan_row['scan_keluar']);
+            $current_time_stamp = time();
 
+            // Check if the last scan was within the last 30 minutes
+            if (($current_time_stamp - $last_scan_time) < 1800) { // 1800 seconds = 30 minutes
+                echo "Anda harus menunggu 30 menit sebelum melakukan scan lagi.";
+                exit;
+            } else {
+                // Update scan_keluar if scan_masuk already exists
+                $update_query = "UPDATE tb_detail SET scan_keluar = '$current_date $current_time' WHERE nomor_kartu = '$nomor_kartu' AND DATE(tanggal) = '$current_date'";
+                mysqli_query($conn, $update_query);
+                echo "Scan keluar berhasil.";
+            }
+        } else {
+            // If no entry exists for today, insert new scan_masuk
+            $randomId = generateRandomId(20);
+            $jam_kerja = ($current_day == 'Sunday') ? 'Libur' : 'Hari Kerja';
+            $insert_query = "INSERT INTO tb_detail(id, nomor_kartu, id_pg, scan_masuk, tanggal, jam_kerja, durasi) VALUES ('$randomId', '$nomor_kartu', '$id_pg', '$current_date $current_time', '$current_date', '$jam_kerja', NULL)";
+            
             // Execute the insert query
             $insert_result = mysqli_query($conn, $insert_query);
 
             if ($insert_result) {
-                // Calculate duration if both entries exist
-                $duration_query = "SELECT scan_masuk, scan_keluar FROM tb_detail WHERE nomor_kartu = '$nomor_kartu' AND DATE(tanggal) = '$current_date'";
-                $duration_result = mysqli_query($conn, $duration_query);
-                
-                if ($duration_result && mysqli_num_rows($duration_result) == 2) {
-                    $duration_row = mysqli_fetch_assoc($duration_result);
-                    $start_time = strtotime($duration_row['scan_masuk']);
-                    $end_time = strtotime($duration_row['scan_keluar']);
-                    
-                    if ($end_time > $start_time) { // Ensure end time is after start time
-                        $duration = ($end_time - $start_time) / 3600; // Duration in hours
-                        $update_duration_query = "UPDATE tb_detail SET durasi = '$duration' WHERE nomor_kartu = '$nomor_kartu' AND DATE(tanggal) = '$current_date'";
-                        mysqli_query($conn, $update_duration_query);
-                    }
-                }
-                echo "Berhasil";
+                echo "Scan masuk berhasil.";
             } else {
                 echo "Gagal saat menyimpan waktu: " . mysqli_error($conn);
             }
-        } else {
-            echo "Data belum ada";
         }
     } else {
         // If nomor_kartu is not found in tb_pengguna, check tb_anonim

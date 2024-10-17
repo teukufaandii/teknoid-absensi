@@ -25,6 +25,8 @@ $token = $_SESSION['token'];
   <link href="./css/font/poppins-font.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -36,6 +38,10 @@ $token = $_SESSION['token'];
       <!-- Top Navigation -->
       <?php include('./navbar/topnav.php') ?>
 
+      <div id="notification" class="hidden fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded" role="alert">
+        <span id="notification-message"></span>
+      </div>
+
 
       <!-- Main Content -->
       <main class="flex-1 p-6 bg-mainBgColor mainContent">
@@ -45,9 +51,11 @@ $token = $_SESSION['token'];
             <label class="block text-gray-700 font-semibold mb-2">Nomor Kartu</label>
             <input
               type="text"
+              name="nomor_kartu"
               placeholder="Masukkan Nomor Kartu"
               class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar"
-              defaultValue="123456789" />
+              value="123456789"
+              readonly />
           </div>
 
           <div class="mb-4">
@@ -104,8 +112,7 @@ $token = $_SESSION['token'];
             </div>
           </div>
 
-          <div class="flex justify-between mt-6">
-            <button class="bg-red-400 text-white px-6 py-2 rounded-lg hover:bg-red-500 transition duration-200">Batal</button>
+          <div class="flex justify-end mt-6">
             <button class="bg-purpleNavbar text-white px-6 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200">Simpan</button>
           </div>
 
@@ -127,6 +134,8 @@ $token = $_SESSION['token'];
             $('input[name="username"]').val(data.nama);
             $('input[name="email"]').val(data.email);
             $('input[name="noinduk"]').val(data.noinduk);
+            $('input[name="nomor_kartu"]').val(data.nomor_kartu);
+            $('input[name="gender"][value="' + data.jenis_kelamin + '"]').prop('checked', true);
           }
         },
         error: function(xhr, status, error) {
@@ -134,8 +143,54 @@ $token = $_SESSION['token'];
           alert('Error fetching user data.');
         }
       });
+
+      $('button:contains("Simpan")').click(function(e) {
+        e.preventDefault();
+
+        Swal.fire({
+          title: 'Yakin ingin menyimpan perubahan?',
+          text: "Perubahan yang Anda buat akan disimpan!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#675EFF',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Ya, simpan!',
+          cancelButtonText: 'Batal'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const updatedData = {
+              username: $('input[name="username"]').val(),
+              email: $('input[name="email"]').val(),
+              noinduk: $('input[name="noinduk"]').val(),
+              gender: $('input[name="gender"]:checked').val()
+            };
+
+            $.ajax({
+              url: '../db/routes/updateMyData.php',
+              type: 'POST',
+              data: updatedData,
+              success: function(response) {
+                if (response.error) {
+                  Swal.fire('Error', response.error, 'error');
+                } else {
+                  Swal.fire(
+                    'Berhasil!',
+                    'Data Anda berhasil diperbarui.',
+                    'success'
+                  );
+                }
+              },
+              error: function(xhr, status, error) {
+                console.error(error);
+                Swal.fire('Error', 'Terjadi kesalahan saat memperbarui data.', 'error');
+              }
+            });
+          }
+        });
+      });
     });
   </script>
+
 
   <?php include('./navbar/profileInfo.php') ?>
 </body>

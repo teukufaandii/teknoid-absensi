@@ -24,6 +24,8 @@ $token = $_SESSION['token'];
     <link href="../../../css/output.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/dataAbsensi.css">
     <link href="../css/font/poppins-font.css" rel="stylesheet">
+    <link href="../css/global/generalStyling.css" rel="stylesheet">
+    <link href="../css/global/tableFormat.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
@@ -140,8 +142,6 @@ $token = $_SESSION['token'];
                         </button>
                     </div>
                 </div>
-
-
 
                 <div class="tableOverflow mt-6 shadow-customTable rounded-lg">
                     <table class="bg-white border">

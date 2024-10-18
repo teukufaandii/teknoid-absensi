@@ -51,7 +51,8 @@ $token = $_SESSION['token'];
 
         <script>
             document.getElementById("closeModal").addEventListener("click", function() {
-            document.getElementById("modal").style.display = "none";
+            //document.getElementById("modal").style.display = "none";
+            window.location.href = "dashboard.php";
             });
 
             document.getElementById("redirectToWebsite").addEventListener("click", function() {

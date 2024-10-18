@@ -77,8 +77,7 @@ $token = $_SESSION['token'];
                             type="text"
                             id="searchInput"
                             placeholder="Search here..."
-                            class="w-60 px-4 py-2 border rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-purpleNavbar text-sm"
-                            onkeyup="searchTable()" />
+                            class="w-60 px-4 py-2 border rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-purpleNavbar text-sm" />
                         <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                     </div>
                 </div>

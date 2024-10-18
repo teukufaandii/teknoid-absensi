@@ -52,7 +52,7 @@ $token = $_SESSION['token'];
                         <p class="text-white text-xs sm:text-sm">Konten Dashboard</p>
                     </div>
                     <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
-                        <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Dashboard</h2>
+                        <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Total Karyawan</h2>
                         <p class="text-white text-xs sm:text-sm">Konten Dashboard</p>
                     </div>
                 </div>

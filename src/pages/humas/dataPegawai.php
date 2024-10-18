@@ -22,6 +22,8 @@ $token = $_SESSION['token'];
   <title>Data Pegawai</title>
   <link href="../../../css/output.css" rel="stylesheet">
   <link href="../css/font/poppins-font.css" rel="stylesheet">
+  <!-- ajax live search -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
@@ -47,18 +49,19 @@ $token = $_SESSION['token'];
           </a>
 
           <div class="relative">
+          <form method="GET">
             <input
               type="text"
               id="searchInput"
               placeholder="Search here..."
-              class="w-60 px-4 py-2 border rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-purpleNavbar text-sm"
-              onkeyup="searchTable()" />
+              class="w-60 px-4 py-2 border rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-purpleNavbar text-sm" />
             <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          </form>
           </div>
         </div>
 
         <div class="tableOverflow mt-6 shadow-customTable rounded-lg">
-          <table class="min-w-full bg-white border">
+          <table class="min-w-full bg-white border" id="tablePegawai">
             <thead>
               <tr class="bg-purpleNavbar text-white rounded-t-lg">
                 <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tl-lg">No</th>
@@ -146,9 +149,25 @@ $token = $_SESSION['token'];
       </main>
     </div>
   </div>
-
   <?php include('../navbar/profileInfo.php') ?>
 </body>
 
+<script>
+   $(document).ready(function() {
+            $("#searchInput").keyup(function() {
+                var search = $(this).val();
+                $.ajax({
+                    url: '../../db/ajax/searchPegawai.php',
+                    method: 'POST',
+                    data: {
+                        query: search
+                    },
+                    success: function(response) {
+                        $("#tablePegawai").html(response);
+                    }
+                });
+            });
+        });
+</script>
 
 </html>

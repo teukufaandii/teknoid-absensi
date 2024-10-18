@@ -31,11 +31,9 @@ $token = $_SESSION['token'];
 
 <body>
   <div class="flex flex-col md:flex-row lg:flex-row h-screen">
-    <!-- Side Navigation -->
     <?php include('./navbar/sidenav.php') ?>
 
     <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
-      <!-- Top Navigation -->
       <?php include('./navbar/topnav.php') ?>
 
       <div id="notification" class="hidden fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded" role="alert">

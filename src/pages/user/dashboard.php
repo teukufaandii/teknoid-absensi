@@ -58,7 +58,9 @@ $token = $_SESSION['token'];
             </main>
         </div>
     </div>
+
     <?php include('../navbar/profileInfo.php') ?>
+    
 </body>
 
 </html>

@@ -67,7 +67,7 @@
     </div>
 
     <!-- Toast Notification -->
-    <div id="toast-success" class="hidden fixed bottom-5 right-5 p-4 mb-4 w-80 max-w-xs bg-green-100 border-t-4 border-green-500 rounded-lg shadow-md text-green-800" role="alert">
+    <div id="toast-success" class="hidden fixed top-5 right-5 p-4 mb-4 w-80 max-w-xs bg-green-100 border-t-4 border-green-500 rounded-lg shadow-md text-green-800" role="alert">
         <div class="flex">
             <div class="py-1">
                 <i class="fas fa-check-circle"></i>

@@ -157,7 +157,7 @@ $token = $_SESSION['token'];
             $("#searchInput").keyup(function() {
                 var search = $(this).val();
                 $.ajax({
-                    url: '../../db/ajax/searchPegawai.php',
+                    url: '../../db/routes/searchPegawai.php',
                     method: 'POST',
                     data: {
                         query: search

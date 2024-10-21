@@ -142,12 +142,12 @@ li:hover .sideNav-text {
 #content {
     margin-left: 14rem; 
     transition: margin-left 0.5s ease;
-    max-width: 100%;
     overflow-x: hidden;
 }
 
 /* Collapsed state */
 #content.collapsed {
+    display: inline-flex;
     margin-left: 0px; 
     transition: margin-left 0.5s ease;
 }
@@ -215,7 +215,7 @@ input[type="radio"]:checked + span {
                         <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
                         <i class="fa-regular fa-calendar-plus"></i>
                         </span>
-                        <span class="ml-2 font-medium sideNav-text">Atur Hari Libur</span>
+                        <span class="ml-2 font-medium sideNav-text whitespace-nowrap">Atur Hari Libur</span>
                     </a>
                 </li>
             </ul>

@@ -27,6 +27,7 @@ $token = $_SESSION['token'];
     <link href="../css/global/generalStyling.css" rel="stylesheet">
     <link href="../css/global/tableFormat.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -153,79 +154,20 @@ $token = $_SESSION['token'];
                                 <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tr-lg">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            <?php
-                            include '../../db/db_connect.php';
-
-                            // pengaturan baris
-                            $start = 0;
-                            $rows_per_page = 10;
-
-                            // total nomor baris
-                            $records = mysqli_query($conn, "SELECT * FROM tb_pengguna");
-                            $nr_of_rows = $records->num_rows;
-
-                            // kalkulasi nomor per halaman
-                            $pages = ceil($nr_of_rows / $rows_per_page);
-
-                            // start point
-                            if (isset($_GET['page-nr'])) {
-                                $page = $_GET['page-nr'] - 1;
-                                $start = $page * $rows_per_page;
-                            } else {
-                                $page = 0;
-                            }
-
-                            // ambil data dari tabel dengan batasan jumlah per halaman
-                            $stmt = $conn->prepare("SELECT * FROM tb_pengguna LIMIT ?, ?");
-                            $stmt->bind_param("ii", $start, $rows_per_page);
-                            $stmt->execute();
-                            $result = $stmt->get_result();
-
-                            if ($result->num_rows > 0) {
-                                $counter = $start + 1;
-                                while ($row = $result->fetch_assoc()) {
-                            ?>
-                                    <tr class="bg-gray-100">
-                                        <td class="px-6 py-2 text-center"><?php echo $counter++; ?></td>
-                                        <td class="px-6 py-2 text-center"><?php echo htmlspecialchars($row["noinduk"]); ?></td>
-                                        <td class="px-6 py-2 text-center"><?php echo htmlspecialchars($row["nama"]); ?></td>
-                                        <td class="px-6 py-2 text-center"><?php echo htmlspecialchars($row["role"]); ?></td>
-                                        <td class="px-6 py-2 text-center">
-                                            <a href="previewDataAbsensi.php?id_pg=<?php echo $row['id_pg']; ?>">
-                                                <button class="bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition">Edit</button>
-                                            </a>
-                                        </td>
-                                    </tr>
-                            <?php
-                                }
-                            } else {
-                                echo "<tr><td colspan='5' class='text-center'>Tidak ada data</td></tr>";
-                            }
-
-                            $stmt->close();
-                            $conn->close();
-                            ?>
+                        <tbody id="absensi-table-body" class="divide-y divide-gray-200">
                         </tbody>
                     </table>
                 </div>
 
                 <div class="flex justify-center items-center space-x-1 mt-4">
-                    <!-- Previous Button -->
-                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">
+                    <button id="prev-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl" disabled>
                         <i class="fas fa-chevron-left"></i>
                     </button>
 
-                    <!-- Page Numbers -->
-                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">1</button>
-                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">2</button>
-                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">3</button>
-
-                    <!-- Dots -->
-                    <button class="min-w-9 px-3 py-2 bg-white text-purpleNavbar rounded-md hover:text-white hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">...</button>
-
-                    <!-- Next Button -->
-                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">
+                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="0">1</button>
+                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="1">2</button>
+                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="2">3</button>
+                    <button id="next-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
@@ -233,6 +175,109 @@ $token = $_SESSION['token'];
             </main>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            let currentPage = 0;
+            let totalDataAbsensi = 0;
+
+            function loadDataAbsensi(page) {
+                $.ajax({
+                    url: '../../db/routes/getDataAbsensi.php',
+                    type: 'GET',
+                    data: {
+                        start: page * 5
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'unauthorized') {
+                            window.location.href = '../../unauthorized.php';
+                            return;
+                        }
+
+                        totalDataAbsensi = response.total;
+                        let DataAbsensiTableBody = $('#absensi-table-body');
+                        DataAbsensiTableBody.empty();
+
+                        if (response.data_absensi.length === 0 && currentPage > 0) {
+                            currentPage--;
+                            loadDataAbsensi(currentPage);
+                        } else if (response.data_absensi.length === 0) {
+                            DataAbsensiTableBody.append('<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>');
+                        } else {
+                            let counter = page * 5 + 1;
+                            response.data_absensi.forEach(function(data_absensi) {
+                                DataAbsensiTableBody.append(`
+                            <tr class="bg-gray-100">
+                                <td class="px-6 py-2 text-center">${counter++}</td>
+                                <td class="px-6 py-2 text-center">${data_absensi.noinduk}</td>
+                                <td class="px-6 py-2 text-center">${data_absensi.nama}</td>
+                                <td class="px-6 py-2 text-center">${data_absensi.role}</td>
+                                <td class="px-6 py-2 text-center">
+                                    <a href="./previewDataAbsensi.php?id_pg=${data_absensi.id_pg}">
+                                        <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
+                                    </a>
+                                    <a>
+                                         <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${data_absensi.id_pg}"><i class="fa-solid fa-trash"></i></button>
+                                    </a>
+                                </td>
+                            </tr>
+                        `);
+                            });
+                        }
+
+                        $('#prev-page').prop('disabled', currentPage === 0);
+                        $('#next-page').prop('disabled', (currentPage + 1) * 5 >= totalDataAbsensi);
+
+                        updatePaginationButtons();
+                    },
+                    error: function() {
+                        Swal.fire('Error!', 'Terjadi kesalahan saat memuat data', 'error');
+                    }
+                });
+            }
+
+            function updatePaginationButtons() {
+                const totalPages = Math.ceil(totalDataAbsensi / 5);
+                const paginationButtons = $('.pagination-button');
+
+                paginationButtons.hide();
+
+                for (let i = 0; i < totalPages; i++) {
+                    paginationButtons.eq(i).show().data('page', i).text(i + 1);
+                    if (i === currentPage) {
+                        paginationButtons.eq(i).addClass('active-button').removeClass('inactive-button');
+                    } else {
+                        paginationButtons.eq(i).addClass('inactive-button').removeClass('active-button');
+                    }
+                }
+
+                $('#next-page').prop('disabled', currentPage >= totalPages - 1);
+            }
+
+            $('#prev-page').on('click', function() {
+                if (currentPage > 0) {
+                    currentPage--;
+                    loadDataAbsensi(currentPage);
+                }
+            });
+
+            $('#next-page').on('click', function() {
+                if ((currentPage + 1) * 5 < totalDataAbsensi) {
+                    currentPage++;
+                    loadDataAbsensi(currentPage);
+                }
+            });
+
+            $(document).on('click', '.pagination-button', function() {
+                currentPage = parseInt($(this).data('page'));
+                loadDataAbsensi(currentPage);
+                updatePaginationButtons();
+            });
+
+            loadDataAbsensi(currentPage);
+        });
+    </script>
+
     <script>
         // Variables for popup and buttons
         const downloadButton = document.getElementById('downloadButton');

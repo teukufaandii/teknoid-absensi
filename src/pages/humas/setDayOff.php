@@ -52,7 +52,7 @@ $token = $_SESSION['token'];
                     <form id="holiday-form">
                         <div class="flex gap-4">
                             <div class="flex flex-col w-full gap-4">
-                                <div class="w-full flex flex-row gap-4">
+                                <div class="w-full flex flex-col md:flex-row gap-4">
                                     <div class="w-full">
                                         <label for="tanggal_mulai" class="block text-lg font-Poppins font-semibold text-gray-700">Tanggal Mulai</label>
                                         <input type="date" id="tanggal_mulai" name="tanggal_mulai" class="mt-1 block w-full px-4 py-2 border-2 border-gray-200 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm" required>
@@ -103,7 +103,6 @@ $token = $_SESSION['token'];
                     <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="0">1</button>
                     <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="1">2</button>
                     <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="2">3</button>
-
                     <button id="next-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">
                         <i class="fas fa-chevron-right"></i>
                     </button>
@@ -154,8 +153,8 @@ $token = $_SESSION['token'];
                                     <a href="./editDayOff.php?id=${holiday.id}">
                                         <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
                                     </a>
-                                    <a href="">
-                                        <button class="bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition"><i class="fa-solid fa-trash"></i></button>
+                                    <a>
+                                         <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${holiday.id}"><i class="fa-solid fa-trash"></i></button>
                                     </a>
                                 </td>
                             </tr>
@@ -191,6 +190,46 @@ $token = $_SESSION['token'];
 
                 $('#next-page').prop('disabled', currentPage >= totalPages - 1);
             }
+
+            $(document).on('click', '.delete-button', function() {
+                const id = $(this).data('id');
+                deleteHoliday(id);
+
+                function deleteHoliday(id) {
+                    Swal.fire({
+                        title: 'Konfirmasi',
+                        text: "Apakah Anda yakin ingin menghapus hari libur ini?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: '../../db/routes/deleteDayOff.php',
+                                type: 'POST',
+                                data: {
+                                    id: id
+                                },
+                                dataType: 'json',
+                                success: function(response) {
+                                    if (response.status === 'success') {
+                                        Swal.fire('Berhasil!', response.message, 'success');
+                                        loadHolidays(currentPage);
+                                    } else {
+                                        Swal.fire('Gagal!', response.message, 'error');
+                                    }
+                                },
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    Swal.fire('Error!', 'Terjadi kesalahan saat menghapus hari libur', 'error');
+                                }
+                            });
+                        }
+                    });
+                }
+            });
 
             $('#prev-page').on('click', function() {
                 if (currentPage > 0) {
@@ -258,6 +297,8 @@ $token = $_SESSION['token'];
             });
 
             loadHolidays(currentPage);
+
+
         });
     </script>
     <?php include('../navbar/profileInfo.php') ?>

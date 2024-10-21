@@ -26,6 +26,7 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
         $nama_pg = htmlspecialchars($row['nama']);
     }
 } else {
+    $id_pg = null;
     $nama_pg = 'ID Pengguna tidak valid';
 }
 ?>
@@ -86,8 +87,8 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
     </div>
     <script>
         let id_pg = <?php echo json_encode($id_pg); ?>;
-        let currentPage = 1; // Current page, starts from 1
-        let totalPages = 1; // Placeholder, will be updated with actual page count from backend
+        let currentPage = 1; 
+        let totalPages = 1;
 
         // Function to fetch data and pagination
         function fetchAbsensiData(page) {

@@ -51,7 +51,7 @@ $id_libur = $_GET['id'] ?? '';
                     <form id="holiday-form">
                         <div class="flex gap-4">
                             <div class="flex flex-col w-full gap-4">
-                                <div class="w-full flex flex-row gap-4">
+                                <div class="w-full flex flex-col md:flex-row gap-4">
                                     <div class="w-full">
                                         <label for="tanggal_mulai" class="block text-lg font-Poppins font-semibold text-gray-700">Tanggal Mulai</label>
                                         <input type="date" name="tanggal_mulai" class="mt-1 block w-full px-4 py-2 border-2 border-gray-200 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm" required>

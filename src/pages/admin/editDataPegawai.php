@@ -6,6 +6,12 @@ if (!isset($_SESSION['token'])) {
   exit();
 }
 
+// Cek session akses admin
+if ($_SESSION['role'] !== 'admin') {
+  header('Location: ../../unauthorized.php'); // Ganti dengan halaman yang sesuai
+  exit();
+}
+
 $username = htmlspecialchars($_SESSION['name']);
 $role = $_SESSION['role'];
 $id = $_SESSION['user_id'];
@@ -40,7 +46,12 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
 
       <!-- Main Content -->
       <main class="flex-1 p-6 bg-mainBgColor mainContent">
-        <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Edit Data Pegawai </h1>
+        <div class="flex justify-between items-center border-b border-gray-500">
+            <h1 class="text-lg sm:text-xl md:text-3xl py-2 font-Poppins font-semibold">Edit Data Pegawai</h1>
+            <a href="DataPegawai.php">
+                <button class="bg-purpleNavbar text-white px-4 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200">Kembali</button>
+            </a>
+        </div>
         <div class="w-full mx-auto py-6">
           <div class="mb-4">
             <label class="block text-gray-700 font-semibold mb-2">Nomor Kartu</label>

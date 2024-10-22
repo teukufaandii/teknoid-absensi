@@ -8,7 +8,7 @@ if (!isset($_SESSION['role'])) {
 
 $redirectUrl = '';
 if ($_SESSION['role'] === 'admin') {
-    $redirectUrl = './pages/humas/dashboard.php';
+    $redirectUrl = './pages/admin/dashboard.php';
 } elseif ($_SESSION['role'] === 'user') {
     $redirectUrl = './pages/user/dashboard.php';
 } else {

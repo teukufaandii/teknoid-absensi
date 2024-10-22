@@ -6,6 +6,12 @@ if (!isset($_SESSION['token'])) {
     exit();
 }
 
+// Cek session akses admin
+if ($_SESSION['role'] !== 'admin') {
+    header('Location: ../../unauthorized.php'); // Ganti dengan halaman yang sesuai
+    exit();
+}
+
 $username = htmlspecialchars($_SESSION['name']);
 $role = $_SESSION['role'];
 $id = $_SESSION['user_id'];

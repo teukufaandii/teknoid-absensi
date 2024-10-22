@@ -6,6 +6,12 @@ if (!isset($_SESSION['token'])) {
     exit();
 }
 
+// Cek session akses admin
+if ($_SESSION['role'] !== 'admin') {
+    header('Location: ../../unauthorized.php'); // Ganti dengan halaman yang sesuai
+    exit();
+}
+
 $username = htmlspecialchars($_SESSION['name']);
 $role = $_SESSION['role'];
 $id = $_SESSION['user_id'];
@@ -26,6 +32,7 @@ $token = $_SESSION['token'];
     <link href="../css/font/poppins-font.css" rel="stylesheet">
     <link href="../css/global/generalStyling.css" rel="stylesheet">
     <link href="../css/global/tableFormat.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/dataAbsensi.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -43,7 +50,7 @@ $token = $_SESSION['token'];
             <main class="flex-1 p-6 bg-mainBgColor mainContent">
                 <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Absensi</h1>
                 <?php
-               include '../../db/db_connect.php';
+                include '../../db/db_connect.php';
 
                 // pengaturan baris
                 $start = 0;
@@ -94,7 +101,6 @@ $token = $_SESSION['token'];
                                 <i class="fa-solid fa-calendar-days"></i>
                                 <span>Harian</span>
                             </button>
-
                             <!-- Mingguan Button with Date Range -->
                             <div class="relative w-full">
                                 <button id="mingguanButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2" onclick="toggleMingguan()">
@@ -114,7 +120,6 @@ $token = $_SESSION['token'];
                                     </button>
                                 </div>
                             </div>
-
                             <!-- Bulanan Button with Date Range -->
                             <div class="relative w-full">
                                 <button id="bulananButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2" onclick="toggleBulanan()">
@@ -163,7 +168,6 @@ $token = $_SESSION['token'];
                     <button id="prev-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl" disabled>
                         <i class="fas fa-chevron-left"></i>
                     </button>
-
                     <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="0">1</button>
                     <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="1">2</button>
                     <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="2">3</button>
@@ -179,13 +183,15 @@ $token = $_SESSION['token'];
         $(document).ready(function() {
             let currentPage = 0;
             let totalDataAbsensi = 0;
+            let searchTerm = ''; // Variabel untuk menyimpan kata kunci pencarian
 
-            function loadDataAbsensi(page) {
+            function loadDataAbsensi(page, search = '') {
                 $.ajax({
                     url: '../../db/routes/getDataAbsensi.php',
                     type: 'GET',
                     data: {
-                        start: page * 5
+                        start: page * 5,
+                        search: search // Kirim kata kunci pencarian ke backend
                     },
                     dataType: 'json',
                     success: function(response) {
@@ -200,7 +206,7 @@ $token = $_SESSION['token'];
 
                         if (response.data_absensi.length === 0 && currentPage > 0) {
                             currentPage--;
-                            loadDataAbsensi(currentPage);
+                            loadDataAbsensi(currentPage, search);
                         } else if (response.data_absensi.length === 0) {
                             DataAbsensiTableBody.append('<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>');
                         } else {
@@ -243,35 +249,44 @@ $token = $_SESSION['token'];
                 paginationButtons.hide();
 
                 for (let i = 0; i < totalPages; i++) {
-                    paginationButtons.eq(i).show().data('page', i).text(i + 1);
+                    const button = paginationButtons.eq(i);
+                    button.show().data('page', i).text(i + 1);
                     if (i === currentPage) {
-                        paginationButtons.eq(i).addClass('active-button').removeClass('inactive-button');
+                        button.removeClass('inactive-button').addClass('active-button');
                     } else {
-                        paginationButtons.eq(i).addClass('inactive-button').removeClass('active-button');
+                        button.removeClass('active-button').addClass('inactive-button');
                     }
                 }
 
-                $('#next-page').prop('disabled', currentPage >= totalPages - 1);
+                $('#prev-page').prop('disabled', currentPage === 0);
+                $('#next-page').prop('disabled', (currentPage + 1) * 5 >= totalDataAbsensi);
             }
 
             $('#prev-page').on('click', function() {
                 if (currentPage > 0) {
                     currentPage--;
-                    loadDataAbsensi(currentPage);
+                    loadDataAbsensi(currentPage, searchTerm);
                 }
             });
 
             $('#next-page').on('click', function() {
                 if ((currentPage + 1) * 5 < totalDataAbsensi) {
                     currentPage++;
-                    loadDataAbsensi(currentPage);
+                    loadDataAbsensi(currentPage, searchTerm);
                 }
             });
 
             $(document).on('click', '.pagination-button', function() {
                 currentPage = parseInt($(this).data('page'));
-                loadDataAbsensi(currentPage);
+                loadDataAbsensi(currentPage, searchTerm);
                 updatePaginationButtons();
+            });
+
+            // Event listener untuk input pencarian
+            $('#searchInput').on('keyup', function() {
+                searchTerm = $(this).val();
+                currentPage = 0; // Reset ke halaman pertama saat pencarian
+                loadDataAbsensi(currentPage, searchTerm);
             });
 
             loadDataAbsensi(currentPage);

@@ -186,7 +186,7 @@ input[type="radio"]:checked + span {
         <nav class="p-3">
             <ul class="">
                 <li class="mb-2">
-                    <a href="../humas/dashboard.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dashboard.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                    <a href="../admin/dashboard.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dashboard.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
                         <span class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg 
                             <?php echo $current_page == 'dashboard.php' ? 'text-white' : 'text-purpleNavbar'; ?>">
                             <i class="fa-solid fa-house"></i>

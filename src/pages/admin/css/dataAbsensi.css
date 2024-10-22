@@ -1,0 +1,9 @@
+.active-button {
+    background-color: #6b46c1; /* Purple color for active page */
+    color: white;
+}
+
+.inactive-button {
+    background-color: #e2e8f0; /* Gray for inactive pages */
+    color: #6b46c1;
+}

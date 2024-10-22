@@ -1,109 +1,96 @@
 <?php
-session_start();
-include '../db_connect.php';
+include '../../db/db_connect.php';
 
-$id_pg = $_GET['id_pg'];
+$id_pg = isset($_GET['id_pg']) ? $_GET['id_pg'] : '';
+$start = isset($_GET['start']) ? intval($_GET['start']) : 0;
+$limit = 10;
 
 // Ambil nama pengguna
-$nama_stmt = $conn->prepare("SELECT nama FROM tb_pengguna WHERE id_pg = ?");
-$nama_stmt->bind_param("s", $id_pg);
+$namaQuery = "SELECT nama FROM tb_pengguna WHERE id_pg = ?";
+$namaStmt = $conn->prepare($namaQuery);
+$namaStmt->bind_param("s", $id_pg);
+$namaStmt->execute();
+$namaResult = $namaStmt->get_result();
+$namaRow = $namaResult->fetch_assoc();
 
-if (!$nama_stmt->execute()) {
-    die('Query Error: ' . $nama_stmt->error);
-}
-
-$nama_result = $nama_stmt->get_result();
-$nama_row = $nama_result->fetch_assoc();
-
-if (!$nama_row) {
-    echo "<tr><td colspan='7' class='text-center'>Pengguna dengan ID PG: " . htmlspecialchars($id_pg) . " tidak ditemukan</td></tr>";
+if (!$namaRow) {
+    echo json_encode([
+        'status' => 'error',
+        'message' => "Pengguna dengan ID PG: " . htmlspecialchars($id_pg) . " tidak ditemukan"
+    ]);
     exit();
 }
 
-$nama_pengguna = $nama_row['nama'];
+$nama_pengguna = $namaRow['nama'];
 
-$start = 0;
-$rows_per_page = 10;
-
-// Hitung jumlah baris di tb_detail
-$count_stmt = $conn->prepare("
+// Hitung jumlah total data
+$countQuery = "
     SELECT COUNT(*) AS total_rows 
     FROM tb_detail 
     INNER JOIN tb_pengguna ON tb_detail.id_pg = tb_pengguna.id_pg 
     WHERE tb_detail.id_pg = ?
-");
-$count_stmt->bind_param("s", $id_pg);
-
-if (!$count_stmt->execute()) {
-    die('Query Error: ' . $count_stmt->error);
-}
-
-$count_result = $count_stmt->get_result();
-$row_count = $count_result->fetch_assoc();
-$nr_of_rows = $row_count['total_rows'];
+";
+$countStmt = $conn->prepare($countQuery);
+$countStmt->bind_param("s", $id_pg);
+$countStmt->execute();
+$countResult = $countStmt->get_result();
+$rowCount = $countResult->fetch_assoc();
+$nr_of_rows = $rowCount['total_rows'];
 
 if ($nr_of_rows == 0) {
-    echo "<tr><td colspan='7' class='text-center py-6'>Tidak ada data untuk pengguna: " . htmlspecialchars($nama_pengguna) . "</td></tr>";
+    echo json_encode([
+        'status' => 'success', // Change this to 'success' to indicate no data found
+        'total' => $nr_of_rows,
+        'preview_data_absensi' => [] // Return an empty array
+    ]);
     exit();
 }
 
-$pages = ceil($nr_of_rows / $rows_per_page);
-
-if (isset($_GET['page-nr'])) {
-    $page = $_GET['page-nr'] - 1;
-    $start = $page * $rows_per_page;
-} else {
-    $page = 0;
-}
+$pages = ceil($nr_of_rows / $limit);
 
 // Ambil data dari tabel dengan batasan jumlah per halaman
-$data_stmt = $conn->prepare("
+$dataQuery = "
     SELECT tb_detail.*, tb_pengguna.nama 
     FROM tb_detail 
     INNER JOIN tb_pengguna ON tb_detail.id_pg = tb_pengguna.id_pg 
     WHERE tb_detail.id_pg = ? 
     LIMIT ?, ?
-");
-$data_stmt->bind_param("sii", $id_pg, $start, $rows_per_page);
+";
+$dataStmt = $conn->prepare($dataQuery);
+$dataStmt->bind_param("sii", $id_pg, $start, $limit);
+$dataStmt->execute();
+$result = $dataStmt->get_result();
 
-if (!$data_stmt->execute()) {
-    die('Execute Error: ' . $data_stmt->error);
-}
+$preview_data_absensi = [];
+while ($row = $result->fetch_assoc()) {
+    $scanMasuk = $row["scan_masuk"] ? date('H:i', strtotime($row["scan_masuk"])) : '-';
+    $scanKeluar = $row["scan_keluar"] ? date('H:i', strtotime($row["scan_keluar"])) : '-';
 
-$result = $data_stmt->get_result();
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        // Format scan_masuk dan scan_keluar
-        $scanMasuk = $row["scan_masuk"] ? date('H:i', strtotime($row["scan_masuk"])) : '-';
-        $scanKeluar = $row["scan_keluar"] ? date('H:i', strtotime($row["scan_keluar"])) : '-';
-
-        // Hitung durasi jika scan_keluar ada
-        if (!empty($row["scan_keluar"])) {
-            $durasi = floor((strtotime($row["scan_keluar"]) - strtotime($row["scan_masuk"])) / 60); // Menggunakan floor untuk mendapatkan nilai bulat
-        } else {
-            $durasi = '-';
-        }
-
-        echo "<tr class='bg-gray-100'>
-                <td class='px-6 py-2 text-center'>" . htmlspecialchars($row["tanggal"]) . "</td>
-                <td class='px-6 py-2 text-center'>" . htmlspecialchars($row["jam_kerja"]) . "</td>
-                <td class='px-6 py-2 text-center'>" . htmlspecialchars($scanMasuk) . "</td>
-                <td class='px-6 py-2 text-center'>" . htmlspecialchars($scanKeluar) . "</td>
-                <td class='px-6 py-2 text-center'>" . ($durasi === '-' ? '-' : $durasi . " menit") . "</td>
-                <td class='px-6 py-2 text-center'>" . htmlspecialchars($row["keterangan"]) . "</td>
-                <td class='px-6 py-2 text-center'>" . htmlspecialchars($row["nama"]) . "</td>
-                <td class='px-6 py-2 text-center'>
-                    <a href='previewDataAbsensi.php?id_pg=" . $row['id_pg'] . "'>
-                        <button class='bg-purpleNavbar text-white px-8 py-2 rounded-xl hover:bg-purpleNavbarHover transition'>Edit</button >
-                    </a>
-                </td>
-              </tr>";
+    if (!empty($row["scan_keluar"])) {
+        $durasi = floor((strtotime($row["scan_keluar"]) - strtotime($row["scan_masuk"])) / 60);
+    } else {
+        $durasi = '-';
     }
-} else {
-    echo "<tr><td colspan='8' class='text-center'>Tidak ada data</td></tr>";
+
+    $preview_data_absensi[] = [
+        'tanggal' => htmlspecialchars($row["tanggal"]),
+        'jam_kerja' => htmlspecialchars($row["jam_kerja"]),
+        'scan_masuk' => htmlspecialchars($scanMasuk),
+        'scan_keluar' => htmlspecialchars($scanKeluar),
+        'durasi' => $durasi === '-' ? '-' : $durasi . " menit",
+        'keterangan' => htmlspecialchars($row["keterangan"]),
+        'nama' => htmlspecialchars($row["nama"]),
+        'id_pg' => $row['id_pg']
+    ];
 }
 
-$data_stmt->close();
+// Kirim hasil sebagai JSON
+echo json_encode([
+    'status' => 'success',
+    'preview_data_absensi' => $preview_data_absensi,
+    'total' => $nr_of_rows,
+    'pages' => $pages
+]);
+
+$dataStmt->close();
 $conn->close();
-?>

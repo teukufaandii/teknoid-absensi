@@ -12,12 +12,12 @@ $stmt = $conn->prepare($query);
 $searchPattern = '%' . $search . '%';
 $stmt->bind_param('sssii', $searchPattern, $searchPattern, $searchPattern, $start, $limit);
 $stmt->execute();
-$result = $stmt->get_result();
+$result = $stmt->get_result();  
 
 // Simpan data yang diambil dalam array
-$data_absensi = [];
+$data_pegawai = [];
 while ($row = $result->fetch_assoc()) {
-    $data_absensi[] = $row;
+  $data_pegawai[] = $row;
 }
 
 // Ambil total data
@@ -30,7 +30,7 @@ $totalData = $totalResult->fetch_assoc()['total'];
 
 // Kirim hasil pencarian sebagai JSON
 echo json_encode([
-    'status' => 'success',
-    'data_absensi' => $data_absensi,
-    'total' => $totalData
+  'status' => 'success',
+  'data_pegawai' => $data_pegawai,
+  'total' => $totalData
 ]);

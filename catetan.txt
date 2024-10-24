@@ -1,7 +1,2 @@
-edit previewDataAbsensi blm di route
-
-user masi bisa masuk ke file admin (OK)
-contoh saat login dengan akun admin tetap bisa akses ke
-https://<linkNgrokk>/teknoid-absensi/src/pages/humas/previewDataAbsensi.php?id_pg=409042b7-56c5-11ef-8bf6-088fc3c28a2b
-
-nama folder diganti dari humas ke admin dan rapikan routenya (HARUS CLEAR) ~DONEEE
+pattern email 
+pattern password(perlu/tidakperlu)

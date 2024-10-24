@@ -20,13 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Lakukan validasi dan proses simpan ke database
     // Contoh query untuk menyimpan data ke database (disesuaikan dengan database Anda)
-    $query = "INSERT INTO tb_pengguna (nomor_kartu, nama, email, password, noinduk, tempat_lahir, tanggal_lahir, jenis_kelamin, jabatan) VALUES ('$nomor_kartu', '$nama', '$email', '$password', '$noinduk', '$tempat_lahir', '$tanggal_lahir', '$jenis_kelamin', '$jabatan')";
+    $query = "INSERT INTO tb_pengguna (id_pg, nomor_kartu, nama, email, password, noinduk, tempat_lahir, tanggal_lahir, jenis_kelamin, jabatan) VALUES (UUID(), '$nomor_kartu', '$nama', '$email', '$password', '$noinduk', '$tempat_lahir', '$tanggal_lahir', '$jenis_kelamin', '$jabatan')";
 
     // Eksekusi query dan kirim respon
     if (mysqli_query($conn, $query)) {
         echo json_encode(['success' => true]);
     } elseif (!$nomor_kartu || !$nama || !$email || !$password || !$noinduk || !$tempat_lahir || !$tanggal_lahir || !$jenis_kelamin || !$jabatan) {
         echo json_encode(['success' => false, 'message' => 'Semua field harus diisi']);
+        exit();
+    } elseif (!mysqli_query($conn, $query)) {
+        echo json_encode(['success' => false, 'message' => mysqli_error($conn)]);
         exit();
     } else {
         echo json_encode(['success' => false, 'message' => 'Gagal menyimpan data']);

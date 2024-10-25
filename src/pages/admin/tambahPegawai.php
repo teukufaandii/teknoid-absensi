@@ -89,6 +89,7 @@ $token = $_SESSION['token'];
               placeholder="Masukkan Nama Lengkap"
               class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar" required />
           </div>
+          
           <div class="mb-4">
             <label class="block text-gray-700 font-semibold mb-2">Jenis Kelamin</label>
             <div class="flex items-center space-x-6">

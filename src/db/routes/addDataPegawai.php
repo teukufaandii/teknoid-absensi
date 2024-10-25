@@ -15,12 +15,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $tanggal_lahir = $input['tanggalLahir'];
     $jenis_kelamin = isset($input['jenis_kelamin']) ? $input['jenis_kelamin'] : null;
     $jabatan = $input['jabatan'];
+    $role = $input['role'];
 
-    $query = "INSERT INTO tb_pengguna (id_pg, nomor_kartu, nama, email, password, noinduk, tempat_lahir, tanggal_lahir, jenis_kelamin, jabatan) VALUES (UUID(), '$nomor_kartu', '$nama', '$email', '$password', '$noinduk', '$tempat_lahir', '$tanggal_lahir', '$jenis_kelamin', '$jabatan')";
+    $query = "INSERT INTO tb_pengguna (id_pg, nomor_kartu, nama, email, password, noinduk, tempat_lahir, tanggal_lahir, jenis_kelamin, jabatan, role) VALUES (UUID(), '$nomor_kartu', '$nama', '$email', '$password', '$noinduk', '$tempat_lahir', '$tanggal_lahir', '$jenis_kelamin', '$jabatan', '$role')";
 
     if (mysqli_query($conn, $query)) {
         echo json_encode(['success' => true]);
-    } elseif (!$nomor_kartu || !$nama || !$email || !$password || !$noinduk || !$tempat_lahir || !$tanggal_lahir || !$jenis_kelamin || !$jabatan) {
+    } elseif (!$nomor_kartu || !$nama || !$email || !$password || !$noinduk || !$tempat_lahir || !$tanggal_lahir || !$jenis_kelamin || !$jabatan || !$role) {
         echo json_encode(['success' => false, 'message' => 'Semua field harus diisi']);
         exit();
     } elseif (!mysqli_query($conn, $query)) {

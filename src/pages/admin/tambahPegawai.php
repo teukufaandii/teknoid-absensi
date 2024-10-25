@@ -89,7 +89,7 @@ $token = $_SESSION['token'];
               placeholder="Masukkan Nama Lengkap"
               class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar" required />
           </div>
-          
+
           <div class="mb-4">
             <label class="block text-gray-700 font-semibold mb-2">Jenis Kelamin</label>
             <div class="flex items-center space-x-6">
@@ -153,6 +153,23 @@ $token = $_SESSION['token'];
             </div>
           </div>
 
+          <div class="mb-4">
+            <label class="block text-gray-700 font-semibold mb-2">Hak Akses</label>
+            <div class="relative w-full">
+              <select name="role" class="appearance-none w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar">
+                <option hidden>Pilih Hak Akses</option>
+                <option value="admin">Admin</option>
+                <option value="user">User</option>
+              </select>
+
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
           <div class="flex justify-between mt-6">
             <button class="bg-red-400 text-white px-6 py-2 rounded-lg hover:bg-red-500 transition duration-200" onclick="window.location.href='dataPegawai.php'">Batal</button>
             <button class="bg-purpleNavbar text-white px-6 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200" onclick="saveData()">Simpan</button>
@@ -177,7 +194,8 @@ $token = $_SESSION['token'];
       tempatLahir: document.querySelector('input[name="tempatLahir"]').value,
       tanggalLahir: document.querySelector('input[name="tanggalLahir"]').value,
       jenis_kelamin: document.querySelector('input[name="gender"]:checked').value,
-      jabatan: document.querySelector('select[name="jabatan"]').value
+      jabatan: document.querySelector('select[name="jabatan"]').value,
+      role: document.querySelector('select[name="role"]').value
     };
 
     // Konfirmasi sebelum menyimpan data

@@ -32,10 +32,41 @@ $token = $_SESSION['token'];
     <link href="../css/font/poppins-font.css" rel="stylesheet">
     <link href="../css/global/generalStyling.css" rel="stylesheet">
     <link href="../css/global/tableFormat.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/dataAbsensi.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
+<style>
+    .active-button {
+        background-color: #8C85FF;
+        color: white;
+    }
+
+    .inactive-button {
+        background-color: #e2e8f0;
+        color: #8C85FF;
+    }
+
+    #loadingSpinner .loader {
+        border: 8px solid rgba(255, 255, 255, 0.3);
+        border-top: 8px solid #ffffff;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
 
 <body>
     <div class="flex flex-col md:flex-row lg:flex-row h-screen">
@@ -49,36 +80,16 @@ $token = $_SESSION['token'];
             <!-- Main Content -->
             <main class="flex-1 p-6 bg-mainBgColor mainContent">
                 <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Absensi</h1>
-                <?php
-                include '../../db/db_connect.php';
-
-                // pengaturan baris
-                $start = 0;
-                $rows_per_page = 10;
-
-                // total nomor baris
-                $records = mysqli_query($conn, "SELECT * FROM tb_pengguna");
-                $nr_of_rows = $records->num_rows;
-
-                // kalkulasi nomor per halaman
-                $pages = ceil($nr_of_rows / $rows_per_page);
-
-                // start point
-                if (isset($_GET['page-nr'])) {
-                    $page = $_GET['page-nr'] - 1;
-                    $start = $page * $rows_per_page;
-                }
-
-                // tabel db suratmasuk
-                $stmt = $conn->prepare("SELECT * FROM  tb_pengguna LIMIT $start, $rows_per_page");
-                $stmt->execute();
-                $result = $stmt->get_result();
-                ?>
 
                 <div class="flex justify-between items-center mt-5">
-                    <button id="downloadButton" class="bg-purpleNavbar text-white px-4 py-2  rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
-                        Download
-                    </button>
+                    <div class="flex justify-start items-center space-x-4">
+                        <button id="downloadButton" class="bg-purpleNavbar text-white px-4 py-2  rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
+                            Download
+                        </button>
+                        <button class="bg-purpleNavbar text-white px-4 py-2 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition" id="addButton">
+                            Generate Detail Absen <i class="fa-solid fa-circle-plus"></i>
+                        </button>
+                    </div>
 
                     <div class="relative">
                         <input
@@ -175,15 +186,87 @@ $token = $_SESSION['token'];
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
-
             </main>
+
+            <div id="loadingSpinner" class="hidden fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50 z-50">
+                <div class="loader"></div>
+            </div>
+
+            <div id="toast-success" class="hidden fixed top-5 right-5 p-4 mb-4 w-80 max-w-xs bg-green-100 border-t-4 border-green-500 rounded-lg shadow-md text-green-800" role="alert">
+                <div class="flex">
+                    <div class="py-1">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p id="success-message" class="text-sm font-medium"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="toast-error" class="hidden fixed top-5 right-5 p-4 mb-4 w-80 max-w-xs bg-red-100 border-t-4 border-red-500 rounded-lg shadow-md text-red-800" role="alert">
+                <div class="flex">
+                    <div class="py-1">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p id="error-message" class="text-sm font-medium"></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script>
+        
+        $('#addButton').on('click', function() {
+            Swal.fire({
+                title: 'Generate Detail Absen',
+                text: 'Pilih opsi untuk generate detail absensi:',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Per Bulan',
+                cancelButtonText: 'Per Minggu'
+            }).then((result) => {
+                let option;
+                if (result.isConfirmed) {
+                    option = 'bulanan';
+                } else if (result.isDismissed) {
+                    option = 'mingguan';
+                }
+
+                if (option) {
+                    document.getElementById('loadingSpinner').classList.remove('hidden');
+
+                    $.ajax({
+                        url: '../../db/routes/generateAbsenceDetails.php',
+                        type: 'GET',
+                        data: {
+                            option: option
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            document.getElementById('loadingSpinner').classList.add('hidden');
+
+                            if (response.status === 'success') {
+                                showToast('success', response.message);
+                            } else {
+                                showToast('error', response.message);
+                            }
+                        },
+                        error: function() {
+                            document.getElementById('loadingSpinner').classList.add('hidden');
+                            showToast('error', 'Terjadi kesalahan saat memproses permintaan.');
+                        }
+                    });
+                }
+            });
+        });
+
         $(document).ready(function() {
             let currentPage = 0;
             let totalDataAbsensi = 0;
-            let searchTerm = ''; // Variabel untuk menyimpan kata kunci pencarian
+            let searchTerm = '';
 
             function loadDataAbsensi(page, search = '') {
                 $.ajax({
@@ -191,7 +274,7 @@ $token = $_SESSION['token'];
                     type: 'GET',
                     data: {
                         start: page * 5,
-                        search: search // Kirim kata kunci pencarian ke backend
+                        search: search
                     },
                     dataType: 'json',
                     success: function(response) {
@@ -282,14 +365,55 @@ $token = $_SESSION['token'];
                 updatePaginationButtons();
             });
 
-            // Event listener untuk input pencarian
             $('#searchInput').on('keyup', function() {
                 searchTerm = $(this).val();
-                currentPage = 0; // Reset ke halaman pertama saat pencarian
+                currentPage = 0;
                 loadDataAbsensi(currentPage, searchTerm);
             });
 
             loadDataAbsensi(currentPage);
+        });
+
+        function showToast(type, message) {
+            const successToast = document.getElementById('toast-success');
+            const errorToast = document.getElementById('toast-error');
+
+            if (type === 'success') {
+                document.getElementById('success-message').innerText = message;
+                successToast.classList.remove('hidden');
+                successToast.classList.add('block');
+                setTimeout(() => {
+                    successToast.classList.remove('block');
+                    successToast.classList.add('hidden');
+                }, 3000);
+            } else if (type === 'error') {
+                document.getElementById('error-message').innerText = message;
+                errorToast.classList.remove('hidden');
+                errorToast.classList.add('block');
+                setTimeout(() => {
+                    errorToast.classList.remove('block');
+                    errorToast.classList.add('hidden');
+                }, 3000);
+            }
+        }
+
+        $.ajax({
+            url: 'generateDetailAbsen.php',
+            type: 'GET',
+            data: {
+                option: selectedOption
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    showToast('success', response.message);
+                } else {
+                    showToast('error', response.message);
+                }
+            },
+            error: function() {
+                showToast('error', 'Terjadi kesalahan saat memproses permintaan.');
+            }
         });
     </script>
 

@@ -86,7 +86,7 @@ $token = $_SESSION['token'];
             <input
               type="text"
               name="noInduk"
-              placeholder="Masukkan NIDN"
+              placeholder="Masukkan NID"
               class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar" required />
           </div>
 
@@ -185,10 +185,22 @@ $token = $_SESSION['token'];
 
 <script>
   function saveData() {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|yahoo\.co\.id|outlook\.com|hotmail\.com|icloud\.com)$/;
+    const email = document.querySelector('input[name="email"]').value;
+
+    if (!emailPattern.test(email)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Email tidak valid',
+        text: 'Masukkan email dengan format yang benar'
+      });
+      return;
+    }
+
     const data = {
       nomorKartu: document.querySelector('input[name="nomorKartu"]').value,
       namaLengkap: document.querySelector('input[name="namaLengkap"]').value,
-      email: document.querySelector('input[name="email"]').value,
+      email: email,
       password: document.querySelector('input[name="password"]').value,
       noInduk: document.querySelector('input[name="noInduk"]').value,
       tempatLahir: document.querySelector('input[name="tempatLahir"]').value,
@@ -198,7 +210,6 @@ $token = $_SESSION['token'];
       role: document.querySelector('select[name="role"]').value
     };
 
-    // Konfirmasi sebelum menyimpan data
     Swal.fire({
       title: 'Konfirmasi',
       text: "Apakah Anda yakin ingin menambahkan data pegawai baru?",
@@ -210,7 +221,6 @@ $token = $_SESSION['token'];
       cancelButtonText: 'Batal'
     }).then((result) => {
       if (result.isConfirmed) {
-        // Lakukan fetch ke backend untuk menambahkan data
         fetch('../../db/routes/addDataPegawai.php', {
             method: 'POST',
             headers: {
@@ -247,5 +257,6 @@ $token = $_SESSION['token'];
     });
   }
 </script>
+
 
 </html>

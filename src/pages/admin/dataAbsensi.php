@@ -8,7 +8,7 @@ if (!isset($_SESSION['token'])) {
 
 // Cek session akses admin
 if ($_SESSION['role'] !== 'admin') {
-    header('Location: ../../unauthorized.php'); // Ganti dengan halaman yang sesuai
+    header('Location: ../../unauthorized.php');
     exit();
 }
 

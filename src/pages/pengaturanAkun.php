@@ -144,6 +144,20 @@ $token = $_SESSION['token'];
       $('button:contains("Simpan")').click(function(e) {
         e.preventDefault();
 
+        // Definisikan pola regex untuk validasi email
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|yahoo\.co\.id|outlook\.com|hotmail\.com|icloud\.com)$/;
+        const email = $('input[name="email"]').val();
+
+        // Validasi email menggunakan regex
+        if (!emailPattern.test(email)) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Email tidak valid',
+            text: 'Masukkan email dengan format yang benar'
+          });
+          return; // Hentikan proses jika email tidak valid
+        }
+
         Swal.fire({
           title: 'Yakin ingin menyimpan perubahan?',
           text: "Perubahan yang Anda buat akan disimpan!",
@@ -157,7 +171,7 @@ $token = $_SESSION['token'];
           if (result.isConfirmed) {
             const updatedData = {
               username: $('input[name="username"]').val(),
-              email: $('input[name="email"]').val(),
+              email: email, 
               noinduk: $('input[name="noinduk"]').val(),
               gender: $('input[name="gender"]:checked').val()
             };
@@ -187,6 +201,7 @@ $token = $_SESSION['token'];
       });
     });
   </script>
+
 
 
   <?php include('./navbar/profileInfo.php') ?>

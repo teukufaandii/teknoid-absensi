@@ -86,7 +86,7 @@ $token = $_SESSION['token'];
             <input
               type="text"
               name="noInduk"
-              placeholder="Masukkan Nama Lengkap"
+              placeholder="Masukkan NIDN"
               class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar" required />
           </div>
 

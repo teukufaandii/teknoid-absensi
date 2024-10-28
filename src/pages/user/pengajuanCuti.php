@@ -30,7 +30,7 @@ if ($conn->connect_error) {
 $sql = "SELECT jatah_cuti FROM tb_pengguna WHERE id_pg = ?";
 $stmt = $conn->prepare($sql);
 if ($stmt) {
-    $stmt->bind_param("i", $id_pg); // Bind parameter id_pg pengguna
+    $stmt->bind_param("s", $id_pg); // Bind parameter id_pg pengguna
     $stmt->execute();
     $stmt->bind_result($jatah_cuti);
     $stmt->fetch();

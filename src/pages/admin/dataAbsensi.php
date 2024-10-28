@@ -86,7 +86,7 @@ $token = $_SESSION['token'];
                         <button id="downloadButton" class="bg-purpleNavbar text-white px-4 py-2  rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
                             Download
                         </button>
-                        <button class="bg-purpleNavbar text-white px-4 py-2 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition" id="addButton">
+                        <button class="bg-purpleNavbar text-white px-4 py-2 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition" id="addButton"> 
                             Generate Detail Absen <i class="fa-solid fa-circle-plus"></i>
                         </button>
                     </div>
@@ -216,7 +216,6 @@ $token = $_SESSION['token'];
         </div>
     </div>
     <script>
-        
         $('#addButton').on('click', function() {
             Swal.fire({
                 title: 'Generate Detail Absen',
@@ -226,13 +225,17 @@ $token = $_SESSION['token'];
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Per Bulan',
-                cancelButtonText: 'Per Minggu'
+                cancelButtonText: 'Per Minggu',
+                html: '<button id="customCancel" class="swal2-cancel swal2-styled">Cancel</button>',
+                allowOutsideClick: false
             }).then((result) => {
                 let option;
                 if (result.isConfirmed) {
                     option = 'bulanan';
-                } else if (result.isDismissed) {
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
                     option = 'mingguan';
+                } else {
+                    return;
                 }
 
                 if (option) {
@@ -260,6 +263,10 @@ $token = $_SESSION['token'];
                         }
                     });
                 }
+            });
+
+            $(document).on('click', '#customCancel', function() {
+                Swal.close();
             });
         });
 

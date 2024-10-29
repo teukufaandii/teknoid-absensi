@@ -1,3 +1,2 @@
 pattern email
 pattern password(perlu/tidakperlu)
-

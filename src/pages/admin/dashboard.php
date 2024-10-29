@@ -40,15 +40,15 @@ $token = $_SESSION['token'];
                 <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Dashboard </h1>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
                     <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
-                        <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 pb-1 border-white text-white">Pengguna</h2>
-                        <p class="text-white text-xs sm:text-sm">Konten Pengguna</p>
-                    </div>
-                    <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
-                        <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Dashboard</h2>
+                        <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 pb-1 border-white text-white">Total Hadir Hari Ini</h2>
                         <p class="text-white text-xs sm:text-sm">Konten Dashboard</p>
                     </div>
                     <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
-                        <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Dashboard</h2>
+                        <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Total Tidak Hadir Hari Ini</h2>
+                        <p class="text-white text-xs sm:text-sm">Konten Dashboard</p>
+                    </div>
+                    <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
+                        <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Total Terlambat Datang Hari ini</h2>
                         <p class="text-white text-xs sm:text-sm">Konten Dashboard</p>
                     </div>
                     <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">

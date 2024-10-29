@@ -197,7 +197,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             <?php echo $current_page == 'dashboard.php' ? 'text-white' : 'text-purpleNavbar'; ?>">
                                 <i class="fa-solid fa-house"></i>
                             </span>
-                            <span class="ml-2 font-medium sideNav-text">Dashboard</span>
+                            <span class="ml-2 font-medium sideNav-text whitespace-nowrap">Dashboard</span>
                         </a>
                     </li>
                     <li class="mb-2">
@@ -205,7 +205,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             <span id="user-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
                                 <i class="fa-solid fa-users-gear"></i>
                             </span>
-                            <span class="ml-2 font-medium sideNav-text">Pegawai</span>
+                            <span class="ml-2 font-medium sideNav-text whitespace-nowrap">Pegawai</span>
                         </a>
                     </li>
                     <li class="mb-2">
@@ -213,7 +213,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
                                 <i class="fa-regular fa-calendar-days"></i>
                             </span>
-                            <span class="ml-2 font-medium sideNav-text">Absensi</span>
+                            <span class="ml-2 font-medium sideNav-text whitespace-nowrap">Absensi</span>
                         </a>
                     </li>
                     <li class="mb-2">
@@ -222,6 +222,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
                                 <i class="fa-regular fa-calendar-plus"></i>
                             </span>
                             <span class="ml-2 font-medium sideNav-text whitespace-nowrap">Atur Hari Libur</span>
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="./dataAnonim.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dataAnonim.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                            <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
+                            <i class="fa-solid fa-question"></i>                            
+                        </span>
+                            <span class="ml-2 font-medium sideNav-text whitespace-nowrap">Tidak Dikenal</span>
                         </a>
                     </li>
                 </ul>
@@ -252,11 +260,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </li>
                     <li class="mb-2">
                         <a href="./pengajuanCuti.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'pengajuanCuti.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
-                            <span class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg 
-                            <?php echo $current_page == 'dashboard.php' ? 'text-white' : 'text-purpleNavbar'; ?>">
-                                <i class="fa-solid fa-file-circle-plus"></i>
-                            </span>
-                            <span class="ml-2 font-medium sideNav-text">Pengajuan Cuti</span>
+                            <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
+                            <i class="fa-solid fa-file-circle-plus"></i>                       
+                        </span>
+                            <span class="ml-2 font-medium sideNav-text whitespace-nowrap">Pengajuan Cuti</span>
                         </a>
                     </li>
                 </ul>

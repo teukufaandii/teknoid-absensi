@@ -73,7 +73,7 @@ $conn->close();
                     <p class="text-center mb-6">Ajukan surat cuti?</p>
                     <div class="flex justify-center gap-4">
                         <button id="closeModal" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg">Tidak</button>
-                        <button id="ajukanCuti" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg">Ya</button>
+                        <button id="ajukanCuti" class="bg-purpleNavbar hover:bg-purpleNavbarHover text-white font-bold py-2 px-4 rounded-lg">Ya</button>
                     </div>
                 </div>
             </div>
@@ -106,7 +106,7 @@ $conn->close();
         });
     </script>
 
-    <?php include('navbar/profileInfo.php') ?>
+        <?php include('../navbar/profileInfo.php') ?>
 </body>
 
 </html>

@@ -30,6 +30,9 @@ $token = $_SESSION['token'];
   <link href="../css/font/poppins-font.css" rel="stylesheet">
   <!-- ajax live search -->
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
@@ -134,16 +137,17 @@ $(document).ready(function() {
                         DataAnonimTableBody.append(`
                             <tr class="bg-gray-100">
                                 <td class="px-6 py-2 text-center">${counter++}</td>
+                                <td class="px-6 py-2 text-center" style="display: none;">${data_anonim.id}</td>
                                 <td class="px-6 py-2 text-center">${data_anonim.nomor_kartu}</td>
                                 <td class="px-6 py-2 text-center">${data_anonim.jam}</td>
                                 <td class="px-6 py-2 text-center">${data_anonim.tanggal}</td>
                                 <td class="px-6 py-2 text-center">
-                                    <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition">
-                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    <button class="edit-button bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition" data-nomor-kartu="${data_anonim.nomor_kartu}">
+                                        <i class="fa-solid fa-plus"></i>
                                     </button>
-                                    <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${data_anonim.id}">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
+                                      <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${data_anonim.id}">
+                                          <i class="fa-solid fa-trash"></i>
+                                      </button>
                                 </td>
                             </tr>
                         `);
@@ -212,6 +216,60 @@ $(document).ready(function() {
 });
 
 
+//add button
+$(document).on('click', '.edit-button', function() {
+    const nomorKartu = $(this).data('nomor-kartu');
+    window.location.href = `tambahPegawai.php?nomor_kartu=${nomorKartu}`;
+});
+
+
+//button delete 
+$(document).on('click', '.delete-button', function() {
+    const id = $(this).data('id'); // Get the ID from the button's data attribute
+    deletedata_anonim(id); // Call the delete function with the ID
+});
+       
+
+function deletedata_anonim(id) {
+    Swal.fire({
+        title: 'Konfirmasi',
+        text: "Apakah Anda yakin ingin menghapus data anonim ini?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '../../db/routes/deleteDataAnonim.php', // URL to your PHP file
+                type: 'POST', // Method type
+                data: { id: id }, // Data to be sent
+                dataType: 'json', // Expected data type from server
+                success: function(response) {
+                    console.log(response); // For debugging
+                    if (response.status === 'success') {
+                        Swal.fire('Berhasil!', response.message, 'success').then(() => {
+                            // Set a timeout of 1 second before refreshing the page
+                            setTimeout(() => {
+                                location.reload(); // Refresh the current page
+                            }, 100); // 1000 milliseconds = 1 second
+                        });
+                    } else {
+                        Swal.fire('Gagal!', response.message, 'error'); // Error message
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error(textStatus, errorThrown); // For debugging
+                    Swal.fire('Error!', 'Terjadi kesalahan saat menghapus data anonim', 'error'); // Error message
+                }
+            });
+        }
+    });
+}
+
+//search function
   $(document).ready(function() {
     $("#searchInput").keyup(function() {
       var search = $(this).val();

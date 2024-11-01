@@ -23,7 +23,6 @@ $token = $_SESSION['token'];
     <link rel="stylesheet" href="../css/dataAbsensi.css">
     <link href="../css/font/poppins-font.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    
 </head>
 
 <body>
@@ -39,27 +38,63 @@ $token = $_SESSION['token'];
             <main class="flex-1 p-6 bg-mainBgColor mainContent">
                 <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Dashboard </h1>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-                    <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
-                        <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 pb-1 border-white text-white">Total Hadir Hari Ini</h2>
-                        <p class="text-white text-xs sm:text-sm">Konten Dashboard</p>
-                    </div>
-                    <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
-                        <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Total Tidak Hadir Hari Ini</h2>
-                        <p class="text-white text-xs sm:text-sm">Konten Dashboard</p>
-                    </div>
-                    <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
-                        <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Total Terlambat Datang Hari ini</h2>
-                        <p class="text-white text-xs sm:text-sm">Konten Dashboard</p>
-                    </div>
-                    <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
-                        <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Total Karyawan</h2>
-                        <p class="text-white text-xs sm:text-sm">Konten Dashboard</p>
-                    </div>
+                    <?php
+                    $cards = [
+                        ['title' => 'Total Hadir Hari Ini', 'id' => 'total-hadir'],
+                        ['title' => 'Total Tidak Datang Hari Ini', 'id' => 'total-absen'],
+                        ['title' => 'Total Terlambat Datang Hari ini', 'id' => 'total-telat'],
+                        ['title' => 'Total Karyawan', 'id' => 'total-karyawan'],
+                    ];
+
+                    foreach ($cards as $card) {
+                        echo "
+                        <div class='bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag'>
+                            <h2 class='text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1'>{$card['title']}</h2>
+                            <p id='{$card['id']}' class='text-white text-xs sm:text-sm'>Loading...</p>
+                        </div>";
+                    }
+                    ?>
                 </div>
             </main>
         </div>
     </div>
     <?php include('../navbar/profileInfo.php') ?>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const endpoints = {
+                'total-karyawan': '../../db/routes/getAllUsers.php',
+                'total-absen': '../../db/routes/getAbsenceDetailsByAlpha.php',
+                'total-hadir': '../../db/routes/getAbsenceDetailsByPresence.php',
+                'total-telat': '../../db/routes/getAbsenceDetailsByLate.php'
+            };
+
+            function fetchData(elementId, url) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        const totalKey = elementId === 'total-telat' ? 'total_telat' : 'total';
+                        if (data[totalKey] !== undefined) {
+                            $('#' + elementId).text(data[totalKey]);
+                        } else {
+                            $('#' + elementId).text('Invalid data format');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error('Error fetching data: ', textStatus, errorThrown);
+                        $('#' + elementId).text('Error loading data');
+                    }
+                });
+            }
+
+            for (const [id, url] of Object.entries(endpoints)) {
+                fetchData(id, url);
+            }
+        });
+    </script>
 </body>
 
 </html>

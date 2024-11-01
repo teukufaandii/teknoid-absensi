@@ -16,7 +16,6 @@ $username = htmlspecialchars($_SESSION['name']);
 $role = $_SESSION['role'];
 $id = $_SESSION['user_id'];
 $token = $_SESSION['token'];
-
 ?>
 
 <!DOCTYPE html>

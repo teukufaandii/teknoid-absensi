@@ -30,7 +30,11 @@ $token = $_SESSION['token'];
   <link href="../css/font/poppins-font.css" rel="stylesheet">
   <!-- ajax live search -->
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
 </head>
 
 <body>
@@ -136,6 +140,7 @@ $token = $_SESSION['token'];
               DataAbsensiTableBody.append(`
                             <tr class="bg-gray-100">
                                 <td class="px-6 py-2 text-center">${counter++}</td>
+                                <td class="px-6 py-2 text-center" style="display:none">${data_pegawai.id_pg}</td>
                                 <td class="px-6 py-2 text-center">${data_pegawai.noinduk}</td>
                                 <td class="px-6 py-2 text-center">${data_pegawai.nama}</td>
                                 <td class="px-6 py-2 text-center">${data_pegawai.role}</td>
@@ -143,9 +148,11 @@ $token = $_SESSION['token'];
                                     <a href="./editDataPegawai.php?id_pg=${data_pegawai.id_pg}">
                                         <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
                                     </a>
-                                    <a>
-                                         <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${data_pegawai.id_pg}"><i class="fa-solid fa-trash"></i></button>
-                                    </a>
+                                   <a>
+                                      <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${data_pegawai.id_pg}">
+                                          <i class="fa-solid fa-trash"></i>
+                                      </button>
+                                  </a>
                                 </td>
                             </tr>
                         `);
@@ -212,6 +219,37 @@ $token = $_SESSION['token'];
 
     loadDataAbsensi(currentPage);
   });
+
+    // Menambahkan event listener pada tombol delete
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+
+            // Menampilkan SweetAlert konfirmasi
+            swal({
+                title: "Anda yakin?",
+                text: "Data ini akan dihapus!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    // Melakukan aksi penghapusan
+                    // Contoh: Mengirim permintaan AJAX untuk menghapus data
+                    // Misalnya, Anda bisa menggunakan fetch atau XMLHttpRequest
+                    console.log(`Menghapus data dengan ID: ${id}`);
+
+                    // Setelah menghapus, Anda bisa memberi tahu pengguna
+                    swal("Data berhasil dihapus!", {
+                        icon: "success",
+                    });
+                } else {
+                    swal("Penghapusan dibatalkan!");
+                }
+            });
+        });
+    });
 
   $(document).ready(function() {
     $("#searchInput").keyup(function() {

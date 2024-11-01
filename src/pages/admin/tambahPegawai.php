@@ -16,6 +16,10 @@ $username = htmlspecialchars($_SESSION['name']);
 $role = $_SESSION['role'];
 $id = $_SESSION['user_id'];
 $token = $_SESSION['token'];
+
+// Ambil nomor kartu dari URL
+$nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu']) : '';
+
 ?>
 
 <!DOCTYPE html>
@@ -46,13 +50,14 @@ $token = $_SESSION['token'];
         <div class="w-full mx-auto py-6">
           <div class="mb-4">
             <label class="block text-gray-700 font-semibold mb-2">Nomor Kartu</label>
-            <input
-              type="text"
-              name="nomorKartu"
-              placeholder="Masukkan Nomor kartu"
-              class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar"
-              defaultValue="123456789" required />
-          </div>
+                <input
+                    type="text"
+                    name="nomorKartu"
+                    value="<?php echo $nomorKartu; ?>"
+                    class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar" 
+                    required 
+                    placeholder="Masukkan Nomor Kartu" />
+                </div>
 
           <div class="mb-4">
             <label class="block text-gray-700 font-semibold mb-2">Nama Lengkap</label>
@@ -86,7 +91,7 @@ $token = $_SESSION['token'];
             <input
               type="text"
               name="noInduk"
-              placeholder="Masukkan NID"
+              placeholder="Masukkan NIDN"
               class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar" required />
           </div>
 
@@ -236,6 +241,8 @@ $token = $_SESSION['token'];
                 title: 'Data berhasil ditambahkan!',
                 showConfirmButton: false,
                 timer: 1500
+              }).then(() => {
+                window.location.href = 'dataPegawai.php';
               });
             } else {
               Swal.fire({
@@ -255,7 +262,7 @@ $token = $_SESSION['token'];
           });
       }
     });
-  }
+}
 </script>
 
 

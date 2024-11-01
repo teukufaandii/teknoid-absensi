@@ -6,7 +6,7 @@
         <div id="profileMenu" class="profile-menu right-0 top-14 z-[999999]">
             <div class="profile-header flex p-2 text-center border-b">
                 <div class="align-middle justify-center profilePicContainer">
-                    <img src="/teknoid-absensi/public/gigadam.jpg" alt="Profile Picture" class="w-12 h-auto rounded-lg">
+                    <img src="/teknoid-absensi/public/logo.png" alt="Profile Picture" class="w-12 h-auto rounded-lg">
                 </div>
                 <div class="ml-3">
                     <p class="font-bold text-left"><?php echo $username; ?></p>

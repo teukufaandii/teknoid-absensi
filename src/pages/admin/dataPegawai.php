@@ -220,37 +220,54 @@ $token = $_SESSION['token'];
     loadDataAbsensi(currentPage);
   });
 
-    // Menambahkan event listener pada tombol delete
-    document.querySelectorAll('.delete-button').forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
 
-            // Menampilkan SweetAlert konfirmasi
-            swal({
-                title: "Anda yakin?",
-                text: "Data ini akan dihapus!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-            .then((willDelete) => {
-                if (willDelete) {
-                    // Melakukan aksi penghapusan
-                    // Contoh: Mengirim permintaan AJAX untuk menghapus data
-                    // Misalnya, Anda bisa menggunakan fetch atau XMLHttpRequest
-                    console.log(`Menghapus data dengan ID: ${id}`);
+  //button delete
+$(document).on('click', '.delete-button', function() {
+    const id_pg = $(this).data('id');
+    deletedata_pegawai(id_pg);
+});
 
-                    // Setelah menghapus, Anda bisa memberi tahu pengguna
-                    swal("Data berhasil dihapus!", {
-                        icon: "success",
-                    });
-                } else {
-                    swal("Penghapusan dibatalkan!");
-                }
+function deletedata_pegawai(id_pg) {
+    Swal.fire({
+        title: 'Konfirmasi',
+        text: "Apakah Anda yakin ingin menghapus data pegawai ini?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '../../db/routes/deleteDataPegawai.php', // URL to your PHP file
+                type: 'POST', // Method type
+                data: { id_pg: id_pg },
+                dataType: 'json', // Expected data type from server
+                success: function(response) {
+                    console.log(response); // For debugging
+                    if (response.status === 'success') {
+                        Swal.fire('Berhasil!', response.message, 'success').then(() => {
+                            // Refresh the current page
+                            location.reload(); // Refresh the current page
+                        });
+                    } else {
+                        Swal.fire('Gagal!', response.message, 'error'); // Error message
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+    console.error("Status: " + textStatus); // Log status
+    console.error("Error: " + errorThrown); // Log error
+    console.error("Response: " + jqXHR.responseText); // Log respons dari server
+    Swal.fire('Error!', 'Terjadi kesalahan saat menghapus data pegawai', 'error'); // Error message
+}
             });
-        });
+        }
     });
+}
 
+
+//untuk fungsi search
   $(document).ready(function() {
     $("#searchInput").keyup(function() {
       var search = $(this).val();

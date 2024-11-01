@@ -1,0 +1,39 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['token'])) {
+    header('Location: login.php');
+    exit();
+}
+
+require_once __DIR__ . '/../db_connect.php';
+
+$query = "
+    SELECT 
+        COUNT(CASE WHEN keterangan = 'Hadir' THEN 1 END) AS total_hadir,
+        COUNT(CASE WHEN keterangan = 'Sakit' THEN 1 END) AS total_sakit,
+        COUNT(CASE WHEN keterangan = 'Izin' THEN 1 END) AS total_izin
+    FROM tb_detail 
+    WHERE id_pg = ?
+";
+
+$stmt = $conn->prepare($query);
+if ($stmt === false) {
+    echo json_encode(['error' => 'Database query error']);
+    exit();
+}
+
+$stmt->bind_param('s', $_SESSION['user_id']);
+if ($stmt === false) {
+    echo json_encode(['error' => 'Database query error']);
+    exit();
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+$result = $result->fetch_assoc();
+echo json_encode(['result' => $result]);
+
+$stmt->close();
+$conn->close();
+?>

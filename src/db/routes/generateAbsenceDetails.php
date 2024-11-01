@@ -30,7 +30,7 @@ if ($option) {
     while ($row = $dayoffResult->fetch_assoc()) {
         $start = new DateTime($row['tanggal_mulai']);
         $end = new DateTime($row['tanggal_akhir']);
-        $interval = new DateInterval('P1D'); // 1 day interval
+        $interval = new DateInterval('P1D');
         $period = new DatePeriod($start, $interval, $end->modify('+1 day')); // Include the end date
 
         foreach ($period as $date) {

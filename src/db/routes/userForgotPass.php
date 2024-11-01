@@ -15,8 +15,6 @@ require '../../../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');
 $dotenv->load();
 
-require '../../../vendor/autoload.php';
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
 
@@ -37,26 +35,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $mail = new PHPMailer(true);
 
         try {
-            //Server settings
+            // Server settings
             $mail->isSMTP();                                            // Send using SMTP
-            $mail->Host       = 'smtp.gmail.com';                 // Set the SMTP server to send through
+            $mail->Host       = 'smtp.gmail.com';                       // Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-            $mail->Username   = $_ENV['EMAIL_USER'];                       // SMTP username
-            $mail->Password   = $_ENV['EMAIL_PASS'];                               // SMTP password                        
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption, `PHPMailer::ENCRYPTION_SMTPS` encouraged
+            $mail->Username   = $_ENV['EMAIL_USER'];                    // SMTP username
+            $mail->Password   = $_ENV['EMAIL_PASS'];                    // SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption
             $mail->Port       = 587;                                    // TCP port to connect to
 
-            //Recipients
+            // Recipients
             $mail->setFrom('no-reply@teknoid-itbad.com', 'Teknoid ITB Ahmad Dahlan');
-            $mail->addAddress($email);                                  // Add a recipient
+            $mail->addAddress($email);                                  // Add recipient
 
             // Content
             $resetLink = "http://localhost/teknoid-absensi/src/pages/reset_password.php?token=$token";
             $mail->isHTML(true);                                        
             $mail->Subject = 'Password Reset Request';
-            $mail->Body    = "You requested a password reset. Click the link below to reset your password:<br><br>
-                              <a style='color: blue; background-color: white; padding: 10px; border-radius: 5px;' href='$resetLink'>$resetLink</a><br><br>
-                              If you did not request a password reset, please ignore this email.";
+
+            // Load the email template and replace placeholder
+            $templatePath = './templateEmail.php';
+            $emailBody = file_get_contents($templatePath);
+            $emailBody = str_replace('{{resetLink}}', $resetLink, $emailBody);
+            
+            $mail->Body = $emailBody;
 
             $mail->send();
             $_SESSION['message'] = "Tautan reset kata sandi telah dikirim ke email Anda.";

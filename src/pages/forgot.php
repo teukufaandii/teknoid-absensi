@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="./css/login.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/forgot.css">
+    <link href="./css/font/poppins-font.css" rel="stylesheet">
 </head>
 <body class="flex justify-center items-center h-screen w-screen bg-gray-100">
     <div class="flex w-full h-full max-w-none bg-white shadow-lg">
@@ -42,7 +43,7 @@
                         <label for="email">Masukkan Email Anda</label>
                     </div>
                 </div>
-                <button type="submit" class="form-button submit-button">Kirim</button>
+                <button type="submit" class="form-button bg-purpleNavbar text-white hover:bg-purpleNavbarHover">Kirim</button>
 
                 <!-- Back to Login Button -->
                 <div class="mb-4">

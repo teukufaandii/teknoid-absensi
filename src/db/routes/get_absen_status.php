@@ -19,7 +19,7 @@ $status = 'Belum Absen';
 $color = 'bg-red-500';
 
 if ($row = $result->fetch_assoc()) {
-    if ($row['keterangan'] === 'Hadir') {
+    if ($row['keterangan'] === 'hadir') {
         $status = 'Sudah Absen';
         $color = 'bg-green-500';
     } elseif ($row['keterangan'] === 'alpha') {

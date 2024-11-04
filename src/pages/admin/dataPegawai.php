@@ -31,10 +31,29 @@ $token = $_SESSION['token'];
   <!-- ajax live search -->
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #3498db;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+    }
 
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -68,6 +87,11 @@ $token = $_SESSION['token'];
               <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
             </form>
           </div>
+        </div>
+
+        <div id="loading" class="hidden text-center mt-4">
+          <p>Loading...</p>
+          <div class="loader"></div>
         </div>
 
         <div class="tableOverflow mt-6 shadow-customTable rounded-lg">
@@ -108,18 +132,20 @@ $token = $_SESSION['token'];
   $(document).ready(function() {
     let currentPage = 0;
     let totalDataAbsensi = 0;
-    let searchTerm = ''; // Variabel untuk menyimpan kata kunci pencarian
+    let searchTerm = '';
 
     function loadDataAbsensi(page, search = '') {
+      $('#loading').removeClass('hidden');
       $.ajax({
         url: '../../db/routes/fetchDataPegawai.php',
         type: 'GET',
         data: {
           start: page * 5,
-          search: search // Kirim kata kunci pencarian ke backend
+          search: search
         },
         dataType: 'json',
         success: function(response) {
+          $('#loading').addClass('hidden');
           if (response.status === 'unauthorized') {
             window.location.href = '../../unauthorized.php';
             return;
@@ -133,38 +159,38 @@ $token = $_SESSION['token'];
             currentPage--;
             loadDataAbsensi(currentPage, search);
           } else if (response.data_pegawai.length === 0) {
-            DataAbsensiTableBody.append('<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>');
+              DataAbsensiTableBody.append('<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>');
           } else {
-            let counter = page * 5 + 1;
+              let counter = page * 5 + 1;
             response.data_pegawai.forEach(function(data_pegawai) {
               DataAbsensiTableBody.append(`
-                            <tr class="bg-gray-100">
-                                <td class="px-6 py-2 text-center">${counter++}</td>
-                                <td class="px-6 py-2 text-center" style="display:none">${data_pegawai.id_pg}</td>
-                                <td class="px-6 py-2 text-center">${data_pegawai.noinduk}</td>
-                                <td class="px-6 py-2 text-center">${data_pegawai.nama}</td>
-                                <td class="px-6 py-2 text-center">${data_pegawai.role}</td>
-                                <td class="px-6 py-2 text-center">
-                                    <a href="./editDataPegawai.php?id_pg=${data_pegawai.id_pg}">
-                                        <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    </a>
-                                   <a>
-                                      <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${data_pegawai.id_pg}">
-                                          <i class="fa-solid fa-trash"></i>
-                                      </button>
-                                  </a>
-                                </td>
-                            </tr>
-                        `);
+              <tr class="bg-gray-100">
+              <td class="px-6 py-2 text-center">${counter++}</td>
+              <td class="px-6 py-2 text-center">${data_pegawai.noinduk}</td>
+              <td class="px-6 py-2 text-center">${data_pegawai.nama}</td>
+              <td class="px-6 py-2 text-center">${data_pegawai.role}</td>
+              <td class="px-6 py-2 text-center">
+                <a href="./editDataPegawai.php?id_pg=${data_pegawai.id_pg}">
+                  <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
+                </a>
+                <a>
+                  <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${data_pegawai.id_pg}">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </a>
+              </td>
+            </tr>
+          `);
             });
           }
 
-          $('#prev-page').prop('disabled', currentPage === 0);
-          $('#next-page').prop('disabled', (currentPage + 1) * 5 >= totalDataAbsensi);
+          //$('#prev-page').prop('disabled', currentPage === 0);
+          //$('#next-page').prop('disabled', (currentPage + 1) * 5 >= totalDataAbsensi);
 
           updatePaginationButtons();
         },
         error: function() {
+          $('#loading').addClass('hidden');
           Swal.fire('Error!', 'Terjadi kesalahan saat memuat data', 'error');
         }
       });
@@ -222,52 +248,54 @@ $token = $_SESSION['token'];
 
 
   //button delete
-$(document).on('click', '.delete-button', function() {
+  $(document).on('click', '.delete-button', function() {
     const id_pg = $(this).data('id');
     deletedata_pegawai(id_pg);
-});
+  });
 
-function deletedata_pegawai(id_pg) {
+  function deletedata_pegawai(id_pg) {
     Swal.fire({
-        title: 'Konfirmasi',
-        text: "Apakah Anda yakin ingin menghapus data pegawai ini?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, hapus!',
-        cancelButtonText: 'Batal'
+      title: 'Konfirmasi',
+      text: "Apakah Anda yakin ingin menghapus data pegawai ini?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, hapus!',
+      cancelButtonText: 'Batal'
     }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '../../db/routes/deleteDataPegawai.php', // URL to your PHP file
-                type: 'POST', // Method type
-                data: { id_pg: id_pg },
-                dataType: 'json', // Expected data type from server
-                success: function(response) {
-                    console.log(response); // For debugging
-                    if (response.status === 'success') {
-                        Swal.fire('Berhasil!', response.message, 'success').then(() => {
-                            // Refresh the current page
-                            location.reload(); // Refresh the current page
-                        });
-                    } else {
-                        Swal.fire('Gagal!', response.message, 'error'); // Error message
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-    console.error("Status: " + textStatus); // Log status
-    console.error("Error: " + errorThrown); // Log error
-    console.error("Response: " + jqXHR.responseText); // Log respons dari server
-    Swal.fire('Error!', 'Terjadi kesalahan saat menghapus data pegawai', 'error'); // Error message
-}
-            });
-        }
+      if (result.isConfirmed) {
+        $.ajax({
+          url: '../../db/routes/deleteDataPegawai.php', // URL to your PHP file
+          type: 'POST', // Method type
+          data: {
+            id_pg: id_pg
+          },
+          dataType: 'json', // Expected data type from server
+          success: function(response) {
+            console.log(response); // For debugging
+            if (response.status === 'success') {
+              Swal.fire('Berhasil!', response.message, 'success').then(() => {
+                // Refresh the current page
+                location.reload(); // Refresh the current page
+              });
+            } else {
+              Swal.fire('Gagal!', response.message, 'error'); // Error message
+            }
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.error("Status: " + textStatus); // Log status
+            console.error("Error: " + errorThrown); // Log error
+            console.error("Response: " + jqXHR.responseText); // Log respons dari server
+            Swal.fire('Error!', 'Terjadi kesalahan saat menghapus data pegawai', 'error'); // Error message
+          }
+        });
+      }
     });
-}
+  }
 
 
-//untuk fungsi search
+  //untuk fungsi search
   $(document).ready(function() {
     $("#searchInput").keyup(function() {
       var search = $(this).val();

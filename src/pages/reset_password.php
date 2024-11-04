@@ -32,9 +32,10 @@ if (isset($_GET['token'])) {
     <title>Reset Kata Sandi - Sistem Absensi</title>
     <link href="../../css/output.css" rel="stylesheet">
     <link rel="icon" href="../../public/logo.png">
-    <link rel="stylesheet" href="./css/login.css">
     <link rel="stylesheet" href="./css/reset_password.css">
+    <link rel="stylesheet" href="./css/login.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="./css/font/poppins-font.css" rel="stylesheet">
     <style>
 
     </style>
@@ -90,7 +91,7 @@ if (isset($_GET['token'])) {
                     
                 </div>
 
-                <button type="submit" class="w-full bg-gray-800 text-white py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">Reset Kata Sandi</button>
+                <button type="submit" class="w-full bg-purpleNavbar text-white py-2 rounded-md hover:bg-purpleNavbarHover focus:outline-none">Reset Kata Sandi</button>
             </form>
         </div>
         <div class="flex flex-col items-center justify-center w-1/2 bg-gray-200 p-8">

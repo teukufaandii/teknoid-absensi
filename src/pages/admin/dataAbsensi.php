@@ -312,9 +312,6 @@ $token = $_SESSION['token'];
                                     <a href="./previewDataAbsensi.php?id_pg=${data_absensi.id_pg}">
                                         <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
                                     </a>
-                                    <a>
-                                         <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${data_absensi.id_pg}"><i class="fa-solid fa-trash"></i></button>
-                                    </a>
                                 </td>
                             </tr>
                         `);

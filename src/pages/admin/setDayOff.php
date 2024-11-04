@@ -146,8 +146,8 @@ $token = $_SESSION['token'];
                             <tr class="bg-gray-100">
                                 <td class="px-6 py-2 text-center">${counter++}</td>
                                 <td class="px-6 py-2 text-center">${holiday.nama_libur}</td>
-                                <td class="px-6 py-2 text-center">${holiday.tanggal_mulai}</td>
-                                <td class="px-6 py-2 text-center">${holiday.tanggal_akhir}</td>
+                                <td class="px-6 py-2 text-center">${holiday.tanggal_mulai ? holiday.tanggal_mulai.split('-').reverse().join('-') : '-'}</td>
+                                <td class="px-6 py-2 text-center">${holiday.tanggal_akhir ? holiday.tanggal_akhir.split('-').reverse().join('-') : '-'}</td>
                                 <td class="px-6 py-2 text-center">
                                     <a href="./editDayOff.php?id=${holiday.id}">
                                         <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>

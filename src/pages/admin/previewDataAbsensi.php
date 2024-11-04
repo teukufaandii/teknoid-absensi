@@ -71,13 +71,13 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
                     <table class="bg-white border">
                         <thead>
                             <tr class="bg-purpleNavbar text-white rounded-t-lg">
-                                <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tl-lg">Tanggal</th>
-                                <th class="px-6 py-4 font-medium uppercase tracking-wider">jam Kerja</th>
+                                <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tl-lg">No</th>
+                                <th class="px-6 py-4 font-medium uppercase tracking-wider">Nama</th>
+                                <th class="px-6 py-4 font-medium uppercase tracking-wider">Tanggal</th>
                                 <th class="px-6 py-4 font-medium uppercase tracking-wider">Scan Masuk</th>
                                 <th class="px-6 py-4 font-medium uppercase tracking-wider">Scan Keluar</th>
                                 <th class="px-6 py-4 font-medium uppercase tracking-wider">Durasi (m)</th>
                                 <th class="px-6 py-4 font-medium uppercase tracking-wider">Keterangan</th>
-                                <th class="px-6 py-4 font-medium uppercase tracking-wider">Nama</th>
                                 <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tr-lg">Aksi</th>
                             </tr>
                         </thead>
@@ -139,13 +139,13 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
                                 <tr class="bg-gray-100">
                                     <td class="px-6 py-2 text-center">${counter++}</td>
                                     <td class="px-6 py-2 text-center">${preview_data_absensi.nama}</td>
-                                    <td class="px-6 py-2 text-center">${preview_data_absensi.tanggal}</td>
+                                    <td class="px-6 py-2 text-center">${preview_data_absensi.tanggal ? preview_data_absensi.tanggal.split('-').reverse().join('-') : '-'}</td>
                                     <td class="px-6 py-2 text-center">${preview_data_absensi.scan_masuk}</td>
                                     <td class="px-6 py-2 text-center">${preview_data_absensi.scan_keluar}</td>
                                     <td class="px-6 py-2 text-center">${preview_data_absensi.durasi}</td>
                                     <td class="px-6 py-2 text-center">${preview_data_absensi.keterangan}</td>
                                     <td class="px-6 py-2 text-center">
-                                        <a href="./previewDataAbsensi.php?id_pg=${preview_data_absensi.id_pg}">
+                                        <a href="./editDataAbsensi.php?id_pg=${preview_data_absensi.id_pg}">
                                             <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
                                         </a>
                                         <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${preview_data_absensi.id_pg}"><i class="fa-solid fa-trash"></i></button>

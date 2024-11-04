@@ -10,9 +10,9 @@ require_once __DIR__ . '/../db_connect.php';
 
 $query = "
     SELECT 
-        COUNT(CASE WHEN keterangan = 'Hadir' THEN 1 END) AS total_hadir,
-        COUNT(CASE WHEN keterangan = 'Sakit' THEN 1 END) AS total_sakit,
-        COUNT(CASE WHEN keterangan = 'Izin' THEN 1 END) AS total_izin
+        COUNT(CASE WHEN keterangan = 'hadir' THEN 1 END) AS total_hadir,
+        COUNT(CASE WHEN keterangan = 'sakit' THEN 1 END) AS total_sakit,
+        COUNT(CASE WHEN keterangan = 'izin' THEN 1 END) AS total_izin
     FROM tb_detail 
     WHERE id_pg = ?
 ";

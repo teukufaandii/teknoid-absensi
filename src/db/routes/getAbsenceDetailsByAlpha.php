@@ -8,7 +8,7 @@ if (!isset($_SESSION['token'])) {
 
 require_once __DIR__ . '/../db_connect.php';
 
-$query = "SELECT COUNT(*) as total FROM tb_detail WHERE keterangan = 'alpha' AND tanggal = CURDATE()";
+$query = "SELECT COUNT(*) as total FROM tb_detail WHERE keterangan = 'Alpha' AND tanggal = CURDATE()";
 $stmt = $conn->prepare($query);
 if ($stmt === false) {
     echo json_encode(['error' => 'Database query error']);

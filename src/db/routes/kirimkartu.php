@@ -46,8 +46,8 @@ if ($simpan) {
             $current_time_stamp = time();
 
             // Check if the last scan was within the last 30 minutes
-            if (($current_time_stamp - $last_scan_time) < 1800) { // 1800 seconds = 30 minutes
-                echo "Anda harus menunggu 30 menit sebelum melakukan scan lagi.";
+            if (($current_time_stamp - $last_scan_time) < 9000) { // 9000 seconds = 150 minutes
+                echo "Anda harus menunggu 150 menit sebelum melakukan scan lagi.";
                 exit;
             } else {
                 // Update scan_keluar if scan_masuk already exists
@@ -74,7 +74,7 @@ if ($simpan) {
             // If no entry exists for today, insert new scan_masuk
             $randomId = generateRandomId(20);
             $jam_kerja = ($current_day == 'Sunday') ? 'Libur' : 'Hari Kerja';
-            $insert_query = "INSERT INTO tb_detail(id, nomor_kartu, id_pg, scan_masuk, tanggal, jam_kerja, durasi) VALUES ('$randomId', '$nomor_kartu', '$id_pg', '$current_time', '$current_date', '$jam_kerja', NULL)";
+            $insert_query = "INSERT INTO tb_detail(id, nomor_kartu, id_pg, scan_masuk, tanggal, jam_kerja, durasi, keterangan) VALUES ('$randomId', '$nomor_kartu', '$id_pg', '$current_time', '$current_date', '$jam_kerja', NULL, 'hadir')";
             
             // Execute the insert query
             $insert_result = mysqli_query($conn, $insert_query);

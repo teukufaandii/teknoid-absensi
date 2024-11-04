@@ -29,13 +29,6 @@
     justify-content: center;
     transition: background-color 0.3s;
 }
-.submit-button {
-    background-color: #4b5563;
-    color: white;
-}
-.submit-button:hover {
-    background-color: #374151;
-}
 .back-to-login {
     background-color: #e5e7eb;
     color: #1f2937;

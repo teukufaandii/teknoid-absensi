@@ -8,7 +8,7 @@ if (!isset($_SESSION['token'])) {
 
 // Cek session akses admin
 if ($_SESSION['role'] !== 'admin') {
-  header('Location: ../../unauthorized.php'); // Ganti dengan halaman yang sesuai
+  header('Location: ../../unauthorized.php');
   exit();
 }
 
@@ -105,15 +105,16 @@ $token = $_SESSION['token'];
 $(document).ready(function() {
     let currentPage = 0;
     let totalDataAnonim = 0;
-    let searchTerm = ''; // Variabel untuk menyimpan kata kunci pencarian
+    let searchTerm = '';
 
+    // Fungsi untuk memuat data anonim
     function loadDataAnonim(page, search = '') {
         $.ajax({
             url: '../../db/routes/fetchDataAnonim.php',
             type: 'GET',
             data: {
                 start: page * 5,
-                search: search // Kirim kata kunci pencarian ke backend
+                search: search
             },
             dataType: 'json',
             success: function(response) {
@@ -122,9 +123,9 @@ $(document).ready(function() {
                     return;
                 }
 
-                totalDataAnonim = response.totalData; // Simpan total data dari response
+                totalDataAnonim = response.totalData;
                 let DataAnonimTableBody = $('#anonim-table-body');
-                DataAnonimTableBody.empty(); // Kosongkan tabel sebelum menambahkan data
+                DataAnonimTableBody.empty();
 
                 if (response.data_anonim.length === 0 && currentPage > 0) {
                     currentPage--;
@@ -132,7 +133,7 @@ $(document).ready(function() {
                 } else if (response.data_anonim.length === 0) {
                     DataAnonimTableBody.append('<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>');
                 } else {
-                    let counter = page * 5 + 1; // Hitung counter berdasarkan halaman
+                    let counter = page * 5 + 1;
                     response.data_anonim.forEach(function(data_anonim) {
                         DataAnonimTableBody.append(`
                             <tr class="bg-gray-100">
@@ -140,31 +141,30 @@ $(document).ready(function() {
                                 <td class="px-6 py-2 text-center" style="display: none;">${data_anonim.id}</td>
                                 <td class="px-6 py-2 text-center">${data_anonim.nomor_kartu}</td>
                                 <td class="px-6 py-2 text-center">${data_anonim.jam}</td>
-                                <td class="px-6 py-2 text-center">${data_anonim.tanggal}</td>
+                                <td class="px-6 py-2 text-center">${data_anonim.tanggal ? data_anonim.tanggal.split('-').reverse().join('-') : '-'} </td>
                                 <td class="px-6 py-2 text-center">
                                     <button class="edit-button bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition" data-nomor-kartu="${data_anonim.nomor_kartu}">
                                         <i class="fa-solid fa-plus"></i>
                                     </button>
-                                      <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${data_anonim.id}">
-                                          <i class="fa-solid fa-trash"></i>
-                                      </button>
+                                    <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${data_anonim.id}">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                         `);
                     });
                 }
 
-                $('#prev-page').prop('disabled', currentPage === 0);
-                $('#next-page').prop('disabled', (currentPage + 1) * 5 >= totalDataAnonim);
-
                 updatePaginationButtons();
             },
             error: function() {
+                $('#loading').addClass('hidden');
                 Swal.fire('Error!', 'Terjadi kesalahan saat memuat data', 'error');
             }
         });
     }
 
+    // Fungsi untuk memperbarui tombol pagination
     function updatePaginationButtons() {
         const totalPages = Math.ceil(totalDataAnonim / 5);
         const paginationButtons = $('.pagination-button');
@@ -185,6 +185,7 @@ $(document).ready(function() {
         $('#next-page').prop('disabled', (currentPage + 1) * 5 >= totalDataAnonim);
     }
 
+    // Event listener untuk previous pagination
     $('#prev-page').on('click', function() {
         if (currentPage > 0) {
             currentPage--;
@@ -192,6 +193,7 @@ $(document).ready(function() {
         }
     });
 
+    // Event listener untuk next pagination
     $('#next-page').on('click', function() {
         if ((currentPage + 1) * 5 < totalDataAnonim) {
             currentPage++;
@@ -199,6 +201,7 @@ $(document).ready(function() {
         }
     });
 
+    // Event listener untuk pagination button
     $(document).on('click', '.pagination-button', function() {
         currentPage = parseInt($(this).data('page'));
         loadDataAnonim(currentPage, searchTerm);
@@ -212,11 +215,12 @@ $(document).ready(function() {
         loadDataAnonim(currentPage, searchTerm);
     });
 
-    loadDataAnonim(currentPage); // Panggil fungsi untuk memuat data anonim saat halaman dimuat
+    // Load data pertama kali
+    loadDataAnonim(currentPage, searchTerm);
 });
 
 
-//add button
+//add user button
 $(document).on('click', '.edit-button', function() {
     const nomorKartu = $(this).data('nomor-kartu');
     window.location.href = `tambahPegawai.php?nomor_kartu=${nomorKartu}`;

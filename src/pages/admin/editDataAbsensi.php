@@ -2,14 +2,14 @@
 session_start();
 
 if (!isset($_SESSION['token'])) {
-    header('Location: login.php');
-    exit();
+  header('Location: login.php');
+  exit();
 }
 
 // Cek session akses admin
 if ($_SESSION['role'] !== 'admin') {
-    header('Location: ../../unauthorized.php');
-    exit();
+  header('Location: ../../unauthorized.php');
+  exit();
 }
 
 $username = htmlspecialchars($_SESSION['name']);
@@ -17,6 +17,7 @@ $role = $_SESSION['role'];
 $id = $_SESSION['user_id'];
 $token = $_SESSION['token'];
 
+$detailId = isset($_GET['id']) ? htmlspecialchars($_GET['id']) : null;
 $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
 ?>
 
@@ -24,119 +25,113 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Rekap</title>
-    <link href="../../../css/output.css" rel="stylesheet">
-    <link href="../css/font/poppins-font.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Rekap</title>
+  <link href="../../../css/output.css" rel="stylesheet">
+  <link href="../css/font/poppins-font.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
-    <div class="flex flex-col md:flex-row lg:flex-row h-screen">
-        <!-- Side Navigation -->
-        <?php include('../navbar/sidenav.php') ?>
+  <div class="flex flex-col md:flex-row lg:flex-row h-screen">
+    <!-- Side Navigation -->
+    <?php include('../navbar/sidenav.php') ?>
 
-        <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
-            <!-- Top Navigation -->
-            <?php include('../navbar/topnav.php') ?>
+    <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
+      <!-- Top Navigation -->
+      <?php include('../navbar/topnav.php') ?>
 
-            <!-- Main Content -->
-            <main class="flex-1 p-6 bg-mainBgColor mainContent">
-            <div class="flex justify-between items-center border-b border-gray-500">
-                <h1 class="text-lg sm:text-xl md:text-3xl py-2 font-Poppins font-semibold">Edit Data Absensi</h1>
-                <a href="previewDataAbsensi.php?id_pg=<?php echo $id_pg; ?>">
-                    <button class="bg-purpleNavbar text-white px-4 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200">Kembali</button>
-                </a>
-            </div>    
-            <div class="max-w-full mx-auto py-6">
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">Tanggal</label>
-                    <input
-                    type="date"
-                    class="w-full border-2 border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar cursor-not-allowed"
-                    value=""
-                    name="tanggal"
-                    readonly
-                    />
-                </div>
-
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">Keterangan</label>
-                    <div class="flex items-center justify-between space-x-8 sm:justify-start">
-                        <label class="flex items-center text-gray-600">
-                        <input
-                            type="radio"
-                            name="keterangan"
-                            value="sakit"
-                            class="hidden"
-                            checked
-                        />
-                        <span class="w-3.5 h-3.5 inline-block mr-2 border-2 border-purpleNavbar rounded-full flex-shrink-0 transition"></span>
-                        Sakit
-                        </label>
-                        <label class="flex items-center text-gray-600">
-                        <input
-                            type="radio"
-                            name="keterangan"
-                            value="izin"
-                            class="hidden"
-                        />
-                        <span class="w-3.5 h-3.5 inline-block mr-2 border-2 border-purpleNavbar rounded-full flex-shrink-0 transition"></span>
-                        Izin
-                        </label>
-                        <label class="flex items-center text-gray-600">
-                        <input
-                            type="radio"
-                            name="keterangan"
-                            value="cuti"
-                            class="hidden"
-                        />
-                        <span class="w-3.5 h-3.5 inline-block mr-2 border-2 border-purpleNavbar rounded-full flex-shrink-0 transition"></span>
-                        Cuti
-                        </label>
-                        <label class="flex items-center text-gray-600">
-                        <input
-                            type="radio"
-                            name="keterangan"
-                            value="hadir"
-                            class="hidden"
-                        />
-                        <span class="w-3.5 h-3.5 inline-block mr-2 border-2 border-purpleNavbar rounded-full flex-shrink-0 transition"></span>
-                        Hadir
-                        </label>
-                        <label class="flex items-center text-gray-600">
-                        <input
-                            type="radio"
-                            name="keterangan"
-                            value="alpha"
-                            class="hidden"
-                        />
-                        <span class="w-3.5 h-3.5 inline-block mr-2 border-2 border-purpleNavbar rounded-full flex-shrink-0 transition"></span>
-                        Alpha
-                        </label>
-
-                    </div>
-                </div>
-
-                <div class="flex justify-between mt-6">
-                    <button class="bg-purpleNavbar text-white px-6 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200" onclick="saveData()">Simpan</button>
-                </div>
-                </div>
-            </main>
+      <!-- Main Content -->
+      <main class="flex-1 p-6 bg-mainBgColor mainContent">
+        <div class="flex justify-between items-center border-b border-gray-500">
+          <h1 class="text-lg sm:text-xl md:text-3xl py-2 font-Poppins font-semibold">Edit Data Absensi</h1>
+          <a href="previewDataAbsensi.php?id_pg=<?php echo $id_pg; ?>">
+            <button class="bg-purpleNavbar text-white px-4 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200">Kembali</button>
+          </a>
         </div>
+        <div class="max-w-full mx-auto py-6">
+          <div class="mb-4">
+            <label class="block text-gray-700 font-semibold mb-2">Tanggal</label>
+            <input
+              type="date"
+              class="w-full border-2 border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar cursor-not-allowed"
+              value=""
+              name="tanggal"
+              readonly />
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-gray-700 font-semibold mb-2">Keterangan</label>
+            <div class="flex items-center justify-between space-x-8 sm:justify-start">
+              <label class="flex items-center text-gray-600">
+                <input
+                  type="radio"
+                  name="keterangan"
+                  value="sakit"
+                  class="hidden" />
+                <span class="w-3.5 h-3.5 inline-block mr-2 border-2 border-purpleNavbar rounded-full flex-shrink-0 transition"></span>
+                Sakit
+              </label>
+              <label class="flex items-center text-gray-600">
+                <input
+                  type="radio"
+                  name="keterangan"
+                  value="izin"
+                  class="hidden" />
+                <span class="w-3.5 h-3.5 inline-block mr-2 border-2 border-purpleNavbar rounded-full flex-shrink-0 transition"></span>
+                Izin
+              </label>
+              <label class="flex items-center text-gray-600">
+                <input
+                  type="radio"
+                  name="keterangan"
+                  value="cuti"
+                  class="hidden" />
+                <span class="w-3.5 h-3.5 inline-block mr-2 border-2 border-purpleNavbar rounded-full flex-shrink-0 transition"></span>
+                Cuti
+              </label>
+              <label class="flex items-center text-gray-600">
+                <input
+                  type="radio"
+                  name="keterangan"
+                  value="hadir"
+                  class="hidden" />
+                <span class="w-3.5 h-3.5 inline-block mr-2 border-2 border-purpleNavbar rounded-full flex-shrink-0 transition"></span>
+                Hadir
+              </label>
+              <label class="flex items-center text-gray-600">
+                <input
+                  type="radio"
+                  name="keterangan"
+                  value="alpha"
+                  class="hidden" />
+                <span class="w-3.5 h-3.5 inline-block mr-2 border-2 border-purpleNavbar rounded-full flex-shrink-0 transition"></span>
+                Alpha
+              </label>
+
+            </div>
+          </div>
+
+          <div class="flex justify-between mt-6">
+            <button class="bg-purpleNavbar text-white px-6 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200" onclick="saveData()">Simpan</button>
+          </div>
+        </div>
+      </main>
     </div>
-    
-    <?php include('../navbar/profileInfo.php') ?>
+  </div>
+
+  <?php include('../navbar/profileInfo.php') ?>
 </body>
 
 <script>
-    function saveData() {
+  function saveData() {
     const userId = <?php echo json_encode($id_pg); ?>;
+    const detailId = <?php echo json_encode($detailId); ?>;
     const data = {
       tanggal: document.querySelector('input[name="tanggal"]').value,
-      keterangan: document.querySelector('input[name="keterangan"]').value,
+      keterangan: document.querySelector('input[name="keterangan"]:checked').value,
     };
 
     // Show confirmation popup
@@ -158,6 +153,7 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+              id: detailId,
               user_id: userId,
               data: data
             })
@@ -170,6 +166,11 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
                 title: 'Data updated successfully!',
                 showConfirmButton: false,
                 timer: 1500
+              }).then(() => {
+                // Redirect after 1.5 seconds
+                setTimeout(() => {
+                  window.location.href = 'previewDataAbsensi.php?id_pg=' + userId;
+                }, 1500);
               });
             } else {
               Swal.fire({
@@ -191,29 +192,30 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
     });
   }
 
-    function fetchData() {
-        const userId = <?php echo json_encode($id_pg); ?>;
+  function fetchData() {
+    const userId = <?php echo json_encode($id_pg); ?>;
+    let id_pg = "<?php echo $_GET['id_pg']; ?>";
 
-        fetch(`../../db/routes/fetchPreviewData.php?id_pg=${userId}&start=0&limit=1`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success' && data.preview_data_absensi.length > 0) {
-                    const attendanceData = data.preview_data_absensi[0];
-                    document.querySelector('input[name="tanggal"]').value = attendanceData.tanggal;
-                    
-                    document.querySelectorAll('input[name="keterangan"]').forEach(radio => {
-                        if (radio.value === attendanceData.keterangan) {
-                            radio.checked = true;
-                        }
-                    });
-                } else {
-                    console.error('Data not found or no attendance data available.');
-                }
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    }
+    fetch(`../../db/routes/fetchPreviewData.php?id_pg=${userId}&start=0&limit=1`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success' && data.preview_data_absensi.length > 0) {
+          const attendanceData = data.preview_data_absensi[0];
+          document.querySelector('input[name="tanggal"]').value = attendanceData.tanggal;
 
-    document.addEventListener('DOMContentLoaded', fetchData);
+          document.querySelectorAll('input[name="keterangan"]').forEach(radio => {
+            if (radio.value === attendanceData.keterangan) {
+              radio.checked = true;
+            }
+          });
+        } else {
+          console.error('Data not found or no attendance data available.');
+        }
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  }
+
+  document.addEventListener('DOMContentLoaded', fetchData);
 </script>
 
 

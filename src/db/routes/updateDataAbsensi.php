@@ -8,15 +8,16 @@ if (!isset($_SESSION['token'])) {
 }
 
 // Include the database connection
-require_once '../db_connect.php'; 
+require_once '../db_connect.php';
 
 // Get the POST data
 $data = json_decode(file_get_contents('php://input'), true);
+$detailId = $data['id'];
 $userId = $data['user_id'];
 $absensiData = $data['data'];
 
 // Validate input data
-if (empty($userId) || empty($absensiData)) {
+if (empty($detailId) || empty($userId) || empty($absensiData)) {
     echo json_encode(['success' => false, 'message' => 'Invalid input data']);
     exit();
 }
@@ -26,12 +27,13 @@ try {
     UPDATE tb_detail 
     SET 
         keterangan = ? 
-    WHERE id = ?
+    WHERE id = ? AND id_pg = ?
     ");
 
     $stmt->bind_param(
-        'ss',
+        'sss',
         $absensiData['keterangan'],
+        $detailId,
         $userId
     );
 
@@ -48,4 +50,3 @@ try {
 // Close the statement and connection
 $stmt->close();
 $conn->close();
-?>

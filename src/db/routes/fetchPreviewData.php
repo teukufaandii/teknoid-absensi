@@ -73,6 +73,7 @@ while ($row = $result->fetch_assoc()) {
     }
 
     $preview_data_absensi[] = [
+        'id' => $row["id"], 
         'tanggal' => htmlspecialchars($row["tanggal"]),
         'jam_kerja' => htmlspecialchars($row["jam_kerja"]),
         'scan_masuk' => htmlspecialchars($scanMasuk),

@@ -145,10 +145,9 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
                                     <td class="px-6 py-2 text-center">${preview_data_absensi.durasi}</td>
                                     <td class="px-6 py-2 text-center">${preview_data_absensi.keterangan}</td>
                                     <td class="px-6 py-2 text-center">
-                                        <a href="./editDataAbsensi.php?id_pg=${preview_data_absensi.id_pg}">
+                                        <a href="./editDataAbsensi.php?id_pg=${preview_data_absensi.id_pg}&id=${preview_data_absensi.id}">
                                             <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
-                                        </a>
-                                        <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${preview_data_absensi.id_pg}"><i class="fa-solid fa-trash"></i></button>
+                                        </a>                                        
                                     </td>
                                 </tr>
                             `);

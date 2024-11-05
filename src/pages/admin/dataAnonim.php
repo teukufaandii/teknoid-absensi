@@ -51,8 +51,7 @@ $token = $_SESSION['token'];
         <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Anonim</h1>
 
         <!-- Search Bar & Button Tambah -->
-        <div class="flex justify-between items-center mt-5">
-
+        <div class="flex justify-end items-center mt-5">
           <div class="relative">
                 <form method="GET">
                     <input
@@ -221,6 +220,7 @@ $(document).ready(function() {
 
 
 //add user button
+
 $(document).on('click', '.edit-button', function() {
     const nomorKartu = $(this).data('nomor-kartu');
     window.location.href = `tambahPegawai.php?nomor_kartu=${nomorKartu}`;

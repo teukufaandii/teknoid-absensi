@@ -30,11 +30,20 @@ $token = $_SESSION['token'];
   <link href="../css/font/poppins-font.css" rel="stylesheet">
   <!-- ajax live search -->
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <style>
+    .active-button {
+      background-color: #8C85FF;
+      color: white;
+    }
+
+    .inactive-button {
+        background-color: #e2e8f0;
+        color: #8C85FF;
+    }
+
     .loader {
       border: 8px solid #f3f3f3;
       border-top: 8px solid #3498db;
@@ -111,13 +120,13 @@ $token = $_SESSION['token'];
         </div>
 
         <div class="flex justify-center items-center space-x-1 mt-4">
-          <button id="prev-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl" disabled>
+          <button id="prev-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer" disabled>
             <i class="fas fa-chevron-left"></i>
           </button>
           <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="0">1</button>
           <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="1">2</button>
           <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="2">3</button>
-          <button id="next-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">
+          <button id="next-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer">
             <i class="fas fa-chevron-right"></i>
           </button>
         </div>
@@ -131,119 +140,127 @@ $token = $_SESSION['token'];
 <script>
   $(document).ready(function() {
     let currentPage = 0;
-    let totalDataAbsensi = 0;
+    let totalDataPegawai = 0;
     let searchTerm = '';
 
-    function loadDataAbsensi(page, search = '') {
-      $('#loading').removeClass('hidden');
-      $.ajax({
-        url: '../../db/routes/fetchDataPegawai.php',
-        type: 'GET',
-        data: {
-          start: page * 5,
-          search: search
-        },
-        dataType: 'json',
-        success: function(response) {
-          $('#loading').addClass('hidden');
-          if (response.status === 'unauthorized') {
-            window.location.href = '../../unauthorized.php';
-            return;
-          }
+    // Update this function to dynamically create pagination buttons based on total pages
+function updatePaginationButtons() {
+  const totalPages = Math.ceil(totalDataPegawai / 5);
+  const paginationContainer = $('.flex.justify-center.items-center.space-x-1');
+  paginationContainer.empty(); // Clear existing buttons
 
-          totalDataAbsensi = response.total;
-          let DataAbsensiTableBody = $('#pegawai-table-body');
-          DataAbsensiTableBody.empty();
+  // Create Previous button
+  paginationContainer.append(`
+    <button id="prev-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer" ${currentPage === 0 ? 'disabled' : ''}>
+      <i class="fas fa-chevron-left"></i>
+    </button>
+  `);
 
-          if (response.data_pegawai.length === 0 && currentPage > 0) {
-            currentPage--;
-            loadDataAbsensi(currentPage, search);
-          } else if (response.data_pegawai.length === 0) {
-              DataAbsensiTableBody.append('<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>');
-          } else {
-              let counter = page * 5 + 1;
-            response.data_pegawai.forEach(function(data_pegawai) {
-              DataAbsensiTableBody.append(`
-              <tr class="bg-gray-100">
-              <td class="px-6 py-2 text-center">${counter++}</td>
-              <td class="px-6 py-2 text-center">${data_pegawai.noinduk}</td>
-              <td class="px-6 py-2 text-center">${data_pegawai.nama}</td>
-              <td class="px-6 py-2 text-center">${data_pegawai.role}</td>
-              <td class="px-6 py-2 text-center">
-                <a href="./editDataPegawai.php?id_pg=${data_pegawai.id_pg}">
-                  <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
-                </a>
-                <a>
-                  <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${data_pegawai.id_pg}">
-                    <i class="fa-solid fa-trash"></i>
-                  </button>
-                </a>
-              </td>
-            </tr>
-          `);
-            });
-          }
+  // Dynamically create number buttons
+  for (let i = 0; i < totalPages; i++) {
+    paginationContainer.append(`
+      <button class="min-w-9 px-3 py-2 ${i === currentPage ? 'bg-purpleNavbarHover text-white' : 'bg-purpleNavbar text-white'} rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl pagination-button" data-page="${i}">
+        ${i + 1}
+      </button>
+    `);
+  }
 
-          //$('#prev-page').prop('disabled', currentPage === 0);
-          //$('#next-page').prop('disabled', (currentPage + 1) * 5 >= totalDataAbsensi);
+  // Create Next button
+  paginationContainer.append(`
+    <button id="next-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer" ${currentPage === totalPages - 1 ? 'disabled' : ''}>
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  `);
+}
 
-          updatePaginationButtons();
-        },
-        error: function() {
-          $('#loading').addClass('hidden');
-          Swal.fire('Error!', 'Terjadi kesalahan saat memuat data', 'error');
+// Load data on page load and set up event listeners for pagination
+$(document).ready(function() {
+  let currentPage = 0;
+  let searchTerm = '';
+
+  function loadDataAbsensi(page, search = '') {
+    $('#loading').removeClass('hidden');
+    $.ajax({
+      url: '../../db/routes/fetchDataPegawai.php',
+      type: 'GET',
+      data: { start: page * 5, search: search },
+      dataType: 'json',
+      success: function(response) {
+        $('#loading').addClass('hidden');
+        if (response.status === 'unauthorized') {
+          window.location.href = '../../unauthorized.php';
+          return;
         }
-      });
+
+        totalDataPegawai = response.total;
+        currentPage = page;
+        renderData(response.data_pegawai);
+        updatePaginationButtons();
+      },
+      error: function() {
+        $('#loading').addClass('hidden');
+        Swal.fire('Error!', 'Terjadi kesalahan saat memuat data', 'error');
+      }
+    });
+  }
+
+  function renderData(data) {
+    const tableBody = $('#pegawai-table-body');
+    tableBody.empty();
+
+    if (data.length === 0) {
+      tableBody.append('<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>');
+      return;
     }
 
-    function updatePaginationButtons() {
-      const totalPages = Math.ceil(totalDataAbsensi / 5);
-      const paginationButtons = $('.pagination-button');
+    data.forEach((data_pegawai, index) => {
+      tableBody.append(`
+        <tr class="bg-gray-100">
+          <td class="px-6 py-2 text-center">${index + 1}</td>
+          <td class="px-6 py-2 text-center">${data_pegawai.noinduk}</td>
+          <td class="px-6 py-2 text-center">${data_pegawai.nama}</td>
+          <td class="px-6 py-2 text-center">${data_pegawai.role}</td>
+          <td class="px-6 py-2 text-center">
+            <a href="./editDataPegawai.php?id_pg=${data_pegawai.id_pg}">
+              <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
+            </a>
+            <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${data_pegawai.id_pg}">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      `);
+    });
+  }
 
-      paginationButtons.hide();
+  // Event listener for pagination buttons
+  $(document).on('click', '.pagination-button', function() {
+    const page = parseInt($(this).data('page'));
+    loadDataAbsensi(page, searchTerm);
+  });
 
-      for (let i = 0; i < totalPages; i++) {
-        const button = paginationButtons.eq(i);
-        button.show().data('page', i).text(i + 1);
-        if (i === currentPage) {
-          button.removeClass('inactive-button').addClass('active-button');
-        } else {
-          button.removeClass('active-button').addClass('inactive-button');
-        }
-      }
-
-      $('#prev-page').prop('disabled', currentPage === 0);
-      $('#next-page').prop('disabled', (currentPage + 1) * 5 >= totalDataAbsensi);
+  $('#prev-page').on('click', function() {
+    if (currentPage > 0) {
+      loadDataAbsensi(--currentPage, searchTerm);
     }
+  });
 
-    $('#prev-page').on('click', function() {
-      if (currentPage > 0) {
-        currentPage--;
-        loadDataAbsensi(currentPage, searchTerm);
-      }
-    });
+  $('#next-page').on('click', function() {
+    const totalPages = Math.ceil(totalDataPegawai / 5);
+    if (currentPage < totalPages - 1) {
+      loadDataAbsensi(++currentPage, searchTerm);
+    }
+  });
 
-    $('#next-page').on('click', function() {
-      if ((currentPage + 1) * 5 < totalDataAbsensi) {
-        currentPage++;
-        loadDataAbsensi(currentPage, searchTerm);
-      }
-    });
+  // Event listener for search input
+  $('#searchInput').on('keyup', function() {
+    searchTerm = $(this).val();
+    loadDataAbsensi(0, searchTerm); // Reset to the first page on search
+  });
 
-    $(document).on('click', '.pagination-button', function() {
-      currentPage = parseInt($(this).data('page'));
-      loadDataAbsensi(currentPage, searchTerm);
-      updatePaginationButtons();
-    });
+  loadDataAbsensi(currentPage); // Load initial data
+});
 
-    // Event listener untuk input pencarian
-    $('#searchInput').on('keyup', function() {
-      searchTerm = $(this).val();
-      currentPage = 0; // Reset ke halaman pertama saat pencarian
-      loadDataAbsensi(currentPage, searchTerm);
-    });
-
-    loadDataAbsensi(currentPage);
   });
 
 

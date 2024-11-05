@@ -10,6 +10,9 @@ $username = htmlspecialchars($_SESSION['name']);
 $role = $_SESSION['role'];
 $id = $_SESSION['user_id'];
 $token = $_SESSION['token'];
+
+date_default_timezone_set('Asia/Jakarta');
+$currentDate = date('d/m/Y');
 ?>
 
 <!DOCTYPE html>
@@ -36,14 +39,17 @@ $token = $_SESSION['token'];
 
             <!-- Main Content -->
             <main class="flex-1 p-6 bg-mainBgColor mainContent">
-                <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Dashboard </h1>
+                <div class="border-b border-gray-500 flex justify-between">
+                    <h1 class="text-lg sm:text-xl md:text-3xl py-2 font-Poppins font-semibold"> Dashboard </h1>
+                    <h1 class="text-lg sm:text-xl md:text-3xl py-2 font-Poppins font-semibold"> <?php echo $currentDate; ?> </h1>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
                     <?php
                     $cards = [
-                        ['title' => 'Total Hadir Hari Ini', 'id' => 'total-hadir'],
-                        ['title' => 'Total Tidak Datang Hari Ini', 'id' => 'total-absen'],
-                        ['title' => 'Total Terlambat Datang Hari ini', 'id' => 'total-telat'],
-                        ['title' => 'Total Karyawan', 'id' => 'total-karyawan'],
+                        ['title' => 'Total Hadir', 'id' => 'total-hadir'],
+                        ['title' => 'Total Tidak Hadir', 'id' => 'total-absen'],
+                        ['title' => 'Total Terlambat Hadir', 'id' => 'total-telat'],
+                        ['title' => 'Total  Karyawan', 'id' => 'total-karyawan'],
                     ];
 
                     foreach ($cards as $card) {

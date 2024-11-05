@@ -28,7 +28,6 @@ $token = $_SESSION['token'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rekap Absensi</title>
     <link href="../../../css/output.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/dataAbsensi.css">
     <link href="../css/font/poppins-font.css" rel="stylesheet">
     <link href="../css/global/generalStyling.css" rel="stylesheet">
     <link href="../css/global/tableFormat.css" rel="stylesheet">
@@ -176,13 +175,13 @@ $token = $_SESSION['token'];
                 </div>
 
                 <div class="flex justify-center items-center space-x-1 mt-4">
-                    <button id="prev-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl" disabled>
+                    <button id="prev-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer" disabled>
                         <i class="fas fa-chevron-left"></i>
                     </button>
                     <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="0">1</button>
                     <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="1">2</button>
                     <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="2">3</button>
-                    <button id="next-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">
+                    <button id="next-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>

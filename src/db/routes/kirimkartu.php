@@ -6,11 +6,6 @@ include "../db_connect.php";
 // Get the card number from the query parameter
 $nomor_kartu = $_GET['nomor_kartu'];
 
-// Function to generate random ID
-function generateRandomId($length = 20) {
-    return substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', $length)), 0, $length);
-}
-
 // Clear the temporary RFID table
 mysqli_query($conn, "DELETE FROM temprfid");
 
@@ -37,44 +32,67 @@ if ($simpan) {
         $check_result = mysqli_query($conn, $check_query);
         
         if ($check_result && mysqli_num_rows($check_result) > 0) {
-            // Check the last scan time
+            // If entry exists, check if scan_masuk exists
             $last_scan_row = mysqli_fetch_assoc($check_result);
             $scan_masuk = $last_scan_row['scan_masuk'];
+            $scan_keluar = $last_scan_row['scan_keluar'];
 
-            // Check if the last scan was within the last 30 minutes
-            $last_scan_time = strtotime($last_scan_row['scan_masuk'] ?? $last_scan_row['scan_keluar']);
-            $current_time_stamp = time();
-
-            // Check if the last scan was within the last 30 minutes
-            if (($current_time_stamp - $last_scan_time) < 9000) { // 9000 seconds = 150 minutes
-                echo "Anda harus menunggu 150 menit sebelum melakukan scan lagi.";
+            if (!is_null($scan_masuk) && !is_null($scan_keluar)) {
+                // If both scan_masuk and scan_keluar exist
+                echo "Anda sudah scan masuk dan keluar hari ini.";
                 exit;
-            } else {
-                // Update scan_keluar if scan_masuk already exists
-                $scan_keluar = $current_time; // format TIME
-                $update_query = "UPDATE tb_detail SET scan_keluar = '$scan_keluar' WHERE nomor_kartu = '$nomor_kartu' AND DATE(tanggal) = '$current_date'";
+
+             } elseif(is_null($scan_masuk)) {
+                // If scan_masuk is null, update scan_masuk
+                $jam_kerja = ($current_day == 'Sunday') ? 'Libur' : 'Hari Kerja';
+                $update_query = "UPDATE tb_detail SET scan_masuk = '$current_time', jam_kerja = '$jam_kerja', keterangan = 'hadir' WHERE nomor_kartu = '$nomor_kartu' AND DATE(tanggal) = '$current_date'";
                 
-                if (mysqli_query($conn, $update_query)) {
-                    // Menghitung durasi
-                    $durasi_query = "SELECT TIMEDIFF('$scan_keluar', '$scan_masuk') AS durasi";
-                    $durasi_result = mysqli_query($conn, $durasi_query);
-                    $durasi_row = mysqli_fetch_assoc($durasi_result);
-                    $durasi = $durasi_row['durasi'];
+                // Execute the update query
+                $update_result = mysqli_query($conn, $update_query);
 
-                    // Update durasi
-                    $durasi_update_query = "UPDATE tb_detail SET durasi = '$durasi' WHERE nomor_kartu = '$nomor_kartu' AND DATE(tanggal) = '$current_date'";
-                    mysqli_query($conn, $durasi_update_query);
-
-                    echo "Scan keluar berhasil. Durasi: $durasi.";
+                if ($update_result) {
+                    echo "Scan masuk berhasil.";
                 } else {
-                    echo "Gagal saat memperbarui scan keluar: " . mysqli_error($conn);
+                    echo "Gagal saat memperbarui waktu: " . mysqli_error($conn);
+                }
+            } else {
+                // If scan_masuk exists, check the last scan time
+                $last_scan_time = strtotime($last_scan_row['scan_masuk'] ?? $last_scan_row['scan_keluar']);
+                $current_time_stamp = time();
+
+                // Check if the last scan was within the last 150 minutes
+                if (($current_time_stamp - $last_scan_time) < 60) { // 9000 seconds = 150 minutes
+                    echo "Anda harus menunggu 150 menit sebelum melakukan scan lagi.";
+                    exit;
+                } else {
+                    // Update scan_keluar if scan_masuk already exists
+                    $scan_keluar = $current_time; // format TIME
+                    $update_query = "UPDATE tb_detail SET scan_keluar = '$scan_keluar' WHERE nomor_kartu = '$nomor_kartu' AND DATE(tanggal) = '$current_date'";
+                    
+                    if (mysqli_query($conn, $update_query)) {
+                        // Menghitung durasi
+                        $durasi_query = "SELECT TIMEDIFF('$scan_keluar', '$scan_masuk') AS durasi FROM tb_detail WHERE nomor_kartu = '$nomor_kartu' AND DATE(tanggal) = '$current_date'";
+                        $durasi_result = mysqli_query($conn, $durasi_query);
+                        $durasi_row = mysqli_fetch_assoc($durasi_result);
+                        $durasi = $durasi_row['durasi'];
+
+                        // Update durasi
+                        $durasi_update_query = "UPDATE tb_detail SET durasi = '$durasi' WHERE nomor_kartu = '$nomor_kartu' AND DATE(tanggal) = '$current_date'";
+                        mysqli_query($conn, $durasi_update_query);
+
+                        echo "Scan keluar berhasil. Durasi: $durasi.";
+                    } else {
+                        echo "Gagal saat memperbarui scan keluar: " . mysqli_error($conn);
+                    }
                 }
             }
+
+
+            
         } else {
             // If no entry exists for today, insert new scan_masuk
-            $randomId = generateRandomId(20);
             $jam_kerja = ($current_day == 'Sunday') ? 'Libur' : 'Hari Kerja';
-            $insert_query = "INSERT INTO tb_detail(id, nomor_kartu, id_pg, scan_masuk, tanggal, jam_kerja, durasi, keterangan) VALUES ('$randomId', '$nomor_kartu', '$id_pg', '$current_time', '$current_date', '$jam_kerja', NULL, 'hadir')";
+            $insert_query = "INSERT INTO tb_detail(nomor_kartu, id_pg, scan_masuk, tanggal, jam_kerja, durasi, keterangan) VALUES ('$nomor_kartu', '$id_pg', '$current_time', '$current_date', '$jam_kerja', NULL, 'hadir')";
             
             // Execute the insert query
             $insert_result = mysqli_query($conn, $insert_query);

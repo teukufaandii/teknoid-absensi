@@ -16,6 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $jenis_kelamin = isset($input['jenis_kelamin']) ? $input['jenis_kelamin'] : null;
     $jabatan = $input['jabatan'];
     $role = $input['role'];
+    
+     // Cek apakah nomor_kartu ada di tabel anonim
+    $checkQuery = "SELECT * FROM tb_anonim WHERE nomor_kartu = '$nomor_kartu'";
+    $checkResult = mysqli_query($conn, $checkQuery);
+
+    if (mysqli_num_rows($checkResult) > 0) {
+        // Jika ada, hapus nomor_kartu dari tabel anonim
+        $deleteQuery = "DELETE FROM tb_anonim WHERE nomor_kartu = '$nomor_kartu'";
+        mysqli_query($conn, $deleteQuery);
+    }
 
     $query = "INSERT INTO tb_pengguna (id_pg, nomor_kartu, nama, email, password, noinduk, tempat_lahir, tanggal_lahir, jenis_kelamin, jabatan, role) VALUES (UUID(), '$nomor_kartu', '$nama', '$email', '$password', '$noinduk', '$tempat_lahir', '$tanggal_lahir', '$jenis_kelamin', '$jabatan', '$role')";
 

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../db/db_connect.php';
+include 'src/db/db_connect.php';
 
 $output = '';
 if(isset($_POST['query'])) {

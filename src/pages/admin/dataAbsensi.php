@@ -8,7 +8,7 @@ if (!isset($_SESSION['token'])) {
 
 // Cek session akses admin
 if ($_SESSION['role'] !== 'admin') {
-    header('Location: ../../unauthorized.php');
+    header('Location: unauthorized');
     exit();
 }
 
@@ -27,10 +27,10 @@ $token = $_SESSION['token'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rekap Absensi</title>
-    <link href="../../../css/output.css" rel="stylesheet">
-    <link href="../css/font/poppins-font.css" rel="stylesheet">
-    <link href="../css/global/generalStyling.css" rel="stylesheet">
-    <link href="../css/global/tableFormat.css" rel="stylesheet">
+    <link href="css/output.css" rel="stylesheet">
+    <link href="src/pages/css/font/poppins-font.css" rel="stylesheet">
+    <link href="src/pages/css/global/generalStyling.css" rel="stylesheet">
+    <link href="src/pages/css/global/tableFormat.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -70,11 +70,11 @@ $token = $_SESSION['token'];
 <body>
     <div class="flex flex-col md:flex-row lg:flex-row h-screen">
         <!-- Side Navigation -->
-        <?php include('../navbar/sidenav.php') ?>
+        <?php include('src/pages/navbar/sidenav.php') ?>
 
         <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
             <!-- Top Navigation -->
-            <?php include('../navbar/topnav.php') ?>
+            <?php include('src/pages/navbar/topnav.php') ?>
 
             <!-- Main Content -->
             <main class="flex-1 p-6 bg-mainBgColor mainContent">
@@ -98,6 +98,11 @@ $token = $_SESSION['token'];
                             class="w-60 px-4 py-2 border rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-purpleNavbar text-sm" />
                         <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                     </div>
+                </div>
+
+                <div id="loading" class="hidden text-center mt-4">
+                    <p>Loading...</p>
+                    <div class="loader"></div>
                 </div>
 
                 <!-- Popup Download -->
@@ -241,7 +246,7 @@ $token = $_SESSION['token'];
                     document.getElementById('loadingSpinner').classList.remove('hidden');
 
                     $.ajax({
-                        url: '../../db/routes/generateAbsenceDetails.php',
+                        url: 'api/users/generate-absensi-details',
                         type: 'GET',
                         data: {
                             option: option
@@ -271,111 +276,96 @@ $token = $_SESSION['token'];
 
         $(document).ready(function() {
             let currentPage = 0;
-            let totalDataAbsensi = 0;
             let searchTerm = '';
+            let totalDataAbsensi = 0;
 
             function loadDataAbsensi(page, search = '') {
+                $('#loading').removeClass('hidden');
                 $.ajax({
-                    url: '../../db/routes/getDataAbsensi.php',
-                    type: 'GET',
-                    data: {
-                        start: page * 5,
-                        search: search
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status === 'unauthorized') {
-                            window.location.href = '../../unauthorized.php';
-                            return;
-                        }
-
-                        totalDataAbsensi = response.total;
-                        let DataAbsensiTableBody = $('#absensi-table-body');
-                        DataAbsensiTableBody.empty();
-
-                        if (response.data_absensi.length === 0 && currentPage > 0) {
-                            currentPage--;
-                            loadDataAbsensi(currentPage, search);
-                        } else if (response.data_absensi.length === 0) {
-                            DataAbsensiTableBody.append('<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>');
-                        } else {
-                            let counter = page * 5 + 1;
-                            response.data_absensi.forEach(function(data_absensi) {
-                                DataAbsensiTableBody.append(`
-                            <tr class="bg-gray-100">
-                                <td class="px-6 py-2 text-center">${counter++}</td>
-                                <td class="px-6 py-2 text-center">${data_absensi.noinduk}</td>
-                                <td class="px-6 py-2 text-center">${data_absensi.nama}</td>
-                                <td class="px-6 py-2 text-center">${data_absensi.role}</td>
-                                <td class="px-6 py-2 text-center">
-                                    <a href="./previewDataAbsensi.php?id_pg=${data_absensi.id_pg}">
-                                        <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    </a>
-                                </td>
-                            </tr>
-                        `);
-                            });
-                        }
-
-                        $('#prev-page').prop('disabled', currentPage === 0);
-                        $('#next-page').prop('disabled', (currentPage + 1) * 5 >= totalDataAbsensi);
-
-                        updatePaginationButtons();
-                    },
-                    error: function() {
-                        Swal.fire('Error!', 'Terjadi kesalahan saat memuat data', 'error');
+                url: 'api/users/get-absensi',
+                type: 'GET',
+                data: { start: page * 5, search: search },
+                dataType: 'json',
+                success: function(response) {
+                    $('#loading').addClass('hidden');
+                    if (response.status === 'unauthorized') {
+                    window.location.href = '../../unauthorized.php';
+                    return;
                     }
+
+                    totalDataAbsensi = response.total;
+                    currentPage = page;
+                    renderData(response.data_absensi);
+                    updatePaginationButtons();
+                },
+                error: function() {
+                    $('#loading').addClass('hidden');
+                    Swal.fire('Error!', 'Terjadi kesalahan saat memuat data', 'error');
+                }
+                });
+            }
+
+            function renderData(data) {
+                const tableBody = $('#absensi-table-body');
+                tableBody.empty();
+
+                if (data.length === 0) {
+                tableBody.append('<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>');
+                return;
+                }
+
+                data.forEach((data_absensi, index) => {
+                tableBody.append(`
+                    <tr class="bg-gray-100">
+                    <td class="px-6 py-2 text-center">${index + 1 + currentPage * 5}</td>
+                    <td class="px-6 py-2 text-center">${data_absensi.noinduk}</td>
+                    <td class="px-6 py-2 text-center">${data_absensi.nama}</td>
+                    <td class="px-6 py-2 text-center">${data_absensi.role}</td>
+                    <td class="px-6 py-2 text-center">
+                        <a href="absensi/edit?id_pg=${data_absensi.id_pg}">
+                        <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        </a>
+                    </td>
+                    </tr>
+                `);
                 });
             }
 
             function updatePaginationButtons() {
                 const totalPages = Math.ceil(totalDataAbsensi / 5);
-                const paginationButtons = $('.pagination-button');
-
-                paginationButtons.hide();
-
-                for (let i = 0; i < totalPages; i++) {
-                    const button = paginationButtons.eq(i);
-                    button.show().data('page', i).text(i + 1);
-                    if (i === currentPage) {
-                        button.removeClass('inactive-button').addClass('active-button');
-                    } else {
-                        button.removeClass('active-button').addClass('inactive-button');
-                    }
-                }
+                $('.pagination-button').each(function(index) {
+                $(this).toggle(index < totalPages).data('page', index).text(index + 1)
+                    .toggleClass('active-button', index === currentPage)
+                    .toggleClass('inactive-button', index !== currentPage);
+                });
 
                 $('#prev-page').prop('disabled', currentPage === 0);
-                $('#next-page').prop('disabled', (currentPage + 1) * 5 >= totalDataAbsensi);
+                $('#next-page').prop('disabled', currentPage >= totalPages - 1);
             }
 
             $('#prev-page').on('click', function() {
-                if (currentPage > 0) {
-                    currentPage--;
-                    loadDataAbsensi(currentPage, searchTerm);
-                }
+                if (currentPage > 0) loadDataAbsensi(--currentPage, searchTerm);
             });
 
             $('#next-page').on('click', function() {
-                if ((currentPage + 1) * 5 < totalDataAbsensi) {
-                    currentPage++;
-                    loadDataAbsensi(currentPage, searchTerm);
-                }
+                if ((currentPage + 1) * 5 < totalDataAbsensi) loadDataAbsensi(++currentPage, searchTerm);
             });
 
             $(document).on('click', '.pagination-button', function() {
-                currentPage = parseInt($(this).data('page'));
-                loadDataAbsensi(currentPage, searchTerm);
-                updatePaginationButtons();
+                const page = parseInt($(this).data('page'));
+                loadDataAbsensi(page, searchTerm);
             });
 
             $('#searchInput').on('keyup', function() {
                 searchTerm = $(this).val();
-                currentPage = 0;
-                loadDataAbsensi(currentPage, searchTerm);
+                loadDataAbsensi(0, searchTerm);
             });
 
-            loadDataAbsensi(currentPage);
-        });
+            loadDataAbsensi(currentPage); // Load initial data
+            });
+
 
         function showToast(type, message) {
             const successToast = document.getElementById('toast-success');
@@ -535,7 +525,7 @@ $token = $_SESSION['token'];
         });
     </script>
 
-    <?php include('../navbar/profileInfo.php') ?>
+<?php include('src/pages/navbar/profileInfo.php') ?>
 
 </body>
 

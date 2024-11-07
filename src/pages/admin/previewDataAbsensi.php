@@ -19,7 +19,7 @@ $token = $_SESSION['token'];
 
 if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
     $id_pg = $_GET['id_pg'];
-    include '../../db/db_connect.php';
+    require_once 'src/db/db_connect.php';
 
     $query = "SELECT nama FROM tb_pengguna WHERE id_pg = ?";
     $stmt = $conn->prepare($query);
@@ -44,20 +44,50 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Preview Absensi</title>
-    <link href="../../../css/output.css" rel="stylesheet">
-    <link href="../css/font/poppins-font.css" rel="stylesheet">
+    <link href="/teknoid-absensi/css/output.css" rel="stylesheet">
+    <link href="/teknoid-absensi/src/pages/css/font/poppins-font.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+    .active-button {
+      background-color: #8C85FF;
+      color: white;
+    }
+
+    .inactive-button {
+        background-color: #e2e8f0;
+        color: #8C85FF;
+    }
+
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #3498db;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
 
 <body>
     <div class="flex flex-col md:flex-row lg:flex-row h-screen">
         <!-- Side Navigation -->
-        <?php include('../navbar/sidenav.php') ?>
+        <?php include('src/pages/navbar/sidenav.php') ?>
 
         <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
             <!-- Top Navigation -->
-            <?php include('../navbar/topnav.php') ?>
+            <?php include('src/pages/navbar/topnav.php') ?>
 
             <!-- Main Content -->
             <main class="flex-1 p-6 bg-mainBgColor mainContent">
@@ -67,6 +97,12 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
                         <button class="bg-purpleNavbar text-white px-4 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200">Kembali</button>
                     </a>
                 </div>
+
+                <div id="loading" class="hidden text-center mt-4">
+                    <p>Loading...</p>
+                    <div class="loader"></div>
+                </div>
+
                 <div class="tableOverflow mt-6 shadow-customTable rounded-lg">
                     <table class="bg-white border">
                         <thead>
@@ -101,118 +137,118 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
         </div>
     </div>
     <script>
-        $(document).ready(function() {
-            let currentPage = 0;
-            let totalDataAbsensi = 0;
-            let searchTerm = '';
-            let id_pg = "<?php echo $_GET['id_pg']; ?>";
+      $(document).ready(function() {
+    let currentPage = 0;
+    let totalDataAbsensi = 0;
+    let searchTerm = '';
+    let id_pg = "<?php echo $_GET['id_pg']; ?>";
 
-            function loadDataAbsensi(page, search = '') {
-                $.ajax({
-                    url: '../../db/routes/fetchPreviewData.php',
-                    type: 'GET',
-                    data: {
-                        id_pg: id_pg,
-                        start: page * 10,
-                        search: search
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status === 'unauthorized') {
-                            window.location.href = '../../unauthorized.php';
-                            return;
-                        }
-
-                        totalDataAbsensi = response.total;
-                        let DataAbsensiTableBody = $('#preview-absensi-table-body');
-                        DataAbsensiTableBody.empty();
-
-                        if (response.preview_data_absensi.length === 0 && currentPage > 0) {
-                            currentPage--;
-                            loadDataAbsensi(currentPage, search);
-                        } else if (response.preview_data_absensi.length === 0) {
-                            DataAbsensiTableBody.append('<tr><td colspan="8" class="text-center">Tidak ada data untuk <?php echo $nama_pg ?></td></tr>');
-                        } else {
-                            let counter = page * 10 + 1;
-                            response.preview_data_absensi.forEach(function(preview_data_absensi) {
-                                DataAbsensiTableBody.append(`
-                                <tr class="bg-gray-100">
-                                    <td class="px-6 py-2 text-center">${counter++}</td>
-                                    <td class="px-6 py-2 text-center">${preview_data_absensi.nama}</td>
-                                    <td class="px-6 py-2 text-center">${preview_data_absensi.tanggal ? preview_data_absensi.tanggal.split('-').reverse().join('-') : '-'}</td>
-                                    <td class="px-6 py-2 text-center">${preview_data_absensi.scan_masuk}</td>
-                                    <td class="px-6 py-2 text-center">${preview_data_absensi.scan_keluar}</td>
-                                    <td class="px-6 py-2 text-center">${preview_data_absensi.durasi}</td>
-                                    <td class="px-6 py-2 text-center">${preview_data_absensi.keterangan}</td>
-                                    <td class="px-6 py-2 text-center">
-                                        <a href="./editDataAbsensi.php?id_pg=${preview_data_absensi.id_pg}&id=${preview_data_absensi.id}">
-                                            <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
-                                        </a>                                        
-                                    </td>
-                                </tr>
-                            `);
-                            });
-                        }
-
-                        $('#prev-page').prop('disabled', currentPage === 0);
-                        $('#next-page').prop('disabled', (currentPage + 1) * 10 >= totalDataAbsensi);
-
-                        updatePaginationButtons();
-                    }
-                });
-            }
-
-            function updatePaginationButtons() {
-                const totalPages = Math.ceil(totalDataAbsensi / 10); // Updated for 10 results per page
-                const paginationButtons = $('.pagination-button');
-
-                paginationButtons.hide();
-
-                for (let i = 0; i < totalPages; i++) {
-                    paginationButtons.eq(i).show().data('page', i).text(i + 1);
-                    if (i === currentPage) {
-                        paginationButtons.eq(i).addClass('active-button').removeClass('inactive-button');
-                    } else {
-                        paginationButtons.eq(i).addClass('inactive-button').removeClass('active-button');
-                    }
+    function loadDataAbsensi(page, search = '') {
+        $('#loading').removeClass('hidden');
+        $.ajax({
+            url: '/teknoid-absensi/api/users/fetch-preview-detail',
+            type: 'GET',
+            data: {
+                id_pg: id_pg,
+                start: page * 10,
+                search: search
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#loading').addClass('hidden');
+                if (response.status === 'unauthorized') {
+                    window.location.href = '../../unauthorized.php';
+                    return;
                 }
 
-                $('#next-page').prop('disabled', currentPage >= totalPages - 1);
-            }
-
-            $('#prev-page').on('click', function() {
-                if (currentPage > 0) {
-                    currentPage--;
-                    loadDataAbsensi(currentPage, searchTerm);
-                }
-            });
-
-            $('#next-page').on('click', function() {
-                if ((currentPage + 1) * 10 < totalDataAbsensi) {
-                    currentPage++;
-                    loadDataAbsensi(currentPage, searchTerm);
-                }
-            });
-
-            $(document).on('click', '.pagination-button', function() {
-                currentPage = parseInt($(this).data('page'));
-                loadDataAbsensi(currentPage, searchTerm);
+                totalDataAbsensi = response.total;
+                renderData(response.preview_data_absensi, page);
                 updatePaginationButtons();
-            });
-
-            // Event listener for search input
-            $('#searchInput').on('keyup', function() {
-                searchTerm = $(this).val();
-                currentPage = 0; // Reset to first page on search
-                loadDataAbsensi(currentPage, searchTerm);
-            });
-
-            // Load initial data
-            loadDataAbsensi(currentPage);
+            },
+            error: function() {
+                $('#loading').addClass('hidden');
+                Swal.fire('Error!', 'Terjadi kesalahan saat memuat data', 'error');
+            }
         });
+    }
+
+    function renderData(data, page) {
+        const tableBody = $('#preview-absensi-table-body');
+        tableBody.empty();
+
+        if (data.length === 0 && page > 0) {
+            currentPage--;
+            loadDataAbsensi(currentPage, searchTerm);
+        } else if (data.length === 0) {
+            tableBody.append('<tr><td colspan="8" class="text-center">Tidak ada data untuk <?php echo $nama_pg ?></td></tr>');
+        } else {
+            let counter = page * 10 + 1;
+            data.forEach((item) => {
+                tableBody.append(`
+                    <tr class="bg-gray-100">
+                        <td class="px-6 py-2 text-center">${counter++}</td>
+                        <td class="px-6 py-2 text-center">${item.nama}</td>
+                        <td class="px-6 py-2 text-center">${item.tanggal ? item.tanggal.split('-').reverse().join('-') : '-'}</td>
+                        <td class="px-6 py-2 text-center">${item.scan_masuk}</td>
+                        <td class="px-6 py-2 text-center">${item.scan_keluar}</td>
+                        <td class="px-6 py-2 text-center">${item.durasi}</td>
+                        <td class="px-6 py-2 text-center">${item.keterangan}</td>
+                        <td class="px-6 py-2 text-center">
+                            <a href="./editDataAbsensi.php?id_pg=${item.id_pg}&id=${item.id}">
+                                <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
+                            </a>
+                        </td>
+                    </tr>
+                `);
+            });
+        }
+    }
+
+    function updatePaginationButtons() {
+        const totalPages = Math.ceil(totalDataAbsensi / 10);
+        $('.pagination-button').hide().removeClass('active-button').addClass('inactive-button');
+
+        for (let i = 0; i < totalPages; i++) {
+            const button = $('.pagination-button').eq(i);
+            button.show().data('page', i).text(i + 1);
+            if (i === currentPage) {
+                button.addClass('active-button').removeClass('inactive-button');
+            }
+        }
+
+        $('#prev-page').prop('disabled', currentPage === 0);
+        $('#next-page').prop('disabled', currentPage >= totalPages - 1);
+    }
+
+    $('#prev-page').on('click', function() {
+        if (currentPage > 0) {
+            loadDataAbsensi(--currentPage, searchTerm);
+        }
+    });
+
+    $('#next-page').on('click', function() {
+        if ((currentPage + 1) * 10 < totalDataAbsensi) {
+            loadDataAbsensi(++currentPage, searchTerm);
+        }
+    });
+
+    $(document).on('click', '.pagination-button', function() {
+        currentPage = parseInt($(this).data('page'));
+        loadDataAbsensi(currentPage, searchTerm);
+    });
+
+    $('#searchInput').on('keyup', function() {
+        searchTerm = $(this).val();
+        currentPage = 0;
+        loadDataAbsensi(currentPage, searchTerm);
+    });
+
+    loadDataAbsensi(currentPage); // Initial load
+});
+
     </script>
 
-    <?php include('../navbar/profileInfo.php') ?>
+    <?php include('src/pages/navbar/profileInfo.php') ?>
 
 </body>
 

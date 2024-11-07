@@ -30,11 +30,39 @@ $token = $_SESSION['token'];
   <link href="../css/font/poppins-font.css" rel="stylesheet">
   <!-- ajax live search -->
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<style>
+    .active-button {
+      background-color: #8C85FF;
+      color: white;
+    }
 
+    .inactive-button {
+        background-color: #e2e8f0;
+        color: #8C85FF;
+    }
+
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #3498db;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -104,6 +132,7 @@ $token = $_SESSION['token'];
 $(document).ready(function() {
     let currentPage = 0;
     let totalDataAnonim = 0;
+    let totalPages = 0; 
     let searchTerm = '';
 
     // Fungsi untuk memuat data anonim
@@ -122,7 +151,8 @@ $(document).ready(function() {
                     return;
                 }
 
-                totalDataAnonim = response.totalData;
+                totalDataAnonim = response.total; // Total data dari response
+                totalPages = Math.ceil(totalDataAnonim / 5); // Hitung total halaman
                 let DataAnonimTableBody = $('#anonim-table-body');
                 DataAnonimTableBody.empty();
 

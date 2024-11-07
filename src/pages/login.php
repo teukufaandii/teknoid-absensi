@@ -6,19 +6,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Sistem Absensi</title>
-    <link href="../../css/output.css" rel="stylesheet">
-    <link rel="icon" href="../../public/logo.png">
-    <link rel="stylesheet" href="./css/login.css">
-    <link href="./css/font/poppins-font.css" rel="stylesheet">
+    <link href="css/output.css" rel="stylesheet">
+    <link rel="icon" href="public/logo.png">
+    <link rel="stylesheet" href="src/pages/css/login.css">
+    <link href="src/pages/css/font/poppins-font.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 
 <body class="flex justify-center items-center h-screen w-screen bg-gray-100">
     <div class="flex flex-col md:flex-row w-full h-full max-w-none bg-white shadow-lg">
         <div class="flex flex-col justify-center h-full w-full md:w-1/2 p-8">
-            <form class="max-w-md w-full mx-auto" method="POST" action="../db/routes/userLogin.php">
+            <form class="max-w-md w-full mx-auto" method="POST" action="/teknoid-absensi/api/auth/login">
                 <h2 class="text-3xl font-bold text-center mb-6">Login Sistem Absensi</h2>
-                <img src="../../public/logo.png" alt="Logo" class="mb-6 m-auto w-40 h-40 object-cover">
+                <img src="public/logo.png" alt="Logo" class="mb-6 m-auto w-40 h-40 object-cover">
                 
                 <?php if (isset($_GET['success']) && $_GET['success'] === 'password_reset'): ?>
                     <div class="success-message mb-4 text-green-600">
@@ -31,8 +31,10 @@
                         <?php
                         if ($_GET['error'] === 'locked') {
                             echo 'Akun Anda telah dibekukan selama 10 menit karena terlalu banyak upaya login yang gagal.';
-                        } else {
+                        } elseif($_GET['error'] === 'invalid_credentials') {
                             echo 'Email pengguna atau kata sandi salah.';
+                        } else {
+                            echo 'Terjadi kesalahan. Silakan coba lagi.';
                         }
                         ?>
                     </div>
@@ -52,13 +54,13 @@
                     </div>
                 </div>
                 <div class="flex justify-end items-center mb-4">
-                    <a href="./forgot.php" class="text-sm text-blue-500 hover:underline">Lupa kata sandi?</a>
+                    <a href="forgot" class="text-sm text-blue-500 hover:underline">Lupa kata sandi?</a>
                 </div>
                 <button type="submit" class="w-full bg-purpleNavbar text-white py-2 rounded-md hover:bg-purpleNavbarHover focus:outline-none focus:ring-2 focus:ring-purpleNavbar">Masuk</button>
             </form>
         </div>
         <div class="hidden md:flex flex-col items-center justify-center h-full w-1/2 bg-gray-200 p-8">
-            <img src="../../public/loginPage.png" alt="Login Page" class="mb-8 w-90 h-90 object-cover">
+            <img src="public/loginPage.png" alt="Login Page" class="mb-8 w-90 h-90 object-cover">
             <p class="mt-4 text-center text-gray-600">&copy; 2024 TeknoGenius. All rights reserved.</p>
         </div>
         <div class="md:hidden flex flex-col absolute bottom-0 items-center justify-center w-full bg-gray-200 p-4">

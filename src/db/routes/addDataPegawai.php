@@ -1,6 +1,6 @@
 <?php
 
-include '../../db/db_connect.php';
+include 'src/db/db_connect.php';
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

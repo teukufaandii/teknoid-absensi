@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../db/db_connect.php';
+require_once 'src/db/db_connect.php';
 
 if (!isset($_SESSION['token']) || $_SESSION['role'] !== 'admin') {
     header('Location: ../../unauthorized.php');

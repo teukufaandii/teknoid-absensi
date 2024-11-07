@@ -6,3 +6,5 @@ pattern password(perlu/tidakperlu) OK
 
 30/11/24
 yang bisa dihapus hanya role admin saja pada bagian hapus pegawai
+
+forgot routing is not functional yet :(

@@ -1,5 +1,5 @@
 <?php
-include '../../db/db_connect.php';
+require_once 'src/db/db_connect.php';
 
 $id_pg = isset($_GET['id_pg']) ? $_GET['id_pg'] : '';
 $start = isset($_GET['start']) ? intval($_GET['start']) : 0;

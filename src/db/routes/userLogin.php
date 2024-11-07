@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../db_connect.php';
+include 'src/db/db_connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $result->fetch_assoc();
 
         if ($user['account_locked_until'] && new DateTime() < new DateTime($user['account_locked_until'])) {
-            header("Location: ../../pages/login.php?error=locked");
+            header("Location: /teknoid-absensi/login?error=locked");
             exit();
         }
 
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['role'] = $user['role'];
             $_SESSION['token'] = bin2hex(random_bytes(32));
 
-            header("Location: ../../success.php");
+            header("Location: /teknoid-absensi/success");
             exit();
         } else {
             $failed_attempts = $user['failed_attempts'] + 1;
@@ -48,11 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
             $stmt->close();
 
-            header("Location: ../../pages/login.php?error=invalid");
+            header("Location: /teknoid-absensi/login?error=invalid_credentials");
             exit();
         }
     } else {
-        header("Location: ../../pages/login.php?error=invalid");
+        header("Location: /teknoid-absensi/login?error=invalid");
         exit();
     }
 

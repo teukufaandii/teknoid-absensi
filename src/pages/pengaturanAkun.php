@@ -20,9 +20,9 @@ $token = $_SESSION['token'];
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pengaturan Akun</title>
-  <link href="../../css/output.css" rel="stylesheet">
-  <link rel="stylesheet" href="./css/dataAbsensi.css">
-  <link href="./css/font/poppins-font.css" rel="stylesheet">
+  <link href="css/output.css" rel="stylesheet">
+  <link rel="stylesheet" href="src/pages/css/dataAbsensi.css">
+  <link href="src/pages/css/font/poppins-font.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -31,10 +31,10 @@ $token = $_SESSION['token'];
 
 <body>
   <div class="flex flex-col md:flex-row lg:flex-row h-screen">
-    <?php include('./navbar/sidenav.php') ?>
+    <?php include('src/pages/navbar/sidenav.php') ?>
 
     <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
-      <?php include('./navbar/topnav.php') ?>
+      <?php include('src/pages/navbar/topnav.php') ?>
 
       <div id="notification" class="hidden fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded" role="alert">
         <span id="notification-message"></span>
@@ -121,7 +121,7 @@ $token = $_SESSION['token'];
   <script>
     $(document).ready(function() {
       $.ajax({
-        url: '../db/routes/fetchCurrentUser.php',
+        url: 'api/users/get-current_user',
         type: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -177,7 +177,7 @@ $token = $_SESSION['token'];
             };
 
             $.ajax({
-              url: '../db/routes/updateMyData.php',
+              url: 'api/users/update-current',
               type: 'POST',
               data: updatedData,
               success: function(response) {
@@ -204,7 +204,7 @@ $token = $_SESSION['token'];
 
 
 
-  <?php include('./navbar/profileInfo.php') ?>
+  <?php include('src/pages/navbar/profileInfo.php') ?>
 </body>
 
 

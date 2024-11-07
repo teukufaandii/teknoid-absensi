@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../db/db_connect.php';
+include 'src/db/db_connect.php';
 if ($conn->connect_error) {
     error_log("Koneksi gagal: " . $conn->connect_error);
     echo json_encode(['status' => 'error', 'message' => 'Koneksi database gagal']);

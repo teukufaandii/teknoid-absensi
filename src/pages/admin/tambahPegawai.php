@@ -8,7 +8,7 @@ if (!isset($_SESSION['token'])) {
 
 // Cek session akses admin
 if ($_SESSION['role'] !== 'admin') {
-  header('Location: ../../unauthorized.php'); // Ganti dengan halaman yang sesuai
+  header('Location: unauthorized'); // Ganti dengan halaman yang sesuai
   exit();
 }
 
@@ -29,8 +29,8 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tambah Pegawai</title>
-  <link href="../../../css/output.css" rel="stylesheet">
-  <link href="../css/font/poppins-font.css" rel="stylesheet">
+  <link href="/teknoid-absensi/css/output.css" rel="stylesheet">
+  <link href="/teknoid-absensi/src/pages/css/font/poppins-font.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -38,11 +38,11 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
 <body>
   <div class="flex flex-col md:flex-row lg:flex-row h-screen">
     <!-- Side Navigation -->
-    <?php include('../navbar/sidenav.php') ?>
+    <?php include('src/pages/navbar/sidenav.php') ?>
 
     <div id="content" class="inline-flex flex-col flex-1 bg-mainBgColor ml-56">
       <!-- Top Navigation -->
-      <?php include('../navbar/topnav.php') ?>
+      <?php include('src/pages/navbar/topnav.php') ?>
 
       <!-- Main Content -->
       <main class="flex-1 p-6 bg-mainBgColor md:mt-0 mainContent">
@@ -185,7 +185,7 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
     </div>
   </div>
 
-  <?php include('../navbar/profileInfo.php') ?>
+  <?php include('src/pages/navbar/profileInfo.php') ?>
 </body>
 
 <script>
@@ -226,7 +226,7 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
       cancelButtonText: 'Batal'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch('../../db/routes/addDataPegawai.php', {
+        fetch('/teknoid-absensi/api/users/add-user', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -242,7 +242,7 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
                 showConfirmButton: false,
                 timer: 1500
               }).then(() => {
-                window.location.href = 'dataPegawai.php';
+                window.location.href = '/teknoid-absensi/pegawai';
               });
             } else {
               Swal.fire({

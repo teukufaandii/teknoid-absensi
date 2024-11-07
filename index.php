@@ -1,44 +1,262 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+require 'vendor/autoload.php';
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Teknoid ITB Ahmad Dahlan</title>
-    <link href="css/output.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-</head>
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-<body class="bg-gray-50 flex flex-col items-center justify-center min-h-screen md:mx-0 mx-4">
+$routes = new RouteCollection();
 
-    <div class="text-center">
-        <h1 class="mt-5 text-4xl sm:text-4xl md:text-5xl font-semibold text-gray-800 mb-8">
-            PORTAL TEKNOID ITB AHMAD DAHLAN
-        </h1>
+// Rute client
+$routes->add('landing_page', new Route('/', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/LandingPage.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('login', new Route('/login', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/login.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('forgot', new Route('/forgot', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/forgot.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('reset', new Route('/reset', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/reset_password.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('dashboard', new Route('/dashboard', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/dashboard.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('setting', new Route('/setting', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/pengaturanAkun.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('pegawai', new Route('/pegawai', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/admin/dataPegawai.php';
+        return new Response(ob_get_clean());
+    }
+]));
+//absensi
+$routes->add('absensi', new Route('/absensi', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/admin/dataAbsensi.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('absensi_edit', new Route('/absensi/edit', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/admin/previewDataAbsensi.php';
+        return new Response(ob_get_clean());
+    }
+]));
+//absensi
+$routes->add('pegawai_edit', new Route('/pegawai/edit', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/admin/editDataPegawai.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('pegawai_tambah', new Route('/pegawai/add', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/admin/tambahPegawai.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('anonim', new Route('/anonim', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/admin/dataAnonim.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('success', new Route('/success', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/success.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('not_authorized', new Route('/unauthorized', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/unauthorized.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('not_found', new Route('/404', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/not_found.php';
+        return new Response(ob_get_clean());
+    }
+]));
+
+// Rute API
+$routes->add('api_auth_login', new Route('/api/auth/login', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/userLogin.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_auth_logout', new Route('/api/auth/logout', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/userLogout.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_auth_forgot', new Route('/api/auth/forgot', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/userForgotPass.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_get_user', new Route('/api/users/get-users', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/getAllUsers.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_get_current_user', new Route('/api/users/get-current_user', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/fetchCurrentUser.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_get_details_by_alpha', new Route('/api/details/get-by-alpha', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/getAbsenceDetailsByAlpha.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_get_details_by_presence', new Route('/api/details/get-by-presence', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/getAbsenceDetailsByPresence.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_get_details_by_late', new Route('/api/details/get-by-late', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/getAbsenceDetailsByLate.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_get_pegawai', new Route('/api/users/get-pegawai', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/fetchDataPegawai.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_update_current', new Route('/api/users/update-current', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/updateMyData.php';
+        return new Response(ob_get_clean());
+    }
+]));
+//absensi
+$routes->add('api_get_absensi', new Route('/api/users/get-absensi', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/getDataAbsensi.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_generate_absensi_detail', new Route('/api/users/generate-absensi-details', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/generateAbsenceDetails.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_fetch_preview_detail', new Route('/api/users/fetch-preview-detail', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/fetchPreviewData.php';
+        return new Response(ob_get_clean());
+    }
+]));
+//absensi
+$routes->add('api_get_pengguna', new Route('/api/users/get-data-pengguna', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/fetchDataPengguna.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_update_pengguna', new Route('/api/users/update-data-pengguna', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/updateDataPengguna.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_hapus_pengguna', new Route('/api/users/delete-user', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/deleteDataPegawai.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_search_pengguna', new Route('/api/users/search-user', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/searchPegawai.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_add_pengguna', new Route('api/users/add-user', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/addDataPegawai.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_get_anonim', new Route('api/users/anonim', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/fetchDataAnonim.php';
+        return new Response(ob_get_clean());
+    }
+]));
 
 
-        <img src="./public/logo.png" alt="Logo ITB Ahmad Dahlan" class="mx-auto mb-6 w-36 h-36">
+$request = Request::createFromGlobals();
+$context = new RequestContext('/teknoid-absensi');
+$context->fromRequest($request);
 
-        <h2 class="text-xl font-medium text-gray-600 mb-8">Pilih Modul</h2>
+$matcher = new UrlMatcher($routes, $context);
 
-        <!-- Parent container with padding applied on mobile -->
-        <div class="flex flex-col md:flex-row justify-center items-center gap-6 w-full px-4 md:px-0">
-            <a href="http://teknoid.itb-ad.ac.id/" class="flex flex-col items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl px-8 py-6 shadow-lg transform hover:scale-105 transition-transform w-full">
-                <i class="fas fa-envelope fa-2x mb-2"></i> <!-- Font Awesome Mail Icon -->
-                <span>Surat Menyurat</span>
-            </a>
+try {
+    $parameters = $matcher->match($request->getPathInfo());
+    $response = call_user_func($parameters['_controller']);
+} catch (Exception $e) {
+    error_log($e->getMessage());
 
-            <a href="src/pages/login.php" class="flex flex-col items-center bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl px-8 py-6 shadow-lg transform hover:scale-105 transition-transform w-full">
-                <i class="fas fa-calendar fa-2x mb-2"></i> <!-- Font Awesome Calendar Icon -->
-                <span>Absensi</span>
-            </a>
-        </div>
+    $response = new Response($e, 404);
+    // header("Location: 404");
+    // exit();
+}
 
-        <footer class="mt-12 text-gray-400 text-sm">
-            &copy; 2024 TeknoGenius. All rights reserved.
-        </footer>
-    </div>
+if (!$response instanceof Response) {
+    $response = new Response("Internal Server Error", 500);
+}
 
-</body>
-
-</html>
+$response->send();

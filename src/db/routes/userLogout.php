@@ -16,6 +16,6 @@ if (ini_get("session.use_cookies")) {
 session_destroy();
 
 // Redirect to the login page with the success message
-header('Location: ../../pages/login.php?success=logout');
+header('Location: /teknoid-absensi/login?success=logout');
 exit();
 ?>

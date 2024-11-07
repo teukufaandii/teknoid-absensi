@@ -1,5 +1,5 @@
 <?php
-require_once '../db_connect.php';
+require_once 'src/db/db_connect.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
 $user_id = $data['user_id']; // Change 'id_pg' to 'user_id'

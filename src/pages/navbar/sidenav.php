@@ -5,16 +5,16 @@ $id = $_SESSION['user_id'];
 $token = $_SESSION['token'];
 
 // Tentukan halaman aktif berdasarkan nama file
-$current_page = basename($_SERVER['PHP_SELF']);
+$current_page = $_SERVER['REQUEST_URI'];
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="../css/global/generalStyling.css">
-    <link rel="stylesheet" href="../css/global/tableFormat.css">
-    <link href="../css/font/poppins-font.css" rel="stylesheet">
+    <link rel="stylesheet" href="/teknoid-absensi/src/pages/css/global/generalStyling.css">
+    <link rel="stylesheet" href="/teknoid-absensi/src/pages/css/global/tableFormat.css">
+    <link href="/teknoid-absensi/src/pages/css/font/poppins-font.css" rel="stylesheet">
 </head>
 <style>
     /* Closed sidenav state */
@@ -192,16 +192,16 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <nav class="p-3">
                 <ul class="">
                     <li class="mb-2">
-                        <a href="../admin/dashboard.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dashboard.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                        <a href="/teknoid-absensi/dashboard" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == '/teknoid-absensi/dashboard' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
                             <span class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg 
-                            <?php echo $current_page == 'dashboard.php' ? 'text-white' : 'text-purpleNavbar'; ?>">
+                            <?php echo $current_page == '/teknoid-absensi/dashboard' ? 'text-white' : 'text-purpleNavbar'; ?>">
                                 <i class="fa-solid fa-house"></i>
                             </span>
                             <span class="ml-2 font-medium sideNav-text whitespace-nowrap">Dashboard</span>
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="./dataPegawai.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dataPegawai.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                        <a href="/teknoid-absensi/pegawai" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == '/teknoid-absensi/pegawai' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
                             <span id="user-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
                                 <i class="fa-solid fa-users-gear"></i>
                             </span>
@@ -209,7 +209,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="./dataAbsensi.php" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == 'dataAbsensi.php' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                        <a href="/teknoid-absensi/absensi" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == '/teknoid-absensi/absensi' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
                             <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
                                 <i class="fa-regular fa-calendar-days"></i>
                             </span>

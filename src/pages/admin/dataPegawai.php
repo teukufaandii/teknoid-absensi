@@ -2,13 +2,13 @@
 session_start();
 
 if (!isset($_SESSION['token'])) {
-  header('Location: login.php');
+  header('Location: login');
   exit();
 }
 
 // Cek session akses admin
 if ($_SESSION['role'] !== 'admin') {
-  header('Location: ../../unauthorized.php'); // Ganti dengan halaman yang sesuai
+  header('Location: unauthorized');
   exit();
 }
 
@@ -26,10 +26,10 @@ $token = $_SESSION['token'];
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Data Pegawai</title>
-  <link href="../../../css/output.css" rel="stylesheet">
-  <link href="../css/font/poppins-font.css" rel="stylesheet">
+  <link href="css/output.css" rel="stylesheet">
+  <link href="src/pages/css/font/poppins-font.css" rel="stylesheet">
   <!-- ajax live search -->
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script> -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
@@ -40,8 +40,8 @@ $token = $_SESSION['token'];
     }
 
     .inactive-button {
-        background-color: #e2e8f0;
-        color: #8C85FF;
+      background-color: #e2e8f0;
+      color: #8C85FF;
     }
 
     .loader {
@@ -68,11 +68,11 @@ $token = $_SESSION['token'];
 <body>
   <div class="flex flex-col md:flex-row lg:flex-row h-screen">
     <!-- Side Navigation -->
-    <?php include('../navbar/sidenav.php') ?>
+    <?php include('src/pages/navbar/sidenav.php') ?>
 
     <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
       <!-- Top Navigation -->
-      <?php include('../navbar/topnav.php') ?>
+      <?php include('src/pages/navbar/topnav.php') ?>
 
       <!-- Main Content -->
       <main class="flex-1 p-6 bg-mainBgColor mainContent">
@@ -80,7 +80,7 @@ $token = $_SESSION['token'];
 
         <!-- Search Bar & Button Tambah -->
         <div class="flex justify-between items-center mt-5">
-          <a href="tambahPegawai.php">
+          <a href="pegawai/add">
             <button class="bg-purpleNavbar text-white px-4 py-2 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
               Tambah <i class="fa-solid fa-circle-plus"></i>
             </button>
@@ -119,7 +119,19 @@ $token = $_SESSION['token'];
           </table>
         </div>
 
-        <div class="flex justify-center items-center space-x-1 mt-4">
+
+        <div id="pagination-container" class="flex justify-center items-center space-x-1 mt-4">
+          <button id="prev-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer" disabled>
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <!-- Pagination buttons will be added here dynamically -->
+          <button id="next-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+
+        <!-- <div class="flex justify-center items-center space-x-1 mt-4">
           <button id="prev-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer" disabled>
             <i class="fas fa-chevron-left"></i>
           </button>
@@ -129,15 +141,189 @@ $token = $_SESSION['token'];
           <button id="next-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer">
             <i class="fas fa-chevron-right"></i>
           </button>
-        </div>
+        </div> -->
 
       </main>
     </div>
   </div>
-  <?php include('../navbar/profileInfo.php') ?>
+  <?php include('src/pages/navbar/profileInfo.php') ?>
 </body>
 
 <script>
+  $(document).ready(function() {
+    let currentPage = 0;
+    let totalDataPegawai = 0;
+    let searchTerm = '';
+
+    function loadDataPegawai(page, search = '') {
+      $.ajax({
+        url: 'api/users/get-pegawai',
+        type: 'GET',
+        data: {
+          start: page * 5,
+          search: search
+        },
+        dataType: 'json',
+        success: function(response) {
+          if (response.status === 'unauthorized') {
+            window.location.href = 'unauthorized';
+            return;
+          }
+
+          totalDataPegawai = response.total;
+          let DataPegawaiTableBody = $('#pegawai-table-body');
+          DataPegawaiTableBody.empty();
+
+          if (response.data_pegawai.length === 0 && currentPage > 0) {
+            currentPage--;
+            loadDataPegawai(currentPage, search);
+          } else if (response.data_pegawai.length === 0) {
+            DataPegawaiTableBody.append('<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>');
+          } else {
+            let counter = page * 5 + 1;
+            response.data_pegawai.forEach(function(data_pegawai) {
+              DataPegawaiTableBody.append(`
+                            <tr class="bg-gray-100">
+                                <td class="px-6 py-2 text-center">${counter++}</td>
+                                <td class="px-6 py-2 text-center">${data_pegawai.noinduk}</td>
+                                <td class="px-6 py-2 text-center">${data_pegawai.nama}</td>
+                                <td class="px-6 py-2 text-center">${data_pegawai.role}</td>
+                                <td class="px-6 py-2 text-center">
+                                    <a href="pegawai/edit?id_pg=${data_pegawai.id_pg}">
+                                        <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
+                                    </a>
+                                </td>
+                            </tr>
+                        `);
+            });
+          }
+
+          $('#prev-page').prop('disabled', currentPage === 0);
+          $('#next-page').prop('disabled', (currentPage + 1) * 5 >= totalDataPegawai);
+
+          updatePaginationButtons();
+        },
+        error: function() {
+          Swal.fire('Error!', 'Terjadi kesalahan saat memuat data', 'error');
+        }
+      });
+    }
+
+    function updatePaginationButtons() {
+      const totalPages = Math.ceil(totalDataPegawai / 5);
+      const paginationContainer = $('#pagination-container');
+      paginationContainer.find('.pagination-button').remove(); // Clear existing buttons
+
+      // Add pagination buttons dynamically within the specified container
+      for (let i = 0; i < totalPages; i++) {
+        const button = $(`<button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="${i}">${i + 1}</button>`);
+        if (i === currentPage) {
+          button.addClass('active-button');
+        } else {
+          button.addClass('inactive-button');
+        }
+        button.insertBefore('#next-page'); // Insert before the "Next" button
+      }
+
+      $('#prev-page').prop('disabled', currentPage === 0);
+      $('#next-page').prop('disabled', (currentPage + 1) * 5 >= totalDataPegawai);
+    }
+
+
+    $('#prev-page').on('click', function() {
+      if (currentPage > 0) {
+        currentPage--;
+        loadDataPegawai(currentPage, searchTerm);
+      }
+    });
+
+    $('#next-page').on('click', function() {
+      if ((currentPage + 1) * 5 < totalDataPegawai) {
+        currentPage++;
+        loadDataPegawai(currentPage, searchTerm);
+      }
+    });
+
+    $(document).on('click', '.pagination-button', function() {
+      currentPage = parseInt($(this).data('page'));
+      loadDataPegawai(currentPage, searchTerm);
+      updatePaginationButtons();
+    });
+
+    $('#searchInput').on('keyup', function() {
+      searchTerm = $(this).val();
+      currentPage = 0;
+      loadDataPegawai(currentPage, searchTerm);
+    });
+
+    loadDataPegawai(currentPage); // Load initial data
+
+    // Delete button functionality
+    $(document).on('click', '.delete-button', function() {
+      const id_pg = $(this).data('id');
+      deletedata_pegawai(id_pg);
+    });
+
+    function deletedata_pegawai(id_pg) {
+      Swal.fire({
+        title: 'Konfirmasi',
+        text: "Apakah Anda yakin ingin menghapus data pegawai ini?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: 'api/users/delete-user',
+            type: 'POST',
+            data: {
+              id_pg: id_pg
+            },
+            dataType: 'json',
+            success: function(response) {
+              if (response.status === 'success') {
+                Swal.fire('Berhasil!', response.message, 'success').then(() => {
+                  loadDataPegawai(currentPage, searchTerm); // Refresh data after deletion
+                });
+              } else {
+                Swal.fire('Gagal!', response.message, 'error');
+              }
+            },
+            error: function() {
+              Swal.fire('Error!', 'Terjadi kesalahan saat menghapus data pegawai', 'error');
+            }
+          });
+        }
+      });
+    }
+  });
+
+
+
+
+  //untuk fungsi search
+  $(document).ready(function() {
+    $("#searchInput").keyup(function() {
+      var search = $(this).val();
+      $.ajax({
+        url: 'api/users/search-users',
+        method: 'POST',
+        data: {
+          query: search
+        },
+        success: function(response) {
+          $("#tablePegawai").html(response);
+        }
+      });
+    });
+  });
+</script>
+
+
+<!-- <script>
   $(document).ready(function() {
     let currentPage = 0;
     let totalDataPegawai = 0;
@@ -181,7 +367,7 @@ $(document).ready(function() {
   function loadDataAbsensi(page, search = '') {
     $('#loading').removeClass('hidden');
     $.ajax({
-      url: '../../db/routes/fetchDataPegawai.php',
+      url: 'api/users/get-pegawai',
       type: 'GET',
       data: { start: page * 5, search: search },
       dataType: 'json',
@@ -221,7 +407,7 @@ $(document).ready(function() {
           <td class="px-6 py-2 text-center">${data_pegawai.nama}</td>
           <td class="px-6 py-2 text-center">${data_pegawai.role}</td>
           <td class="px-6 py-2 text-center">
-            <a href="./editDataPegawai.php?id_pg=${data_pegawai.id_pg}">
+            <a href="pegawai/edit?id_pg=${data_pegawai.id_pg}">
               <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
             </a>
             <button class="delete-button bg-red-400 text-white px-3 py-2 rounded-xl hover:bg-red-500 transition" data-id="${data_pegawai.id_pg}">
@@ -283,7 +469,7 @@ $(document).ready(function() {
     }).then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          url: '../../db/routes/deleteDataPegawai.php', // URL to your PHP file
+          url: 'api/users/delete-user', // URL to your PHP file
           type: 'POST', // Method type
           data: {
             id_pg: id_pg
@@ -317,7 +503,7 @@ $(document).ready(function() {
     $("#searchInput").keyup(function() {
       var search = $(this).val();
       $.ajax({
-        url: '../../db/routes/searchPegawai.php',
+        url: 'api/users/search-users',
         method: 'POST',
         data: {
           query: search
@@ -328,6 +514,6 @@ $(document).ready(function() {
       });
     });
   });
-</script>
+</script> -->
 
 </html>

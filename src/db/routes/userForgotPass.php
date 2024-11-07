@@ -1,18 +1,16 @@
 <?php
-// Start session
 session_start();
 
-// Include your database connection
-include '../db_connect.php';
+include 'src/db/db_connect.php';
 
-// Include PHPMailer classes
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use Dotenv\Dotenv;
 
-require '../../../vendor/autoload.php';
+require 'vendor/autoload.php';
 
-// Load environment variables
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');
+// Load the .env file
+$dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -44,39 +42,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption
             $mail->Port       = 587;                                    // TCP port to connect to
 
+            $client_url = $_ENV['client_url'];
             // Recipients
             $mail->setFrom('no-reply@teknoid-itbad.com', 'Teknoid ITB Ahmad Dahlan');
             $mail->addAddress($email);                                  // Add recipient
 
             // Content
-            $resetLink = "http://localhost/teknoid-absensi/src/pages/reset_password.php?token=$token";
+            $resetLink = "$client_url/teknoid-absensi/reset?token=$token";
             $mail->isHTML(true);                                        
             $mail->Subject = 'Password Reset Request';
 
             // Load the email template and replace placeholder
-            $templatePath = './templateEmail.php';
-            $emailBody = file_get_contents($templatePath);
-            $emailBody = str_replace('{{resetLink}}', $resetLink, $emailBody);
+            $templatePath = '/teknoid-absensi/src/db/routes/templateEmail.php';
             
-            $mail->Body = $emailBody;
+            if (file_exists($templatePath)) {
+                $emailBody = file_get_contents($templatePath);
+                $emailBody = str_replace('{{resetLink}}', $resetLink, $emailBody);
+                $mail->Body = $emailBody;
+            } else {
+                throw new Exception("Email template tidak ditemukan.");
+            }
 
             $mail->send();
             $_SESSION['message'] = "Tautan reset kata sandi telah dikirim ke email Anda.";
+            header("Location: /teknoid-absensi/forgot?message=success");
+            exit();
         } catch (Exception $e) {
             $_SESSION['message'] = "Gagal mengirim email. Kesalahan: {$mail->ErrorInfo}";
+            header("Location: /teknoid-absensi/forgot?error=email_send_failed");
+            exit();
         }
     } else {
         // Email not found, redirect back with error
-        header("Location: ../../pages/forgot.php?error=email_not_found");
+        header("Location: /teknoid-absensi/forgot?error=email_not_found");
         exit();
     }
 } else {
     // If the form was not submitted via POST, redirect back to the form
-    header("Location: ../../pages/forgot.php");
+    header("Location: /teknoid-absensi/forgot");
     exit();
 }
-
-// Redirect back to the forgot password form with success message
-header("Location: ../../pages/forgot.php?message=success");
-exit();
 ?>

@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../db_connect.php';
+include 'src/db/db_connect.php';
 session_start();
 
 if (!isset($_SESSION['token'])) {

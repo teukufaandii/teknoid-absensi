@@ -8,7 +8,7 @@ if (!isset($_SESSION['token'])) {
 }
 
 // Include the database connection
-require_once '../db_connect.php';
+require_once 'src/db/db_connect.php';
 
 // Get the POST data
 $data = json_decode(file_get_contents('php://input'), true);

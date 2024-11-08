@@ -1,7 +1,6 @@
-
-
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,27 +18,29 @@
             <form class="max-w-md w-full mx-auto" method="POST" action="/teknoid-absensi/api/auth/login">
                 <h2 class="text-3xl font-bold text-center mb-6">Login Sistem Absensi</h2>
                 <img src="public/logo.png" alt="Logo" class="mb-6 m-auto w-40 h-40 object-cover">
-                
+
                 <?php if (isset($_GET['success']) && $_GET['success'] === 'password_reset'): ?>
                     <div class="success-message mb-4 text-green-600">
                         Reset password berhasil, silakan input ulang email dan password Anda.
                     </div>
                 <?php endif; ?>
-                
+
                 <?php if (isset($_GET['error'])): ?>
                     <div class="error-message mb-4 text-red-600">
                         <?php
                         if ($_GET['error'] === 'locked') {
                             echo 'Akun Anda telah dibekukan selama 10 menit karena terlalu banyak upaya login yang gagal.';
-                        } elseif($_GET['error'] === 'invalid_credentials') {
+                        } elseif ($_GET['error'] === 'invalid_credentials') {
                             echo 'Email pengguna atau kata sandi salah.';
+                        } elseif ($_GET['error'] === 'invalidrole') {
+                            echo 'Role pengguna tidak valid. Silakan hubungi administrator.';
                         } else {
                             echo 'Terjadi kesalahan. Silakan coba lagi.';
                         }
                         ?>
                     </div>
                 <?php endif; ?>
-                
+
                 <div class="mb-4 relative">
                     <div class="floating-placeholder">
                         <input type="email" id="email" name="email" class="floating-input" placeholder="" required>
@@ -110,4 +111,5 @@
         });
     </script>
 </body>
+
 </html>

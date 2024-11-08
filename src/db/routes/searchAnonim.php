@@ -1,5 +1,5 @@
 <?php
-include '../../db/db_connect.php';
+include 'src/db/db_connect.php';
 
 
 $search = isset($_POST['query']) ? trim($_POST['query']) : '';

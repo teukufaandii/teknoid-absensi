@@ -8,7 +8,7 @@ if (!isset($_SESSION['token'])) {
 }
 
 if ($_SESSION['role'] !== 'admin') {
-    header('Location: ../../unauthorized.php');
+    header('Location: unauthorized');
     session_destroy();
     exit();
 }
@@ -28,12 +28,12 @@ $id_libur = $_GET['id'] ?? '';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Libur</title>
-    <link href="../../../css/output.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/dataAbsensi.css">
-    <link href="../css/font/poppins-font.css" rel="stylesheet">
-    <link href="../css/global/generalStyling.css" rel="stylesheet">
-    <link href="../css/global/tableFormat.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/setDayOff.css">
+    <link href="../css/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="../src/pages/admin/css/dataAbsensi.css">
+    <link href="../src/pages/css/font/poppins-font.css" rel="stylesheet">
+    <link href="../src/pages/css/global/generalStyling.css" rel="stylesheet">
+    <link href="../src/pages/css/global/tableFormat.css" rel="stylesheet">
+    <link rel="stylesheet" href="../src/pages/admin/css/setDayOff.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -41,13 +41,13 @@ $id_libur = $_GET['id'] ?? '';
 
 <body>
     <div class="flex flex-col md:flex-row lg:flex-row h-screen">
-        <?php include('../navbar/sidenav.php') ?>
+        <?php include('src/pages/navbar/sidenav.php') ?>
         <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
-            <?php include('../navbar/topnav.php') ?>
+            <?php include('src/pages/navbar/topnav.php') ?>
             <main class="flex-1 p-6 bg-mainBgColor mainContent">
                 <div class="flex justify-between items-center border-b border-gray-500">
                     <h1 class="text-lg sm:text-xl md:text-3xl py-2 font-Poppins font-semibold">Edit Hari Libur</h1>
-                    <a href="setDayOff.php">
+                    <a href="../dayoff">
                         <button class="bg-purpleNavbar text-white px-4 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200">Kembali</button>
                     </a>
                 </div>
@@ -91,7 +91,7 @@ $id_libur = $_GET['id'] ?? '';
             const id_libur = <?php echo json_encode($id_libur); ?>;
 
             $.ajax({
-                url: '../../db/routes/get_current_dayoff.php',
+                url: '../api/dayoff/get/id',
                 type: 'GET',
                 data: {
                     id: id_libur
@@ -133,7 +133,7 @@ $id_libur = $_GET['id'] ?? '';
                         };
 
                         $.ajax({
-                            url: '../../db/routes/update_dayoff.php',
+                            url: '../api/dayoff/put',
                             type: 'POST',
                             data: updatedData,
                             success: function(response) {
@@ -141,7 +141,7 @@ $id_libur = $_GET['id'] ?? '';
                                     Swal.fire('Error', response.error, 'error');
                                 } else {
                                     Swal.fire('Berhasil!', 'Data Anda berhasil diperbarui.', 'success').then(() => {
-                                        window.location.href = './editDayOff.php?id=' + id_libur;
+                                        window.location.href = '/teknoid-absensi/dayoff/edit?id=' + id_libur;
                                     });
                                 }
                             },
@@ -156,7 +156,7 @@ $id_libur = $_GET['id'] ?? '';
         });
     </script>
 
-    <?php include('../navbar/profileInfo.php') ?>
+    <?php include('src/pages/navbar/profileInfo.php') ?>
 </body>
 
 </html>

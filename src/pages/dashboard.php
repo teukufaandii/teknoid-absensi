@@ -92,7 +92,7 @@ $token = $_SESSION['token'];
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             <?php if ($role === 'admin'): ?>
                 const endpoints = {
                     'total-karyawan': 'api/users/get-users',
@@ -106,7 +106,7 @@ $token = $_SESSION['token'];
                         url: url,
                         type: 'GET',
                         dataType: 'json',
-                        success: function (data) {
+                        success: function(data) {
                             const totalKey = elementId === 'total-telat' ? 'total_telat' : 'total';
                             if (data[totalKey] !== undefined) {
                                 $('#' + elementId).text(data[totalKey]);
@@ -114,7 +114,7 @@ $token = $_SESSION['token'];
                                 $('#' + elementId).text('Invalid data format');
                             }
                         },
-                        error: function (jqXHR, textStatus, errorThrown) {
+                        error: function(jqXHR, textStatus, errorThrown) {
                             console.error('Error fetching data: ', textStatus, errorThrown);
                             $('#' + elementId).text('Error loading data');
                         }
@@ -125,26 +125,28 @@ $token = $_SESSION['token'];
                     fetchData(id, url);
                 }
             <?php elseif ($role === 'user'): ?>
-                $.ajax({
-                    url: '../../db/routes/get_absen_status.php',
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            $('.status-absen').text('Status Absen Hari Ini: ' + response.message)
-                                .removeClass('bg-red-500 bg-green-500')
-                                .addClass(response.color);
-                        } else {
-                            console.error(response.message);
+                $(document).ready(function() {
+                    $.ajax({
+                        url: 'api/user/get-status',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                $('.status-absen').text('Status Absen Hari Ini: ' + response.message)
+                                    .removeClass('bg-red-500 bg-green-500')
+                                    .addClass(response.color);
+                            } else {
+                                console.error(response.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('AJAX Error: ' + status + error);
                         }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX Error: ' + status + error);
-                    }
+                    });
                 });
 
                 $.ajax({
-                    url: '../../db/routes/fetchCurrentUser.php',
+                    url: 'api/users/get-current-user',
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
@@ -160,7 +162,7 @@ $token = $_SESSION['token'];
                 });
 
                 $.ajax({
-                    url: '../../db/routes/getCurrentUserAbsenceDetail.php',
+                    url: 'api/user/get-details',
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {

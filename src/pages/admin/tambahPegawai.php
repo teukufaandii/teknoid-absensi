@@ -50,14 +50,14 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
         <div class="w-full mx-auto py-6">
           <div class="mb-4">
             <label class="block text-gray-700 font-semibold mb-2">Nomor Kartu</label>
-                <input
-                    type="text"
-                    name="nomorKartu"
-                    value="<?php echo $nomorKartu; ?>"
-                    class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar" 
-                    required 
-                    placeholder="Masukkan Nomor Kartu" />
-                </div>
+            <input
+              type="text"
+              name="nomorKartu"
+              value="<?php echo $nomorKartu; ?>"
+              class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar"
+              required
+              placeholder="Masukkan Nomor Kartu" />
+          </div>
 
           <div class="mb-4">
             <label class="block text-gray-700 font-semibold mb-2">Nama Lengkap</label>
@@ -92,7 +92,10 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
               type="text"
               name="noInduk"
               placeholder="Masukkan NIDN"
-              class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar" required />
+              class="w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar"
+              required
+              onkeypress="return isNumberKey(event)"
+              title="Hanya angka yang diperbolehkan" />
           </div>
 
           <div class="mb-4">
@@ -189,6 +192,14 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
 </body>
 
 <script>
+  function isNumberKey(evt) {
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+  }
+
   function saveData() {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|yahoo\.co\.id|outlook\.com|hotmail\.com|icloud\.com)$/;
     const email = document.querySelector('input[name="email"]').value;
@@ -262,7 +273,7 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
           });
       }
     });
-}
+  }
 </script>
 
 

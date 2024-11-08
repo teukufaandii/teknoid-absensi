@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include '../db/db_connect.php';
+include 'src/db/db_connect.php';
 
 $token = null;
 
@@ -15,11 +15,11 @@ if (isset($_GET['token'])) {
         $row = mysqli_fetch_assoc($result);
         $email = $row['email'];
     } else {
-        header("Location: ../../src/pages/forgot.php?error=invalid_token");
+        header("Location: /teknoid-absensi/forgot?error=invalid_token");
         exit();
     }
 } else {
-    header("Location: ../../pages/forgot.php");
+    header("Location: /teknoid-absensi/forgot.php");
     exit();
 }
 ?>
@@ -30,12 +30,12 @@ if (isset($_GET['token'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Kata Sandi - Sistem Absensi</title>
-    <link href="../../css/output.css" rel="stylesheet">
-    <link rel="icon" href="../../public/logo.png">
-    <link rel="stylesheet" href="./css/reset_password.css">
-    <link rel="stylesheet" href="./css/login.css">
+    <link href="css/output.css" rel="stylesheet">
+    <link rel="icon" href="public/logo.png">
+    <link rel="stylesheet" href="src/pages/css/reset_password.css">
+    <link rel="stylesheet" href="src/pages/css/login.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="./css/font/poppins-font.css" rel="stylesheet">
+    <link href="src/pages/css/font/poppins-font.css" rel="stylesheet">
     <style>
 
     </style>
@@ -46,7 +46,7 @@ if (isset($_GET['token'])) {
         <div class="flex flex-col justify-center w-1/2 p-8">
             <form id="resetForm" class="max-w-md w-full mx-auto" method="POST" action="../db/routes/userResetPass.php">
                 <h2 class="text-3xl font-bold text-center mb-6">Reset Kata Sandi</h2>
-                <img src="../../public/logo.png" alt="Logo" class="mb-6 m-auto w-40 h-40 justify-center object-cover items-center">
+                <img src="public/logo.png" alt="Logo" class="mb-6 m-auto w-40 h-40 justify-center object-cover items-center">
 
                 <!-- Display error message if any -->
                 <?php if (isset($_GET['error'])): ?>
@@ -95,7 +95,7 @@ if (isset($_GET['token'])) {
             </form>
         </div>
         <div class="flex flex-col items-center justify-center w-1/2 bg-gray-200 p-8">
-            <img src="../../public/loginPage.png" alt="Logo" class="mb-8 w-90 h-90 object-cover">
+            <img src="public/loginPage.png" alt="Logo" class="mb-8 w-90 h-90 object-cover">
             <p class="mt-4 text-center text-gray-600">&copy; 2024 TeknoGenius. All rights reserved.</p>
         </div>
     </div>

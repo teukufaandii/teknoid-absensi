@@ -7,11 +7,11 @@ if (!isset($_SESSION['role'])) {
 }
 
 $redirectUrl = '';
-if ($_SESSION['role'] === 'admin') {
+if ($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'user') {
     $redirectUrl = 'dashboard';
-} elseif ($_SESSION['role'] === 'user') {
-    $redirectUrl = './pages/user/dashboard.php';
-} 
+} else {
+    $redirectUrl = 'login?error=invalidrole';
+}
 ?>
 
 <!DOCTYPE html>

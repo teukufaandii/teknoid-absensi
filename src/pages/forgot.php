@@ -30,6 +30,8 @@
                         <?php
                         if ($_GET['error'] === 'email_not_found') {
                             echo 'Email tidak ditemukan. Silakan periksa dan coba lagi.';
+                        } elseif ($_GET['error'] === 'invalid_token') {
+                            echo 'Token sudah hangus atau token tidak valid. Silakan periksa dan coba lagi.';
                         } else {
                             echo 'Terjadi kesalahan. Silakan coba lagi.';
                         }

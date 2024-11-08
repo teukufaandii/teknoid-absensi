@@ -6,7 +6,7 @@ if (!isset($_SESSION['token'])) {
     exit();
 }
 
-require_once __DIR__ . '/../db_connect.php';
+include 'src/db/db_connect.php';
 
 $query = "
     SELECT 

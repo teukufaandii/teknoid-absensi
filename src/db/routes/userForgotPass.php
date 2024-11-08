@@ -10,7 +10,7 @@ use Dotenv\Dotenv;
 require 'vendor/autoload.php';
 
 // Load the .env file
-$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../../../');
 $dotenv->load();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -24,9 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Email exists, generate a unique token
         $token = bin2hex(random_bytes(50)); 
         $expires = date("U") + 3600; // 1 hour expiration
+        $id = bin2hex(random_bytes(16));
 
         // Insert token into the database
-        $query = "INSERT INTO password_resets (email, token, expires_at) VALUES ('$email', '$token', '$expires')";
+        $query = "INSERT INTO password_resets (id, email, token, expires_at) VALUES ('$id', '$email', '$token', '$expires')";
         mysqli_query($conn, $query);
 
         // Create an instance of PHPMailer
@@ -48,12 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail->addAddress($email);                                  // Add recipient
 
             // Content
-            $resetLink = "$client_url/teknoid-absensi/reset?token=$token";
+            $resetLink = "$client_url/reset?token=$token";
             $mail->isHTML(true);                                        
             $mail->Subject = 'Password Reset Request';
 
             // Load the email template and replace placeholder
-            $templatePath = '/teknoid-absensi/src/db/routes/templateEmail.php';
+            $templatePath = 'src/db/routes/templateEmail.php';
             
             if (file_exists($templatePath)) {
                 $emailBody = file_get_contents($templatePath);

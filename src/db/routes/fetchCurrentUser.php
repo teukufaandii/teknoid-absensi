@@ -1,6 +1,17 @@
 <?php
 require_once __DIR__ . '/../db_connect.php';
+require 'vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');
+$dotenv->load();
+
 session_start();
+
+$apiKey = $_ENV['API_KEY'];
+if (!isset($_GET['api_key']) || $_GET['api_key'] !== $apiKey) {
+    echo json_encode(['error' => 'Unauthorized']);
+    exit();
+}
 
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['error' => 'Unauthorized']);

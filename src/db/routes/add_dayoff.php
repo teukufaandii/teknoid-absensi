@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../db/db_connect.php';
+include 'src/db/db_connect.php';
 
 if (!isset($_SESSION['token']) || $_SESSION['role'] !== 'admin') {
     echo json_encode(['status' => 'unauthorized']);

@@ -97,6 +97,35 @@ $routes->add('anonim', new Route('/anonim', [
         return new Response(ob_get_clean());
     }
 ]));
+$routes->add('edit-preview_data_absensi', new Route('/absensi/edit/preview', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/admin/editDataAbsensi.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('dayoff', new Route('/dayoff', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/admin/setDayOff.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('dayoff_edit', new Route('/dayoff/edit', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/admin/editDayOff.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('pengajuan_cuti', new Route('/pengajuan', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/user/pengajuanCuti.php';
+        return new Response(ob_get_clean());
+    }
+]));
+
 $routes->add('success', new Route('/success', [
     '_controller' => function () {
         ob_start();
@@ -144,7 +173,7 @@ $routes->add('api_get_user', new Route('/api/users/get-users', [
         return new Response(ob_get_clean());
     }
 ]));
-$routes->add('api_get_current_user', new Route('/api/users/get-current_user', [
+$routes->add('api_get_current_user', new Route('/api/users/get-current-user', [
     '_controller' => function () {
         include __DIR__ . '/src/db/routes/fetchCurrentUser.php';
         return new Response(ob_get_clean());
@@ -199,6 +228,12 @@ $routes->add('api_fetch_preview_detail', new Route('/api/users/fetch-preview-det
         return new Response(ob_get_clean());
     }
 ]));
+$routes->add('api_update_preview_absensi', new Route('/api/details/update', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/updateDataAbsensi.php';
+        return new Response(ob_get_clean());
+    }
+]));
 //absensi
 $routes->add('api_get_pengguna', new Route('/api/users/get-data-pengguna', [
     '_controller' => function () {
@@ -230,9 +265,63 @@ $routes->add('api_add_pengguna', new Route('api/users/add-user', [
         return new Response(ob_get_clean());
     }
 ]));
-$routes->add('api_get_anonim', new Route('api/users/anonim', [
+$routes->add('api_get_anonim', new Route('api/anonim/get', [
     '_controller' => function () {
         include __DIR__ . '/src/db/routes/fetchDataAnonim.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_search_anonim', new Route('api/anonim/search', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/searchAnonim.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_delete_anonim', new Route('api/anonim/delete', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/deleteDataAnonim.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_get_dayoff', new Route('api/dayoff/get', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/get_dayoff.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_get_dayoff_by_id', new Route('api/dayoff/get/id', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/get_current_dayoff.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_delete_dayoff', new Route('api/dayoff/delete', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/deleteDayoff.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_post_dayoff', new Route('api/dayoff/post', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/add_dayoff.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_put_dayoff', new Route('api/dayoff/put', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/update_dayoff.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_get_absen_details', new Route('api/user/get-details', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/getCurrentUserAbsenceDetail.php';
+        return new Response(ob_get_clean());
+    }
+]));
+$routes->add('api_get_absen_status', new Route('api/user/get-status', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/get_absen_status.php';
         return new Response(ob_get_clean());
     }
 ]));

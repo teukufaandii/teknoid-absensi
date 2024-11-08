@@ -131,7 +131,7 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
     </div>
   </div>
 
-  <?php include('src/pages/profileInfo.php') ?>
+  <?php include('src/pages/navbar/profileInfo.php') ?>
 </body>
 
 <script>

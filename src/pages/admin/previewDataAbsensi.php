@@ -93,7 +93,7 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
             <main class="flex-1 p-6 bg-mainBgColor mainContent">
                 <div class="flex justify-between items-center border-b border-gray-500">
                     <h1 class="text-lg sm:text-xl md:text-3xl py-2 font-Poppins font-semibold">Preview Data Absensi <?php echo $nama_pg ?></h1>
-                    <a href="dataAbsensi.php">
+                    <a href="../absensi">
                         <button class="bg-purpleNavbar text-white px-4 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200">Kembali</button>
                     </a>
                 </div>
@@ -194,7 +194,7 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
                         <td class="px-6 py-2 text-center">${item.durasi}</td>
                         <td class="px-6 py-2 text-center">${item.keterangan}</td>
                         <td class="px-6 py-2 text-center">
-                            <a href="./editDataAbsensi.php?id_pg=${item.id_pg}&id=${item.id}">
+                            <a href="../absensi/edit/preview?id_pg=${item.id_pg}&id=${item.id}">
                                 <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
                             </a>
                         </td>

@@ -121,7 +121,7 @@ $token = $_SESSION['token'];
   <script>
     $(document).ready(function() {
       $.ajax({
-        url: 'api/users/get-current_user',
+        url: 'api/users/get-current-user',
         type: 'GET',
         dataType: 'json',
         success: function(data) {

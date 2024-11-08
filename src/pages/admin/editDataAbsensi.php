@@ -2,13 +2,13 @@
 session_start();
 
 if (!isset($_SESSION['token'])) {
-  header('Location: login.php');
+  header('Location: login');
   exit();
 }
 
 // Cek session akses admin
 if ($_SESSION['role'] !== 'admin') {
-  header('Location: ../../unauthorized.php');
+  header('Location: unauthorized');
   exit();
 }
 
@@ -28,8 +28,8 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Rekap</title>
-  <link href="../../../css/output.css" rel="stylesheet">
-  <link href="../css/font/poppins-font.css" rel="stylesheet">
+  <link href="../../css/output.css" rel="stylesheet">
+  <link href="../../src/pages/css/font/poppins-font.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -37,17 +37,17 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
 <body>
   <div class="flex flex-col md:flex-row lg:flex-row h-screen">
     <!-- Side Navigation -->
-    <?php include('../navbar/sidenav.php') ?>
+    <?php include('src/pages/navbar/sidenav.php') ?>
 
     <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
       <!-- Top Navigation -->
-      <?php include('../navbar/topnav.php') ?>
+      <?php include('src/pages/navbar/topnav.php') ?>
 
       <!-- Main Content -->
       <main class="flex-1 p-6 bg-mainBgColor mainContent">
         <div class="flex justify-between items-center border-b border-gray-500">
           <h1 class="text-lg sm:text-xl md:text-3xl py-2 font-Poppins font-semibold">Edit Data Absensi</h1>
-          <a href="previewDataAbsensi.php?id_pg=<?php echo $id_pg; ?>">
+          <a href="../../absensi/edit?id_pg=<?php echo $id_pg; ?>">
             <button class="bg-purpleNavbar text-white px-4 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200">Kembali</button>
           </a>
         </div>
@@ -122,7 +122,7 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
     </div>
   </div>
 
-  <?php include('../navbar/profileInfo.php') ?>
+  <?php include('src/pages/navbar/profileInfo.php') ?>
 </body>
 
 <script>
@@ -146,8 +146,7 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
       cancelButtonText: 'Batal'
     }).then((result) => {
       if (result.isConfirmed) {
-        // Proceed with the fetch call to update data
-        fetch('../../db/routes/updateDataAbsensi.php', {
+        fetch('../../api/details/update', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -169,7 +168,7 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
               }).then(() => {
                 // Redirect after 1.5 seconds
                 setTimeout(() => {
-                  window.location.href = 'previewDataAbsensi.php?id_pg=' + userId;
+                  window.location.href = '/teknoid-absensi/absensi/edit?id_pg=' + userId;
                 }, 1500);
               });
             } else {
@@ -196,7 +195,7 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
     const userId = <?php echo json_encode($id_pg); ?>;
     let id_pg = "<?php echo $_GET['id_pg']; ?>";
 
-    fetch(`../../db/routes/fetchPreviewData.php?id_pg=${userId}&start=0&limit=1`)
+    fetch(`../../api/users/fetch-preview-detail?id_pg=${userId}&start=0&limit=1`)
       .then(response => response.json())
       .then(data => {
         if (data.status === 'success' && data.preview_data_absensi.length > 0) {

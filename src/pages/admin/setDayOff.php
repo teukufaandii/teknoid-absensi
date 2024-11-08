@@ -25,12 +25,12 @@ $token = $_SESSION['token'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Set Libur</title>
-    <link href="../../../css/output.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/dataAbsensi.css">
-    <link href="../css/font/poppins-font.css" rel="stylesheet">
-    <link href="../css/global/generalStyling.css" rel="stylesheet">
-    <link href="../css/global/tableFormat.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/setDayOff.css">
+    <link href="css/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="src/pages/css/dataAbsensi.css">
+    <link href="src/pages/css/font/poppins-font.css" rel="stylesheet">
+    <link href="src/pages/css/global/generalStyling.css" rel="stylesheet">
+    <link href="src/pages/css/global/tableFormat.css" rel="stylesheet">
+    <link rel="stylesheet" href="src/pages/admin/css/setDayOff.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -38,9 +38,9 @@ $token = $_SESSION['token'];
 
 <body>
     <div class="flex flex-col md:flex-row lg:flex-row h-screen">
-        <?php include('../navbar/sidenav.php') ?>
+        <?php include('src/pages/navbar/sidenav.php') ?>
         <div id="content" class="min-h-screen inline-flex flex-col flex-1 bg-mainBgColor ml-56">
-            <?php include('../navbar/topnav.php') ?>
+            <?php include('src/pages/navbar/topnav.php') ?>
             <main class="flex-1 p-6 bg-mainBgColor mainContent">
                 <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Input Hari Libur</h1>
 
@@ -118,7 +118,7 @@ $token = $_SESSION['token'];
 
             function loadHolidays(page) {
                 $.ajax({
-                    url: '../../db/routes/get_dayoff.php',
+                    url: 'api/dayoff/get',
                     type: 'GET',
                     data: {
                         start: page * 5
@@ -126,7 +126,7 @@ $token = $_SESSION['token'];
                     dataType: 'json',
                     success: function(response) {
                         if (response.status === 'unauthorized') {
-                            window.location.href = '../../unauthorized.php';
+                            window.location.href = 'unauthorized';
                             return;
                         }
 
@@ -149,7 +149,7 @@ $token = $_SESSION['token'];
                                 <td class="px-6 py-2 text-center">${holiday.tanggal_mulai ? holiday.tanggal_mulai.split('-').reverse().join('-') : '-'}</td>
                                 <td class="px-6 py-2 text-center">${holiday.tanggal_akhir ? holiday.tanggal_akhir.split('-').reverse().join('-') : '-'}</td>
                                 <td class="px-6 py-2 text-center">
-                                    <a href="./editDayOff.php?id=${holiday.id}">
+                                    <a href="dayoff/edit?id=${holiday.id}">
                                         <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
                                     </a>
                                     <a>
@@ -207,7 +207,7 @@ $token = $_SESSION['token'];
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: '../../db/routes/deleteDayOff.php',
+                                url: 'api/dayoff/delete',
                                 type: 'POST',
                                 data: {
                                     id: id
@@ -271,7 +271,7 @@ $token = $_SESSION['token'];
                         };
 
                         $.ajax({
-                            url: '../../db/routes/add_dayoff.php',
+                            url: 'api/dayoff/post',
                             type: 'POST',
                             data: formData,
                             dataType: 'json',
@@ -300,7 +300,7 @@ $token = $_SESSION['token'];
 
         });
     </script>
-    <?php include('../navbar/profileInfo.php') ?>
+    <?php include('src/pages/navbar/profileInfo.php') ?>
 </body>
 
 </html>

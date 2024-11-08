@@ -289,7 +289,7 @@ $token = $_SESSION['token'];
                 success: function(response) {
                     $('#loading').addClass('hidden');
                     if (response.status === 'unauthorized') {
-                    window.location.href = '../../unauthorized.php';
+                    window.location.href = 'unauthorized';
                     return;
                     }
 

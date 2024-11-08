@@ -8,7 +8,7 @@ if (!isset($_SESSION['token'])) {
 
 // Cek session akses admin
 if ($_SESSION['role'] !== 'admin') {
-  header('Location: unauthorized');
+  header('Location: ../unauthorized');
   exit();
 }
 
@@ -193,20 +193,24 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
 
   function fetchData() {
     const userId = <?php echo json_encode($id_pg); ?>;
-    let id_pg = "<?php echo $_GET['id_pg']; ?>";
+    const detailId = <?php echo json_encode($detailId); ?>;
 
-    fetch(`../../api/users/fetch-preview-detail?id_pg=${userId}&start=0&limit=1`)
+    fetch(`../../api/users/fetch-preview-detail?id_pg=${userId}&id=${detailId}&start=0&limit=1`)
       .then(response => response.json())
       .then(data => {
+        console.log(data); 
         if (data.status === 'success' && data.preview_data_absensi.length > 0) {
-          const attendanceData = data.preview_data_absensi[0];
-          document.querySelector('input[name="tanggal"]').value = attendanceData.tanggal;
-
-          document.querySelectorAll('input[name="keterangan"]').forEach(radio => {
-            if (radio.value === attendanceData.keterangan) {
-              radio.checked = true;
-            }
-          });
+          const attendanceData = data.preview_data_absensi.find(item => item.id == detailId);
+          if (attendanceData) {
+            document.querySelector('input[name="tanggal"]').value = attendanceData.tanggal;
+            document.querySelectorAll('input[name="keterangan"]').forEach(radio => {
+              if (radio.value === attendanceData.keterangan) {
+                radio.checked = true;
+              }
+            });
+          } else {
+            console.error('No matching data found for the provided detailId.');
+          }
         } else {
           console.error('Data not found or no attendance data available.');
         }

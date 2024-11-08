@@ -3,7 +3,7 @@
 session_start();
 
 // Include your database connection
-include '../db_connect.php';
+include 'src/db/db_connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the token, new password, and confirm password from the form
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Check if passwords match
         if ($new_password !== $confirm_password) {
-            header("Location: ../../pages/reset_password.php?token=$token&error=password_mismatch");
+            header("Location: /teknoid-absensi/reset?token=$token&error=password_mismatch");
             exit();
         }
 
@@ -37,22 +37,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $delete_query = "DELETE FROM password_resets WHERE email = '$email'";
                 mysqli_query($conn, $delete_query);
 
-                header("Location: ../../pages/login.php?success=password_reset");
+                header("Location: /teknoid-absensi/login?success=password_reset");
                 exit();
             } else {
-                header("Location: ../../pages/reset_password.php?token=$token&error=update_failed");
+                header("Location: /teknoid-absensi/reset?token=$token&error=update_failed");
                 exit();
             }
         } else {
-            header("Location: ../../src/pages/forgot.php?error=invalid_token");
+            header("Location: /teknoid-absensi/forgot?error=invalid_token");
             exit();
         }
     } else {
-        header("Location: ../../pages/reset_password.php?error=missing_data");
+        header("Location: /teknoid-absensi/reset?error=missing_data");
         exit();
     }
 } else {
-    header("Location: ../../pages/forgot.php");
+    header("Location: /teknoid-absensi/forgot");
     exit();
 }
 ?>

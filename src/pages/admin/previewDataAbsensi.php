@@ -8,7 +8,7 @@ if (!isset($_SESSION['token'])) {
 
 // Cek session akses admin
 if ($_SESSION['role'] !== 'admin') {
-    header('Location: ../../unauthorized.php'); // Ganti dengan halaman yang sesuai
+    header('Location: ../unauthorized'); // Ganti dengan halaman yang sesuai
     exit();
 }
 
@@ -49,35 +49,35 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-    .active-button {
-      background-color: #8C85FF;
-      color: white;
-    }
+        .active-button {
+            background-color: #8C85FF;
+            color: white;
+        }
 
-    .inactive-button {
-        background-color: #e2e8f0;
-        color: #8C85FF;
-    }
+        .inactive-button {
+            background-color: #e2e8f0;
+            color: #8C85FF;
+        }
 
-    .loader {
-      border: 8px solid #f3f3f3;
-      border-top: 8px solid #3498db;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      animation: spin 1s linear infinite;
-    }
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
 
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
 
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-  </style>
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -137,54 +137,54 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
         </div>
     </div>
     <script>
-      $(document).ready(function() {
-    let currentPage = 0;
-    let totalDataAbsensi = 0;
-    let searchTerm = '';
-    let id_pg = "<?php echo $_GET['id_pg']; ?>";
+        $(document).ready(function() {
+            let currentPage = 0;
+            let totalDataAbsensi = 0;
+            let searchTerm = '';
+            let id_pg = "<?php echo $_GET['id_pg']; ?>";
 
-    function loadDataAbsensi(page, search = '') {
-        $('#loading').removeClass('hidden');
-        $.ajax({
-            url: '/teknoid-absensi/api/users/fetch-preview-detail',
-            type: 'GET',
-            data: {
-                id_pg: id_pg,
-                start: page * 10,
-                search: search
-            },
-            dataType: 'json',
-            success: function(response) {
-                $('#loading').addClass('hidden');
-                if (response.status === 'unauthorized') {
-                    window.location.href = '../../unauthorized.php';
-                    return;
-                }
+            function loadDataAbsensi(page, search = '') {
+                $('#loading').removeClass('hidden');
+                $.ajax({
+                    url: '/teknoid-absensi/api/users/fetch-preview-detail',
+                    type: 'GET',
+                    data: {
+                        id_pg: id_pg,
+                        start: page * 10,
+                        search: search
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        $('#loading').addClass('hidden');
+                        if (response.status === 'unauthorized') {
+                            window.location.href = 'unauthorized';
+                            return;
+                        }
 
-                totalDataAbsensi = response.total;
-                renderData(response.preview_data_absensi, page);
-                updatePaginationButtons();
-            },
-            error: function() {
-                $('#loading').addClass('hidden');
-                Swal.fire('Error!', 'Terjadi kesalahan saat memuat data', 'error');
+                        totalDataAbsensi = response.total;
+                        renderData(response.preview_data_absensi, page);
+                        updatePaginationButtons();
+                    },
+                    error: function() {
+                        $('#loading').addClass('hidden');
+                        Swal.fire('Error!', 'Terjadi kesalahan saat memuat data', 'error');
+                    }
+                });
             }
-        });
-    }
 
-    function renderData(data, page) {
-        const tableBody = $('#preview-absensi-table-body');
-        tableBody.empty();
+            function renderData(data, page) {
+                const tableBody = $('#preview-absensi-table-body');
+                tableBody.empty();
 
-        if (data.length === 0 && page > 0) {
-            currentPage--;
-            loadDataAbsensi(currentPage, searchTerm);
-        } else if (data.length === 0) {
-            tableBody.append('<tr><td colspan="8" class="text-center">Tidak ada data untuk <?php echo $nama_pg ?></td></tr>');
-        } else {
-            let counter = page * 10 + 1;
-            data.forEach((item) => {
-                tableBody.append(`
+                if (data.length === 0 && page > 0) {
+                    currentPage--;
+                    loadDataAbsensi(currentPage, searchTerm);
+                } else if (data.length === 0) {
+                    tableBody.append('<tr><td colspan="8" class="text-center">Tidak ada data untuk <?php echo $nama_pg ?></td></tr>');
+                } else {
+                    let counter = page * 10 + 1;
+                    data.forEach((item) => {
+                        tableBody.append(`
                     <tr class="bg-gray-100">
                         <td class="px-6 py-2 text-center">${counter++}</td>
                         <td class="px-6 py-2 text-center">${item.nama}</td>
@@ -200,52 +200,51 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
                         </td>
                     </tr>
                 `);
-            });
-        }
-    }
-
-    function updatePaginationButtons() {
-        const totalPages = Math.ceil(totalDataAbsensi / 10);
-        $('.pagination-button').hide().removeClass('active-button').addClass('inactive-button');
-
-        for (let i = 0; i < totalPages; i++) {
-            const button = $('.pagination-button').eq(i);
-            button.show().data('page', i).text(i + 1);
-            if (i === currentPage) {
-                button.addClass('active-button').removeClass('inactive-button');
+                    });
+                }
             }
-        }
 
-        $('#prev-page').prop('disabled', currentPage === 0);
-        $('#next-page').prop('disabled', currentPage >= totalPages - 1);
-    }
+            function updatePaginationButtons() {
+                const totalPages = Math.ceil(totalDataAbsensi / 10);
+                $('.pagination-button').hide().removeClass('active-button').addClass('inactive-button');
 
-    $('#prev-page').on('click', function() {
-        if (currentPage > 0) {
-            loadDataAbsensi(--currentPage, searchTerm);
-        }
-    });
+                for (let i = 0; i < totalPages; i++) {
+                    const button = $('.pagination-button').eq(i);
+                    button.show().data('page', i).text(i + 1);
+                    if (i === currentPage) {
+                        button.addClass('active-button').removeClass('inactive-button');
+                    }
+                }
 
-    $('#next-page').on('click', function() {
-        if ((currentPage + 1) * 10 < totalDataAbsensi) {
-            loadDataAbsensi(++currentPage, searchTerm);
-        }
-    });
+                $('#prev-page').prop('disabled', currentPage === 0);
+                $('#next-page').prop('disabled', currentPage >= totalPages - 1);
+            }
 
-    $(document).on('click', '.pagination-button', function() {
-        currentPage = parseInt($(this).data('page'));
-        loadDataAbsensi(currentPage, searchTerm);
-    });
+            $('#prev-page').on('click', function() {
+                if (currentPage > 0) {
+                    loadDataAbsensi(--currentPage, searchTerm);
+                }
+            });
 
-    $('#searchInput').on('keyup', function() {
-        searchTerm = $(this).val();
-        currentPage = 0;
-        loadDataAbsensi(currentPage, searchTerm);
-    });
+            $('#next-page').on('click', function() {
+                if ((currentPage + 1) * 10 < totalDataAbsensi) {
+                    loadDataAbsensi(++currentPage, searchTerm);
+                }
+            });
 
-    loadDataAbsensi(currentPage); // Initial load
-});
+            $(document).on('click', '.pagination-button', function() {
+                currentPage = parseInt($(this).data('page'));
+                loadDataAbsensi(currentPage, searchTerm);
+            });
 
+            $('#searchInput').on('keyup', function() {
+                searchTerm = $(this).val();
+                currentPage = 0;
+                loadDataAbsensi(currentPage, searchTerm);
+            });
+
+            loadDataAbsensi(currentPage); // Initial load
+        });
     </script>
 
     <?php include('src/pages/navbar/profileInfo.php') ?>

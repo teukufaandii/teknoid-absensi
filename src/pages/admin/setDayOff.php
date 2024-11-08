@@ -7,7 +7,7 @@ if (!isset($_SESSION['token'])) {
 }
 
 if ($_SESSION['role'] !== 'admin') {
-    header('Location: ../../unauthorized.php');
+    header('Location: unauthorized');
     session_destroy();
     exit();
 }

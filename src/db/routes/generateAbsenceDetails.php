@@ -3,7 +3,7 @@ session_start();
 require_once 'src/db/db_connect.php';
 
 if (!isset($_SESSION['token']) || $_SESSION['role'] !== 'admin') {
-    header('Location: ../../unauthorized.php');
+    header('Location: unauthorized');
     exit();
 }
 

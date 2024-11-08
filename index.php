@@ -148,6 +148,7 @@ $routes->add('not_found', new Route('/404', [
     }
 ]));
 
+
 // Rute API
 $routes->add('api_auth_login', new Route('/api/auth/login', [
     '_controller' => function () {
@@ -325,6 +326,13 @@ $routes->add('api_get_absen_status', new Route('api/user/get-status', [
         return new Response(ob_get_clean());
     }
 ]));
+//forgot password
+$routes->add('api_forgot_password', new Route('api/auth/reset', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/userResetPass.php';
+        return new Response(ob_get_clean());
+    }
+]));
 
 
 $request = Request::createFromGlobals();
@@ -340,8 +348,8 @@ try {
     error_log($e->getMessage());
 
     $response = new Response($e, 404);
-    // header("Location: 404");
-    // exit();
+    header("Location: 404");
+    exit();
 }
 
 if (!$response instanceof Response) {

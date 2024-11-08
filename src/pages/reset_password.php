@@ -44,7 +44,7 @@ if (isset($_GET['token'])) {
 <body class="flex justify-center items-center h-screen w-screen bg-gray-100">
     <div class="flex w-full h-full max-w-none bg-white shadow-lg">
         <div class="flex flex-col justify-center w-1/2 p-8">
-            <form id="resetForm" class="max-w-md w-full mx-auto" method="POST" action="../db/routes/userResetPass.php">
+            <form id="resetForm" class="max-w-md w-full mx-auto" method="POST" action="api/auth/reset">
                 <h2 class="text-3xl font-bold text-center mb-6">Reset Kata Sandi</h2>
                 <img src="public/logo.png" alt="Logo" class="mb-6 m-auto w-40 h-40 justify-center object-cover items-center">
 

@@ -12,6 +12,7 @@ module.exports = {
       colors: {
         purpleNavbar: '#8C85FF',
         purpleNavbarHover: '#675EFF', 
+        purpleNavbarHover2: '#3f38b5',
         dashboardBoxBlue: '#6A8DE5',
         dashboardBoxPurple: '#A062E0',
         mainBgColor: '#EFEFEF',

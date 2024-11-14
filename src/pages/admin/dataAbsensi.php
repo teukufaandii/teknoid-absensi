@@ -85,7 +85,7 @@ $token = $_SESSION['token'];
                         <button id="downloadButton" class="bg-purpleNavbar text-white px-4 py-2  rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
                             Download
                         </button>
-                        <button class="bg-purpleNavbar text-white px-4 py-2 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition" id="addButton"> 
+                        <button class="bg-purpleNavbar text-white px-4 py-2 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition" id="addButton">
                             Generate Detail Absen <i class="fa-solid fa-circle-plus"></i>
                         </button>
                     </div>
@@ -170,7 +170,10 @@ $token = $_SESSION['token'];
                                 <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tl-lg">No</th>
                                 <th class="px-6 py-4 font-medium uppercase tracking-wider">Nomor Induk</th>
                                 <th class="px-6 py-4 font-medium uppercase tracking-wider">Nama Lengkap</th>
-                                <th class="px-6 py-4 font-medium uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-4 font-medium uppercase tracking-wider">Jabatan</th>
+                                <th class="px-6 py-4 font-medium uppercase tracking-wider">Sakit</th>
+                                <th class="px-6 py-4 font-medium uppercase tracking-wider">Izin</th>
+                                <th class="px-6 py-4 font-medium uppercase tracking-wider">Cuti</th>
                                 <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tr-lg">Aksi</th>
                             </tr>
                         </thead>
@@ -179,17 +182,15 @@ $token = $_SESSION['token'];
                     </table>
                 </div>
 
-                <div class="flex justify-center items-center space-x-1 mt-4">
+                <div id="pagination-container" class="flex justify-center items-center space-x-1 mt-4">
                     <button id="prev-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer" disabled>
                         <i class="fas fa-chevron-left"></i>
                     </button>
-                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="0">1</button>
-                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="1">2</button>
-                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="2">3</button>
                     <button id="next-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
+
             </main>
 
             <div id="loadingSpinner" class="hidden fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50 z-50">
@@ -269,10 +270,67 @@ $token = $_SESSION['token'];
                 }
             });
 
+
+
             $(document).on('click', '#customCancel', function() {
                 Swal.close();
             });
         });
+
+        $('#addButton').on('click', function() {
+            Swal.fire({
+                title: 'Generate Detail Absen',
+                text: 'Pilih opsi untuk generate detail absensi:',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Per Bulan',
+                cancelButtonText: 'Per Minggu',
+                html: '<button id="customCancel" class="swal2-cancel swal2-styled">Cancel</button>',
+                allowOutsideClick: false
+            }).then((result) => {
+                let option;
+                if (result.isConfirmed) {
+                    option = 'bulanan';
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    option = 'mingguan';
+                } else {
+                    return;
+                }
+
+                if (option) {
+                    document.getElementById('loadingSpinner').classList.remove('hidden');
+
+                    $.ajax({
+                        url: 'api/users/generate-absensi-details',
+                        type: 'GET',
+                        data: {
+                            option: option
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            document.getElementById('loadingSpinner').classList.add('hidden');
+
+                            if (response.status === 'success') {
+                                showToast('success', response.message);
+                            } else {
+                                showToast('error', response.message);
+                            }
+                        },
+                        error: function() {
+                            document.getElementById('loadingSpinner').classList.add('hidden');
+                            showToast('error', 'Terjadi kesalahan saat memproses permintaan.');
+                        }
+                    });
+                }
+            });
+
+            $(document).on('click', '#customCancel', function() {
+                Swal.close();
+            });
+        });
+
 
         $(document).ready(function() {
             let currentPage = 0;
@@ -282,26 +340,29 @@ $token = $_SESSION['token'];
             function loadDataAbsensi(page, search = '') {
                 $('#loading').removeClass('hidden');
                 $.ajax({
-                url: 'api/users/get-absensi',
-                type: 'GET',
-                data: { start: page * 5, search: search },
-                dataType: 'json',
-                success: function(response) {
-                    $('#loading').addClass('hidden');
-                    if (response.status === 'unauthorized') {
-                    window.location.href = 'unauthorized';
-                    return;
-                    }
+                    url: 'api/users/get-absensi',
+                    type: 'GET',
+                    data: {
+                        start: page * 5,
+                        search: search
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        $('#loading').addClass('hidden');
+                        if (response.status === 'unauthorized') {
+                            window.location.href = 'unauthorized';
+                            return;
+                        }
 
-                    totalDataAbsensi = response.total;
-                    currentPage = page;
-                    renderData(response.data_absensi);
-                    updatePaginationButtons();
-                },
-                error: function() {
-                    $('#loading').addClass('hidden');
-                    Swal.fire('Error!', 'Terjadi kesalahan saat memuat data', 'error');
-                }
+                        totalDataAbsensi = response.total;
+                        currentPage = page;
+                        renderData(response.data_absensi);
+                        updatePaginationButtons();
+                    },
+                    error: function() {
+                        $('#loading').addClass('hidden');
+                        Swal.fire('Error!', 'Terjadi kesalahan saat memuat data', 'error');
+                    }
                 });
             }
 
@@ -310,52 +371,68 @@ $token = $_SESSION['token'];
                 tableBody.empty();
 
                 if (data.length === 0) {
-                tableBody.append('<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>');
-                return;
+                    tableBody.append('<tr><td colspan="8" class="text-center">Tidak ada data</td></tr>');
+                    return;
                 }
 
                 data.forEach((data_absensi, index) => {
-                tableBody.append(`
-                    <tr class="bg-gray-100">
+                    tableBody.append(`
+                <tr class="bg-gray-100">
                     <td class="px-6 py-2 text-center">${index + 1 + currentPage * 5}</td>
                     <td class="px-6 py-2 text-center">${data_absensi.noinduk}</td>
                     <td class="px-6 py-2 text-center">${data_absensi.nama}</td>
-                    <td class="px-6 py-2 text-center">${data_absensi.role}</td>
+                    <td class="px-6 py-2 text-center">${data_absensi.jabatan}</td>
+                    <td class="px-6 py-2 text-center">${data_absensi.xx}</td>
+                    <td class="px-6 py-2 text-center">${data_absensi.xx}</td>
+                    <td class="px-6 py-2 text-center">${data_absensi.xx}</td>
                     <td class="px-6 py-2 text-center">
                         <a href="absensi/edit?id_pg=${data_absensi.id_pg}">
                         <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                         </a>
-                    </td>
-                    </tr>
-                `);
+                     </td>
+                </tr>
+            `);
                 });
             }
 
             function updatePaginationButtons() {
                 const totalPages = Math.ceil(totalDataAbsensi / 5);
-                $('.pagination-button').each(function(index) {
-                $(this).toggle(index < totalPages).data('page', index).text(index + 1)
-                    .toggleClass('active-button', index === currentPage)
-                    .toggleClass('inactive-button', index !== currentPage);
-                });
+                const paginationContainer = $('#pagination-container');
 
+                // Clear previous buttons and add new ones
+                paginationContainer.find('.pagination-button').remove();
+
+                // Create dynamic pagination buttons
+                for (let i = 0; i < totalPages; i++) {
+                    const button = $(`<button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl pagination-button" data-page="${i}">${i + 1}</button>`);
+                    button.addClass(i === currentPage ? 'active-button' : 'inactive-button');
+                    button.insertBefore('#next-page'); // Insert before "Next" button
+                }
+
+                // Enable/Disable Prev/Next buttons
                 $('#prev-page').prop('disabled', currentPage === 0);
                 $('#next-page').prop('disabled', currentPage >= totalPages - 1);
             }
 
             $('#prev-page').on('click', function() {
-                if (currentPage > 0) loadDataAbsensi(--currentPage, searchTerm);
+                if (currentPage > 0) {
+                    loadDataAbsensi(--currentPage, searchTerm);
+                }
             });
 
             $('#next-page').on('click', function() {
-                if ((currentPage + 1) * 5 < totalDataAbsensi) loadDataAbsensi(++currentPage, searchTerm);
+                if ((currentPage + 1) * 5 < totalDataAbsensi) {
+                    loadDataAbsensi(++currentPage, searchTerm);
+                }
             });
 
             $(document).on('click', '.pagination-button', function() {
                 const page = parseInt($(this).data('page'));
-                loadDataAbsensi(page, searchTerm);
+                if (page !== currentPage) {
+                    loadDataAbsensi(page, searchTerm);
+                }
             });
 
             $('#searchInput').on('keyup', function() {
@@ -363,9 +440,8 @@ $token = $_SESSION['token'];
                 loadDataAbsensi(0, searchTerm);
             });
 
-            loadDataAbsensi(currentPage); // Load initial data
-            });
-
+            loadDataAbsensi(currentPage); 
+        });
 
         function showToast(type, message) {
             const successToast = document.getElementById('toast-success');
@@ -525,7 +601,7 @@ $token = $_SESSION['token'];
         });
     </script>
 
-<?php include('src/pages/navbar/profileInfo.php') ?>
+    <?php include('src/pages/navbar/profileInfo.php') ?>
 
 </body>
 

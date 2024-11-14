@@ -113,7 +113,7 @@
                                                     <table class="image_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                                                         <tr>
                                                             <td class="pad" style="padding-bottom:15px;padding-top:15px;width:100%;padding-right:0px;padding-left:0px;">
-                                                                <div class="alignment" align="center" style="line-height:10px; display:flex; justify-content: center; ">
+                                                                <div class="alignment justify-center" align="center" style="line-height:10px; display:flex; justify-content: center; ">
                                                                     <div style="max-width: 100px;"><img src="https://kemahasiswaan.itb-ad.ac.id/wp-content/uploads/2020/07/cropped-LOGO-ITBAD-PNG.png" style="display: block; height: auto; border: 0; width: 80%;" width="195" alt="LOGO ITBAD" title="LOGO ITBAD" height="auto"></div>
                                                                     <div style="display: flex; justify-items: center;  align-items: center; padding: 0 10px;">
                                                                         <p style="margin: 0; font-size: 20px; font-family: 'Cabin', Arial, 'Helvetica Neue', Helvetica, sans-serif;">TEKNOID ITBAD</p>

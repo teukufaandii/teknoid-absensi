@@ -217,7 +217,7 @@ $current_page = $_SERVER['REQUEST_URI'];
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="dayoff" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == '/teknoid-absensi/dayoff' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                        <a href="/teknoid-absensi/dayoff" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == '/teknoid-absensi/dayoff' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
                             <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
                                 <i class="fa-regular fa-calendar-plus"></i>
                             </span>
@@ -225,10 +225,10 @@ $current_page = $_SERVER['REQUEST_URI'];
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="anonim" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == '/teknoid-absensi/anonim' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                        <a href="/teknoid-absensi/anonim" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == '/teknoid-absensi/anonim' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
                             <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
-                            <i class="fa-solid fa-question"></i>                            
-                        </span>
+                                <i class="fa-solid fa-question"></i>
+                            </span>
                             <span class="ml-2 font-medium sideNav-text whitespace-nowrap">Tidak Dikenal</span>
                         </a>
                     </li>
@@ -250,7 +250,7 @@ $current_page = $_SERVER['REQUEST_URI'];
             <nav class="p-3">
                 <ul class="">
                     <li class="mb-2">
-                        <a href="dashboard" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == '/teknoid-absensi/dashboard' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                        <a href="/teknoid-absensi/dashboard" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == '/teknoid-absensi/dashboard' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
                             <span class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg 
                             <?php echo $current_page == '/teknoid-absensi/dashboard' ? 'text-white' : 'text-purpleNavbar'; ?>">
                                 <i class="fa-solid fa-house"></i>
@@ -259,10 +259,10 @@ $current_page = $_SERVER['REQUEST_URI'];
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="pengajuan" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == '/teknoid-absensi/pengajuan' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
+                        <a href="/teknoid-absensi/pengajuan" class="flex items-center p-2 text-purpleNavbar <?php echo $current_page == '/teknoid-absensi/pengajuan' ? 'bg-purpleNavbar text-white' : ''; ?> rounded-lg hover:bg-purpleNavbar transition">
                             <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
-                            <i class="fa-solid fa-file-circle-plus"></i>                       
-                        </span>
+                                <i class="fa-solid fa-file-circle-plus"></i>
+                            </span>
                             <span class="ml-2 font-medium sideNav-text whitespace-nowrap">Pengajuan Cuti</span>
                         </a>
                     </li>

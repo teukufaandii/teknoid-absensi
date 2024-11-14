@@ -108,14 +108,11 @@ $token = $_SESSION['token'];
                     </table>
                 </div>
 
-                <div class="flex justify-center items-center space-x-1 mt-4">
-                    <button id="prev-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl" disabled>
+                <div id="pagination-container" class="flex justify-center items-center space-x-1 mt-4">
+                    <button id="prev-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer" disabled>
                         <i class="fas fa-chevron-left"></i>
                     </button>
-                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="0">1</button>
-                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="1">2</button>
-                    <button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover hover:text-white transition shadow-xl drop-shadow-xl pagination-button" data-page="2">3</button>
-                    <button id="next-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl">
+                    <button id="next-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
@@ -132,10 +129,9 @@ $token = $_SESSION['token'];
     $(document).ready(function() {
         let currentPage = 0;
         let totalDataAnonim = 0;
-        let totalPages = 0;
         let searchTerm = '';
 
-        // Fungsi untuk memuat data anonim
+        // Function to load "anonim" data
         function loadDataAnonim(page, search = '') {
             $.ajax({
                 url: 'api/anonim/get',
@@ -151,13 +147,13 @@ $token = $_SESSION['token'];
                         return;
                     }
 
-                    totalDataAnonim = response.total; // Total data dari response
-                    totalPages = Math.ceil(totalDataAnonim / 5); // Hitung total halaman
+                    totalDataAnonim = response.total; // Set total data
+                    currentPage = page; // Update current page
                     let DataAnonimTableBody = $('#anonim-table-body');
                     DataAnonimTableBody.empty();
 
                     if (response.data_anonim.length === 0 && currentPage > 0) {
-                        currentPage--;
+                        currentPage--; // Go to previous page if no data
                         loadDataAnonim(currentPage, search);
                     } else if (response.data_anonim.length === 0) {
                         DataAnonimTableBody.append('<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>');
@@ -183,7 +179,6 @@ $token = $_SESSION['token'];
                         `);
                         });
                     }
-
                     updatePaginationButtons();
                 },
                 error: function() {
@@ -193,28 +188,27 @@ $token = $_SESSION['token'];
             });
         }
 
-        // Fungsi untuk memperbarui tombol pagination
+        // Function to update pagination buttons
         function updatePaginationButtons() {
             const totalPages = Math.ceil(totalDataAnonim / 5);
-            const paginationButtons = $('.pagination-button');
+            const paginationContainer = $('#pagination-container');
 
-            paginationButtons.hide();
+            // Clear previous buttons and add new ones
+            paginationContainer.find('.pagination-button').remove();
 
+            // Create dynamic pagination buttons
             for (let i = 0; i < totalPages; i++) {
-                const button = paginationButtons.eq(i);
-                button.show().data('page', i).text(i + 1);
-                if (i === currentPage) {
-                    button.removeClass('inactive-button').addClass('active-button');
-                } else {
-                    button.removeClass('active-button').addClass('inactive-button');
-                }
+                const button = $(`<button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl pagination-button" data-page="${i}">${i + 1}</button>`);
+                button.addClass(i === currentPage ? 'active-button' : 'inactive-button');
+                button.insertBefore('#next-page'); // Insert before "Next" button
             }
 
+            // Enable/Disable Prev/Next buttons
             $('#prev-page').prop('disabled', currentPage === 0);
-            $('#next-page').prop('disabled', (currentPage + 1) * 5 >= totalDataAnonim);
+            $('#next-page').prop('disabled', currentPage >= totalPages - 1);
         }
 
-        // Event listener untuk previous pagination
+        // Event listener for previous button
         $('#prev-page').on('click', function() {
             if (currentPage > 0) {
                 currentPage--;
@@ -222,7 +216,7 @@ $token = $_SESSION['token'];
             }
         });
 
-        // Event listener untuk next pagination
+        // Event listener for next button
         $('#next-page').on('click', function() {
             if ((currentPage + 1) * 5 < totalDataAnonim) {
                 currentPage++;
@@ -230,27 +224,26 @@ $token = $_SESSION['token'];
             }
         });
 
-        // Event listener untuk pagination button
+        // Event listener for pagination button
         $(document).on('click', '.pagination-button', function() {
-            currentPage = parseInt($(this).data('page'));
-            loadDataAnonim(currentPage, searchTerm);
-            updatePaginationButtons();
+            const page = parseInt($(this).data('page'));
+            if (page !== currentPage) {
+                loadDataAnonim(page, searchTerm);
+            }
         });
 
-        // Event listener untuk input pencarian
+        // Event listener for search input
         $('#searchInput').on('keyup', function() {
             searchTerm = $(this).val();
-            currentPage = 0; // Reset ke halaman pertama saat pencarian
+            currentPage = 0; // Reset to the first page on search
             loadDataAnonim(currentPage, searchTerm);
         });
 
-        // Load data pertama kali
+        // Initial data load
         loadDataAnonim(currentPage, searchTerm);
     });
 
-
     //add user button
-
     $(document).on('click', '.edit-button', function() {
         const nomorKartu = $(this).data('nomor-kartu');
         window.location.href = `/teknoid-absensi/pegawai/add?nomor_kartu=${nomorKartu}`;

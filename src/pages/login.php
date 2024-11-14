@@ -51,7 +51,7 @@
                     <div class="floating-placeholder">
                         <input type="password" id="password" name="password" class="floating-input" placeholder=" " required>
                         <label for="password">Kata sandi</label>
-                        <i id="togglePassword" class="fas fa-eye"></i>
+                        <i id="togglePassword" class="fas fa-eye text-gray-400"></i>
                     </div>
                 </div>
                 <div class="flex justify-end items-center mb-4">

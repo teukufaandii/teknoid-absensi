@@ -63,11 +63,11 @@ if (isset($_GET['token'])) {
 
                 <input type="hidden" name="token" value="<?php echo htmlspecialchars($token); ?>">
 
-                <div class="mb-4 relative">
+                <div class="mb-4 relative password-wrapper">
                     <div class="floating-placeholder">
                         <input type="password" id="new_password" name="new_password" class="floating-input" placeholder="" required>
                         <label for="new_password">Kata Sandi Baru</label>
-                        <i id="toggleNewPassword" class="fas fa-eye"></i>
+                        <i id="toggleNewPassword" class="fas fa-eye text-gray-400"></i>
                     </div>
                     <div id="passwordCriteria" class="criteria-message hidden">
                         <ul>
@@ -79,14 +79,14 @@ if (isset($_GET['token'])) {
                     </div>
                 </div>
 
-                <div class ="mb-4 relative">
+                <div class ="mb-4 relative password-wrapper">
                     <div class="floating-placeholder">
                         <input type="password" id="confirm_password" name="confirm_password" class="floating-input" placeholder="" required>
                         <label for="confirm_password">Konfirmasi Kata Sandi</label>
-                        <i id="toggleConfirmPassword" class="fas fa-eye"></i>
+                        <i id="toggleConfirmPassword" class="fas fa-eye text-gray-400"></i>
                         <div id="confirmPasswordError" class="error_confirm hidden">
                         Kata sandi tidak sesuai.
-                     </div>
+                        </div>
                     </div>
                     
                 </div>

@@ -38,13 +38,13 @@ $token = $_SESSION['token'];
             <!-- Main Content -->
             <main class="flex-1 p-6 bg-mainBgColor mainContent">
                 <?php if ($role === 'admin'): ?>
-                    <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Dashboard Admin </h1>
+                    <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Dashboard </h1>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
                         <?php
                         $cards = [
-                            ['title' => 'Total Hadir Hari Ini', 'id' => 'total-hadir'],
-                            ['title' => 'Total Tidak Datang Hari Ini', 'id' => 'total-absen'],
-                            ['title' => 'Total Terlambat Datang Hari ini', 'id' => 'total-telat'],
+                            ['title' => 'Total Hadir', 'id' => 'total-hadir'],
+                            ['title' => 'Total Tidak Hadir', 'id' => 'total-absen'],
+                            ['title' => 'Total Terlambat Hadir', 'id' => 'total-telat'],
                             ['title' => 'Total Karyawan', 'id' => 'total-karyawan'],
                         ];
 
@@ -58,7 +58,7 @@ $token = $_SESSION['token'];
                         ?>
                     </div>
                 <?php elseif ($role === 'user'): ?>
-                    <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Dashboard USER </h1>
+                    <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Dashboard </h1>
                     <div class="separator">
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
                             <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">

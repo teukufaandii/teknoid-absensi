@@ -121,14 +121,19 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
                         </tbody>
                     </table>
                 </div>
-
                 <div id="pagination-container" class="flex justify-center items-center space-x-1 mt-4">
+                    <button id="first-page" class="min-w-9 px-3 py-2 ring-2 ring-inset ring-purpleNavbar text-purpleNavbar rounded-md hover:ring-purpleNavbarHover hover:text-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer" disabled>
+                        <i class="fas fa-chevron-left"></i><i class="fas fa-chevron-left"></i>
+                    </button>
                     <button id="prev-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer" disabled>
                         <i class="fas fa-chevron-left"></i>
                     </button>
                     <!-- Pagination buttons will be added here dynamically -->
                     <button id="next-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer">
                         <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button id="last-page" class="min-w-9 px-3 py-2 ring-2 ring-inset ring-purpleNavbar text-purpleNavbar rounded-md hover:ring-purpleNavbarHover hover:text-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer">
+                        <i class="fas fa-chevron-right"></i><i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
             </main>
@@ -204,25 +209,51 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
                 }
             }
 
-            // Function to update pagination buttons
             function updatePaginationButtons() {
                 const totalPages = Math.ceil(totalDataAbsensi / 10);
-                const paginationContainer = $('#pagination-container');
+
+                // Define the range of pages to display
+                const maxButtonsToShow = 5; // Maximum number of buttons to display
+                let startPage = Math.max(0, currentPage - Math.floor(maxButtonsToShow / 2));
+                let endPage = Math.min(totalPages, startPage + maxButtonsToShow);
+
+                if (endPage - startPage < maxButtonsToShow) {
+                    startPage = Math.max(0, endPage - maxButtonsToShow);
+                }
 
                 // Clear existing pagination buttons
-                paginationContainer.find('.pagination-button').remove();
+                $('#pagination-container .pagination-button').remove();
 
                 // Create pagination buttons dynamically
-                for (let i = 0; i < totalPages; i++) {
+                for (let i = startPage; i < endPage; i++) {
                     const button = $(`<button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl pagination-button" data-page="${i}">${i + 1}</button>`);
                     button.addClass(i === currentPage ? 'active-button' : 'inactive-button');
                     button.insertBefore('#next-page'); // Insert before "Next" button
                 }
 
-                // Enable/Disable Prev/Next buttons based on the current page
+                // Enable/Disable First, Prev, Next, and Last buttons based on the current page
+                $('#first-page').prop('disabled', currentPage === 0);
                 $('#prev-page').prop('disabled', currentPage === 0);
                 $('#next-page').prop('disabled', currentPage >= totalPages - 1);
+                $('#last-page').prop('disabled', currentPage >= totalPages - 1);
             }
+
+            $('#first-page').on('click', function() {
+                if (currentPage > 0) {
+                    currentPage = 0;
+                    loadDataAbsensi(currentPage, searchTerm);
+                    updatePaginationButtons();
+                }
+            });
+
+            $('#last-page').on('click', function() {
+                const totalPages = Math.ceil(totalDataAbsensi / 10);
+                if (currentPage < totalPages - 1) {
+                    currentPage = totalPages - 1;
+                    loadDataAbsensi(currentPage, searchTerm);
+                    updatePaginationButtons();
+                }
+            });
 
             // Event listener for "Previous" button
             $('#prev-page').on('click', function() {

@@ -183,11 +183,18 @@ $token = $_SESSION['token'];
                 </div>
 
                 <div id="pagination-container" class="flex justify-center items-center space-x-1 mt-4">
+                    <button id="first-page" class="min-w-9 px-3 py-2 ring-2 ring-inset ring-purpleNavbar text-purpleNavbar rounded-md hover:ring-purpleNavbarHover hover:text-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer" disabled>
+                        <i class="fas fa-chevron-left"></i><i class="fas fa-chevron-left"></i>
+                    </button>
                     <button id="prev-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer" disabled>
                         <i class="fas fa-chevron-left"></i>
                     </button>
+                    <!-- Pagination buttons will be added here dynamically -->
                     <button id="next-page" class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer">
                         <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button id="last-page" class="min-w-9 px-3 py-2 ring-2 ring-inset ring-purpleNavbar text-purpleNavbar rounded-md hover:ring-purpleNavbarHover hover:text-purpleNavbarHover transition shadow-xl drop-shadow-xl cursor-pointer">
+                        <i class="fas fa-chevron-right"></i><i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
 
@@ -331,7 +338,6 @@ $token = $_SESSION['token'];
             });
         });
 
-
         $(document).ready(function() {
             let currentPage = 0;
             let searchTerm = '';
@@ -411,10 +417,25 @@ $token = $_SESSION['token'];
                     button.insertBefore('#next-page'); // Insert before "Next" button
                 }
 
-                // Enable/Disable Prev/Next buttons
+                // Enable/Disable navigation buttons
+                $('#first-page').prop('disabled', currentPage === 0);
                 $('#prev-page').prop('disabled', currentPage === 0);
                 $('#next-page').prop('disabled', currentPage >= totalPages - 1);
+                $('#last-page').prop('disabled', currentPage >= totalPages - 1);
             }
+
+            $('#first-page').on('click', function() {
+                if (currentPage > 0) {
+                    loadDataAbsensi(0, searchTerm);
+                }
+            });
+
+            $('#last-page').on('click', function() {
+                const totalPages = Math.ceil(totalDataAbsensi / 5);
+                if (currentPage < totalPages - 1) {
+                    loadDataAbsensi(totalPages - 1, searchTerm);
+                }
+            });
 
             $('#prev-page').on('click', function() {
                 if (currentPage > 0) {
@@ -440,7 +461,7 @@ $token = $_SESSION['token'];
                 loadDataAbsensi(0, searchTerm);
             });
 
-            loadDataAbsensi(currentPage); 
+            loadDataAbsensi(currentPage);
         });
 
         function showToast(type, message) {

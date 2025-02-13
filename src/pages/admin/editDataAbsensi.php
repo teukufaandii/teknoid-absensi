@@ -162,7 +162,7 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
             if (data.success) {
               Swal.fire({
                 icon: 'success',
-                title: 'Data updated successfully!',
+                title: 'Data Berhasil Diperbarui!',
                 showConfirmButton: false,
                 timer: 1500
               }).then(() => {
@@ -174,7 +174,7 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
             } else {
               Swal.fire({
                 icon: 'error',
-                title: 'Failed to update data',
+                title: 'Gagal Memperbarui Data',
                 text: data.message || 'Please try again.'
               });
             }

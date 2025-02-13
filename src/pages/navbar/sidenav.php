@@ -235,7 +235,7 @@ $current_page = $_SERVER['REQUEST_URI'];
                 </ul>
             </nav>
             <div class="copyright absolute w-full text-center items-center bottom-0 text-gray-500 pb-4">
-                © Teknogenius 2024
+                © Teknogenius 2025
             </div>
         </div>
     <?php } elseif ($_SESSION['role'] == 'user') { ?>
@@ -269,7 +269,7 @@ $current_page = $_SERVER['REQUEST_URI'];
                 </ul>
             </nav>
             <div class="copyright absolute w-full text-center items-center bottom-0 text-gray-500 pb-4">
-                © Teknogenius 2024
+                © Teknogenius 2025
             </div>
         </div>
     <?php } ?>

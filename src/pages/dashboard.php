@@ -10,6 +10,10 @@ $username = htmlspecialchars($_SESSION['name']);
 $role = $_SESSION['role'];
 $id = $_SESSION['user_id'];
 $token = $_SESSION['token'];
+
+date_default_timezone_set('Asia/Jakarta');
+$months = date('F');
+$years = date('Y');
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +28,9 @@ $token = $_SESSION['token'];
     <link href="src/pages/css/font/poppins-font.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="src/pages/css/dashboard.css">
-</head>
+    <!-- Chart  -->
+    <script src="node_modules/chart.js/dist/chart.umd.js"></script>
+    <script src="src/pages/js/chart.js"></script>
 
 <body>
     <div class="flex flex-col md:flex-row lg:flex-row h-screen">
@@ -59,6 +65,7 @@ $token = $_SESSION['token'];
                     </div>
                 <?php elseif ($role === 'user'): ?>
                     <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Dashboard </h1>
+                    <?php echo '<h1 class="text-base sm:text-lg md:text-2xl mt-6 font-Poppins font-normal"> Data Bulan <strong> ' . $months . ' </strong> </h1>'; ?>
                     <div class="separator">
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
                             <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
@@ -81,6 +88,11 @@ $token = $_SESSION['token'];
 
                         <div class="status-absen">
                             Status Absen Hari Ini:
+                        </div>
+
+                        <div class="w-full md:w-3/5 flex flex-col md:flex-row items-center justify-between">
+                            <canvas id="absenceChart" class="w-full h-96 mb-4 md:mb-0 md:mr-20"></canvas>
+                            <h1 class="text-base sm:text-lg md:text-2xl font-Poppins font-normal ml-0 md:ml-4"> Diagram Batang Absensi Tahun <strong><?php echo $years; ?></strong> </h1>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -169,9 +181,9 @@ $token = $_SESSION['token'];
                         if (data.error) {
                             alert(data.error);
                         } else {
-                            $('#totalMasuk').text(data.result.total_hadir);
-                            $('#totalSakit').text(data.result.total_sakit);
-                            $('#totalIzin').text(data.result.total_izin);
+                            $('#totalMasuk').text(data.card.total_hadir);
+                            $('#totalSakit').text(data.card.total_sakit);
+                            $('#totalIzin').text(data.card.total_izin);
                         }
                     },
                     error: function(xhr, status, error) {

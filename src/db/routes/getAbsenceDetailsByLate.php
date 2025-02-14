@@ -8,7 +8,7 @@ if (!isset($_SESSION['token'])) {
 
 require_once __DIR__ . '/../db_connect.php';
 
-$query_telat = "SELECT COUNT(*) as total_telat FROM tb_detail WHERE scan_masuk >= '08:30:00' AND tanggal = CURDATE() AND keterangan = 'hadir'";
+$query_telat = "SELECT COUNT(*) as total_telat FROM tb_detail WHERE scan_masuk >= '08:30:00' AND MONTH(tanggal) = MONTH(CURDATE()) AND YEAR(tanggal) = YEAR(CURDATE()) AND keterangan = 'hadir'";
 $stmt_telat = $conn->prepare($query_telat);
 if ($stmt_telat === false) {
     echo json_encode(['error' => 'Database query error']);
@@ -25,4 +25,3 @@ echo json_encode([
 
 $stmt_telat->close();
 $conn->close();
-?>

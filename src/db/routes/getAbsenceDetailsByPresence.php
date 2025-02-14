@@ -8,7 +8,7 @@ if (!isset($_SESSION['token'])) {
 
 require_once __DIR__ . '/../db_connect.php';
 
-$query = "SELECT COUNT(*) as total FROM tb_detail WHERE keterangan = 'hadir' AND tanggal = CURDATE() AND scan_masuk IS NOT NULL";
+$query = "SELECT COUNT(*) as total FROM tb_detail WHERE keterangan = 'hadir' AND MONTH(tanggal) = MONTH(CURDATE()) AND YEAR(tanggal) = YEAR(CURDATE()) AND scan_masuk IS NOT NULL";
 $stmt = $conn->prepare($query);
 if ($stmt === false) {
     echo json_encode(['error' => 'Database query error']);
@@ -22,4 +22,3 @@ echo json_encode(['total' => $count['total']]);
 
 $stmt->close();
 $conn->close();
-?>

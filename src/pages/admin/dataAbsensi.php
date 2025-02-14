@@ -535,7 +535,7 @@ $token = $_SESSION['token'];
         });
 
         function toggleHarian() {
-            window.location.href = 'downloadAbsensi.php?filter=harian';
+            window.location.href = 'api/user/download?filter=harian';
         }
 
         function getDateDifference(start, end) {
@@ -565,7 +565,7 @@ $token = $_SESSION['token'];
                         return;
                     }
 
-                    window.location.href = `downloadAbsensi.php?filter=mingguan&start=${start}&end=${end}`;
+                    window.location.href = `api/user/download?filter=mingguan&start=${start}&end=${end}`;
                 } else {
                     alert("Harap isi kedua tanggal untuk filter mingguan.");
                 }
@@ -592,7 +592,7 @@ $token = $_SESSION['token'];
                         return;
                     }
 
-                    window.location.href = `downloadAbsensi.php?filter=bulanan&start=${start}&end=${end}`;
+                    window.location.href = `api/user/download?filter=bulanan&start=${start}&end=${end}`;
                 } else {
                     alert("Harap isi kedua tanggal untuk filter bulanan.");
                 }
@@ -604,7 +604,7 @@ $token = $_SESSION['token'];
             const end = document.getElementById('endMingguan').value;
 
             if (start && end) {
-                window.location.href = `downloadAbsensi.php?filter=mingguan&start=${start}&end=${end}`;
+                window.location.href = `api/user/download?filter=mingguan&start=${start}&end=${end}`;
             } else {
                 alert('Please select both start and end dates for weekly download');
             }
@@ -615,7 +615,7 @@ $token = $_SESSION['token'];
             const end = document.getElementById('endBulanan').value;
 
             if (start && end) {
-                window.location.href = `downloadAbsensi.php?filter=bulanan&start=${start}&end=${end}`;
+                window.location.href = `api/user/download?filter=bulanan&start=${start}&end=${end}`;
             } else {
                 alert('Please select both start and end dates for monthly download');
             }

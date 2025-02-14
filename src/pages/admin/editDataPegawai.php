@@ -30,6 +30,7 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
   <link href="/teknoid-absensi/css/output.css" rel="stylesheet">
   <link href="/teknoid-absensi/src/pages/css/font/poppins-font.css" rel="stylesheet">
   <link href="/teknoid-absensi/src/pages/css/responsive/resp.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -122,7 +123,7 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
           </div>
 
           <div class="flex justify-between mt-6">
-            <button class="bg-red-400 text-white px-6 py-2 rounded-lg hover:bg-red-500 transition duration-200">Hapus</button>
+            <button class="delete-button bg-red-400 text-white px-6 py-2 rounded-lg hover:bg-red-500 transition duration-200" data-id="<?php echo $id_pg; ?>">Hapus</button>
             <button class="bg-purpleNavbar text-white px-6 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200" onclick="saveData()">Simpan</button>
           </div>
 
@@ -200,6 +201,47 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
       }
     });
   }
+
+    // Delete button functionality
+    $(document).on('click', '.delete-button', function() {
+      const id_pg = $(this).data('id');
+      deletedata_pegawai(id_pg);
+    });
+
+    function deletedata_pegawai(id_pg) {
+      Swal.fire({
+        title: 'Konfirmasi',
+        text: "Apakah Anda yakin ingin menghapus data pegawai ini?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '../api/users/delete-user',
+            type: 'POST',
+            data: JSON.stringify({ id_pg: id_pg }),
+            dataType: 'json',
+            success: function(response) {
+              if (response.status === 'success') {
+                Swal.fire('Berhasil!', response.message, 'success').then(() => {
+                  window.location.href = '/teknoid-absensi/pegawai'; // di production /teknoid-absensi ganti url asli
+                });
+              } else {
+                Swal.fire('Gagal!', response.message, 'error');
+              }
+            },
+            error: function() {
+              Swal.fire('Error!', 'Terjadi kesalahan saat menghapus data pegawai', 'error');
+            }
+          });
+        }
+      });
+    }
+
 
   function fetchData() {
     const userId = <?php echo json_encode($id_pg); ?>;

@@ -198,6 +198,12 @@ $routes->add('api_get_details_by_late', new Route('/api/details/get-by-late', [
         return new Response(ob_get_clean());
     }
 ]));
+$routes->add('api_get_chart_admin', new Route('/api/details/get-chart-admin', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/getChartAdminDashboard.php';
+        return new Response(ob_get_clean());
+    }
+]));
 $routes->add('api_get_pegawai', new Route('/api/users/get-pegawai', [
     '_controller' => function () {
         include __DIR__ . '/src/db/routes/fetchDataPegawai.php';
@@ -333,6 +339,14 @@ $routes->add('api_forgot_password', new Route('api/auth/reset', [
         return new Response(ob_get_clean());
     }
 ]));
+//untuk download data
+$routes->add('api_download_data', new Route('api/user/download', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/downloadAbsensi.php';
+        return new Response(ob_get_clean());
+    }
+]));
+
 
 
 $request = Request::createFromGlobals();

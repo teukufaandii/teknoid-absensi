@@ -30,7 +30,8 @@ $years = date('Y');
     <link rel="stylesheet" href="src/pages/css/dashboard.css">
     <!-- Chart  -->
     <script src="node_modules/chart.js/dist/chart.umd.js"></script>
-    <script src="src/pages/js/chart.js"></script>
+    <script src="src/pages/js/chartUser.js"></script>
+    <script src="src/pages/js/chartAdmin.js"></script>
 
 <body>
     <div class="flex flex-col md:flex-row lg:flex-row h-screen">
@@ -45,6 +46,7 @@ $years = date('Y');
             <main class="flex-1 p-6 bg-mainBgColor mainContent">
                 <?php if ($role === 'admin'): ?>
                     <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Dashboard </h1>
+                    <?php echo '<h1 class="text-base sm:text-lg md:text-2xl mt-6 font-Poppins font-normal"> Data Bulan <strong> ' . $months . ' </strong> </h1>'; ?>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
                         <?php
                         $cards = [
@@ -53,7 +55,6 @@ $years = date('Y');
                             ['title' => 'Total Terlambat Hadir', 'id' => 'total-telat'],
                             ['title' => 'Total Karyawan', 'id' => 'total-karyawan'],
                         ];
-
                         foreach ($cards as $card) {
                             echo "
                             <div class='bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag'>
@@ -62,6 +63,9 @@ $years = date('Y');
                             </div>";
                         }
                         ?>
+                    </div>
+                    <div class="w-full flex justify-center p-8 bg-white rounded-lg">
+                        <canvas id="absenceChartAdmin" class="w-full h-96 mb-4 md:mb-0 md:mr-20"></canvas>
                     </div>
                 <?php elseif ($role === 'user'): ?>
                     <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Dashboard </h1>
@@ -85,14 +89,11 @@ $years = date('Y');
                                 <p id="totalCuti" class="text-white text-xs sm:text-sm">Loading...</p>
                             </div>
                         </div>
-
                         <div class="status-absen">
                             Status Absen Hari Ini:
                         </div>
-
-                        <div class="w-full md:w-3/5 flex flex-col md:flex-row items-center justify-between">
-                            <canvas id="absenceChart" class="w-full h-96 mb-4 md:mb-0 md:mr-20"></canvas>
-                            <h1 class="text-base sm:text-lg md:text-2xl font-Poppins font-normal ml-0 md:ml-4"> Diagram Batang Absensi Tahun <strong><?php echo $years; ?></strong> </h1>
+                        <div class="w-full flex justify-center p-8 bg-white rounded-lg">
+                            <canvas id="absenceChartUser" class="w-full h-96 mb-4 md:mb-0 md:mr-20"></canvas>
                         </div>
                     </div>
                 <?php endif; ?>

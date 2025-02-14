@@ -8,18 +8,18 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       const labels = [
-        "Januari",
-        "Februari",
-        "Maret",
-        "April",
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
         "Mei",
-        "Juni",
-        "Juli",
-        "Agustus",
-        "September",
-        "Oktober",
-        "November",
-        "Desember",
+        "Jun",
+        "Jul",
+        "Agu",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Des",
       ];
 
       const hadirData = labels.map(
@@ -28,9 +28,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const sakitData = labels.map(
         (_, i) => data.chart[i + 1]?.total_sakit || 0
       );
-      const izinData = labels.map((_, i) => data.chart[i + 1]?.total_izin || 0);
+      const izinData = labels.map(
+        (_, i) => data.chart[i + 1]?.total_izin || 0);
 
-      const ctx = document.getElementById("absenceChart").getContext("2d");
+      const ctx = document.getElementById("absenceChartUser").getContext("2d");
       new Chart(ctx, {
         type: "bar",
         data: {
@@ -61,12 +62,30 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         options: {
           responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: "Statistik Kehadiran Tahun Ini",
+              font: {
+                size: 18,
+                weight: "bold",
+              },
+            },
+          },
           scales: {
             y: {
               beginAtZero: true,
               max: 30,
               ticks: {
                 stepSize: 5,
+              },
+              title: {
+                display: true,
+                text: "Jumlah Kehadiran",
+                font: {
+                  size: 14,
+                  weight: "bold",
+                },
               },
             },
           },

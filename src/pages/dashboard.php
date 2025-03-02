@@ -12,7 +12,20 @@ $id = $_SESSION['user_id'];
 $token = $_SESSION['token'];
 
 date_default_timezone_set('Asia/Jakarta');
-$months = date('F');
+$months = [
+    1 => 'Januari',
+    2 => 'Februari',
+    3 => 'Maret',
+    4 => 'April',
+    5 => 'Mei',
+    6 => 'Juni',
+    7 => 'Juli',
+    8 => 'Agustus',
+    9 => 'September',
+    10 => 'Oktober',
+    11 => 'November',
+    12 => 'Desember'
+];
 $years = date('Y');
 ?>
 
@@ -46,7 +59,7 @@ $years = date('Y');
             <main class="flex-1 p-6 bg-mainBgColor mainContent">
                 <?php if ($role === 'admin'): ?>
                     <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Dashboard </h1>
-                    <?php echo '<h1 class="text-base sm:text-lg md:text-2xl mt-6 font-Poppins font-normal"> Data Bulan <strong> ' . $months . ' </strong> </h1>'; ?>
+                    <?php echo '<h1 class="text-base sm:text-lg md:text-2xl mt-6 font-Poppins font-normal"> Data Bulan <strong> ' . $months[date('n')] . ' </strong> </h1>'; ?>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
                         <?php
                         $cards = [
@@ -64,12 +77,12 @@ $years = date('Y');
                         }
                         ?>
                     </div>
-                    <div class="w-full flex justify-center p-8 bg-white rounded-lg">
+                    <div class="w-full flex justify-center p-8 bg-white rounded-lg mt-8">
                         <canvas id="absenceChartAdmin" class="w-full h-96 mb-4 md:mb-0 md:mr-20"></canvas>
                     </div>
                 <?php elseif ($role === 'user'): ?>
                     <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Dashboard </h1>
-                    <?php echo '<h1 class="text-base sm:text-lg md:text-2xl mt-6 font-Poppins font-normal"> Data Bulan <strong> ' . $months . ' </strong> </h1>'; ?>
+                    <?php echo '<h1 class="text-base sm:text-lg md:text-2xl mt-6 font-Poppins font-normal"> Data Bulan <strong> ' . $months[date('n')] . ' </strong> </h1>'; ?>
                     <div class="separator">
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
                             <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">

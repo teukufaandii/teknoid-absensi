@@ -29,13 +29,13 @@ $stmtCard->bind_param('s', $_SESSION['user_id']);
 $stmtCard->execute();
 $resultCard = $stmtCard->get_result()->fetch_assoc();
 
-// Query untuk Chart (Tahun Ini, 12 Bulan)
 $queryChart = "
     SELECT 
         MONTH(tanggal) AS bulan,
         COUNT(CASE WHEN keterangan = 'hadir' THEN 1 END) AS total_hadir,
         COUNT(CASE WHEN keterangan = 'sakit' THEN 1 END) AS total_sakit,
-        COUNT(CASE WHEN keterangan = 'izin' THEN 1 END) AS total_izin
+        COUNT(CASE WHEN keterangan = 'izin' THEN 1 END) AS total_izin,
+        COUNT(CASE WHEN keterangan = 'alpha' THEN 1 END) AS total_alpha
     FROM tb_detail
     WHERE id_pg = ? 
         AND YEAR(tanggal) = YEAR(CURDATE()) 
@@ -57,7 +57,8 @@ while ($row = $resultChart->fetch_assoc()) {
     $dataChart[$bulan] = [
         'total_hadir' => $row['total_hadir'],
         'total_sakit' => $row['total_sakit'],
-        'total_izin' => $row['total_izin']
+        'total_izin' => $row['total_izin'],
+        'total_alpha' => $row['total_alpha']
     ];
 }
 

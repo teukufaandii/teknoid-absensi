@@ -22,14 +22,13 @@ document.addEventListener("DOMContentLoaded", function () {
         "Des",
       ];
 
-      const hadirData = labels.map(
-        (_, i) => data.chart[i + 1]?.total_hadir || 0
-      );
-      const sakitData = labels.map(
-        (_, i) => data.chart[i + 1]?.total_sakit || 0
-      );
-      const izinData = labels.map(
-        (_, i) => data.chart[i + 1]?.total_izin || 0);
+      const getDataByKey = (key) =>
+        labels.map((_, i) => data.chart[i + 1]?.[key] || 0);
+
+      const hadirData = getDataByKey("total_hadir");
+      const sakitData = getDataByKey("total_sakit");
+      const izinData = getDataByKey("total_izin");
+      const alphaData = getDataByKey("total_alpha");
 
       const ctx = document.getElementById("absenceChartUser").getContext("2d");
       new Chart(ctx, {
@@ -55,6 +54,13 @@ document.addEventListener("DOMContentLoaded", function () {
               label: "Izin",
               data: izinData,
               backgroundColor: "rgba(75, 192, 192, 0.2)",
+              borderColor: "rgb(75, 192, 192)",
+              borderWidth: 1,
+            },
+            {
+              label: "Alpha",
+              data: alphaData,
+              backgroundColor: "rgba(54, 162, 235, 0.2)",
               borderColor: "rgb(75, 192, 192)",
               borderWidth: 1,
             },

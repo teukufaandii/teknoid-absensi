@@ -11,7 +11,8 @@ require_once __DIR__ . '/../db_connect.php';
 $query = "
     SELECT 
         MONTH(tanggal) AS bulan, 
-        COUNT(CASE WHEN keterangan = 'Alpha' THEN 1 END) AS total_alpha,
+        COUNT(CASE WHEN keterangan = 'alpha' THEN 1 END) AS total_alpha,
+        COUNT(CASE WHEN keterangan = 'sakit' THEN 1 END) AS total_sakit,
         COUNT(CASE WHEN keterangan = 'hadir' AND scan_masuk IS NOT NULL THEN 1 END) AS total_hadir,
         COUNT(CASE WHEN keterangan = 'hadir' AND scan_masuk >= '08:30:00' THEN 1 END) AS total_telat
     FROM tb_detail
@@ -33,6 +34,7 @@ $data = [];
 while ($row = $result->fetch_assoc()) {
     $data[(int)$row['bulan']] = [
         'alpha' => (int)$row['total_alpha'],
+        'sakit' => (int)$row['total_sakit'],
         'hadir' => (int)$row['total_hadir'],
         'telat' => (int)$row['total_telat']
     ];
@@ -41,7 +43,7 @@ while ($row = $result->fetch_assoc()) {
 // Buat array dengan semua bulan (jika ada bulan tanpa data, isi 0)
 $finalData = [];
 for ($i = 1; $i <= 12; $i++) {
-    $finalData[$i] = $data[$i] ?? ['alpha' => 0, 'hadir' => 0, 'telat' => 0];
+    $finalData[$i] = $data[$i] ?? ['alpha' => 0, 'sakit' => 0, 'hadir' => 0, 'telat' => 0];
 }
 
 echo json_encode(['chart' => $finalData]);

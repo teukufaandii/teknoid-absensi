@@ -17,6 +17,23 @@ $role = $_SESSION['role'];
 $id = $_SESSION['user_id'];
 $token = $_SESSION['token'];
 
+date_default_timezone_set('Asia/Jakarta');
+$months = [
+    1 => 'Januari',
+    2 => 'Februari',
+    3 => 'Maret',
+    4 => 'April',
+    5 => 'Mei',
+    6 => 'Juni',
+    7 => 'Juli',
+    8 => 'Agustus',
+    9 => 'September',
+    10 => 'Oktober',
+    11 => 'November',
+    12 => 'Desember'
+];
+$currentMonth = date('n');
+$years = date('Y');
 ?>
 
 <!DOCTYPE html>
@@ -32,6 +49,7 @@ $token = $_SESSION['token'];
     <link href="src/pages/css/global/generalStyling.css" rel="stylesheet">
     <link href="src/pages/css/global/tableFormat.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -78,78 +96,151 @@ $token = $_SESSION['token'];
 
             <!-- Main Content -->
             <main class="flex-1 p-6 bg-mainBgColor mainContent">
-                <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Absensi</h1>
 
+                <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Absensi <?php echo $months[$currentMonth]; ?> <?php echo $years; ?></h1>
                 <div class="flex justify-between items-center mt-5">
                     <div class="flex justify-start items-center space-x-4">
-                        <button id="downloadButton" class="bg-purpleNavbar text-white px-4 py-2  rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
-                            Download
+                        <!-- Print Button -->
+                        <button id="downloadButton" class="bg-purpleNavbar text-white px-4 py-2 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
+                            <i class='bx bx-printer'></i> Print
                         </button>
+                        <!-- Generate Detail Button -->
                         <button class="bg-purpleNavbar text-white px-4 py-2 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition" id="addButton">
                             Generate Detail Absen <i class="fa-solid fa-circle-plus"></i>
                         </button>
                     </div>
-
+                    <!-- Search Input -->
                     <div class="relative">
-                        <input
-                            type="text"
-                            id="searchInput"
-                            placeholder="Search here..."
-                            class="w-60 px-4 py-2 border rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-purpleNavbar text-sm" />
+                        <input type="text" id="searchInput" placeholder="Search here..." class="w-60 px-4 py-2 border rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-purpleNavbar text-sm" />
                         <i class="fa fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                     </div>
                 </div>
 
+                <!-- Loading Indicator -->
                 <div id="loading" class="hidden text-center mt-4">
                     <p>Loading...</p>
                     <div class="loader"></div>
                 </div>
 
+                <!-- Role Selection Popup -->
+                <div id="rolePopup" class="hidden fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50 z-[9999]">
+                    <div class="bg-white w-[450px] p-6 rounded-lg shadow-lg flex flex-col justify-between z-[10000]">
+                        <h2 class="text-xl font-semibold mb-4 text-center">Pilih Jabatan</h2>
+
+                        <!-- Dosen Tetap Button -->
+                        <button id="dosenTetapButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2 my-5">
+                            <i class="fa-solid fa-user-tie"></i>
+                            <span>Dosen Tetap FEB & FTD</span>
+                        </button>
+
+                        <!-- Karyawan Button -->
+                        <button id="karyawanButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2">
+                            <i class="fa-solid fa-users"></i>
+                            <span>Karyawan, Pimpinan, Dosen Struktural</span>
+                        </button>
+
+                        <!-- Close Button -->
+                        <button id="closeRolePopup" class="mt-6 bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition">Close</button>
+                    </div>
+                </div>
+
                 <!-- Popup Download -->
                 <div id="downloadPopup" class="hidden fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50 z-[9999]">
-                    <div class="bg-white w-[450px] p-6 rounded-lg shadow-lg flex flex-col justify-between z-[10000]">
-                        <h2 class="text-xl font-semibold mb-4 text-center">Filter Download</h2>
+                    <div class="bg-white w-[450px] p-6 rounded-lg shadow-lg flex flex-col justify-between z-[100]">
+                        <h2 class="text-xl font-semibold mb-4 text-center">Pilih Waktu</h2>
 
-                        <div class="space-y-4">
+                        <!-- Dosen Tetap Section -->
+                        <div id="dosenTetapSection" class="hidden">
                             <!-- Harian Button -->
-                            <button id="harianButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2" onclick="toggleHarian()">
+                            <button id="harianButtonDosenTetap" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2 my-5" onclick="toggleHarian('dosenTetap')">
                                 <i class="fa-solid fa-calendar-days"></i>
                                 <span>Harian</span>
                             </button>
+
                             <!-- Mingguan Button with Date Range -->
                             <div class="relative w-full">
-                                <button id="mingguanButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2" onclick="toggleMingguan()">
+                                <button id="mingguanButtonDosenTetap" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2 mb-5" onclick="toggleMingguan('dosenTetap')">
                                     <i class="fa-solid fa-calendar-week"></i>
                                     <span>Mingguan</span>
                                 </button>
 
-                                <div id="mingguanDates" class="hidden mt-2 p-3 bg-white text-black rounded-lg shadow-lg flex flex-col space-y-3">
-                                    <label for="startMingguan" class="text-sm">Start Date:</label>
-                                    <input type="date" id="startMingguan" class="p-2 rounded border focus:ring focus:ring-purple-300">
+                                <div id="mingguanDatesDosenTetap" class="hidden mt-2 p-3 bg-white text-black rounded-lg shadow-lg flex flex-col space-y-3">
+                                    <label for="startMingguanDosenTetap" class="text-sm">Start Date:</label>
+                                    <input type="date" id="startMingguanDosenTetap" class="p-2 rounded border focus:ring focus:ring-purple-300">
 
-                                    <label for="endMingguan" class="text-sm">End Date:</label>
-                                    <input type="date" id="endMingguan" class="p-2 rounded border focus:ring focus:ring-purple-300">
+                                    <label for="endMingguanDosenTetap" class="text-sm">End Date:</label>
+                                    <input type="date" id="endMingguanDosenTetap" class="p-2 rounded border focus:ring focus:ring-purple-300">
 
-                                    <button id="downloadMingguan" class="mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition" onclick="downloadMingguan()">
+                                    <button id="downloadMingguanDosenTetap" class="mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
                                         Download Mingguan
                                     </button>
                                 </div>
                             </div>
+
                             <!-- Bulanan Button with Date Range -->
                             <div class="relative w-full">
-                                <button id="bulananButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2" onclick="toggleBulanan()">
+                                <button id="bulananButtonDosenTetap" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2" onclick="toggleBulanan('dosenTetap')">
                                     <i class="fa-solid fa-calendar"></i>
                                     <span>Bulanan</span>
                                 </button>
 
-                                <div id="bulananDates" class="hidden mt-2 p-3 bg-white text-black rounded-lg shadow-lg flex flex-col space-y-3">
-                                    <label for="startBulanan" class="text-sm">Start Date:</label>
-                                    <input type="date" id="startBulanan" class="p-2 rounded border focus:ring focus:ring-purple-300">
+                                <div id="bulananDatesDosenTetap" class="hidden mt-2 p-3 bg-white text-black rounded-lg shadow-lg flex flex-col space-y-3">
+                                    <label for="startBulananDosenTetap" class="text-sm">Start Date:</label>
+                                    <input type="date" id="startBulananDosenTetap" class="p-2 rounded border focus:ring focus:ring-purple-300">
 
-                                    <label for="endBulanan" class="text-sm">End Date:</label>
-                                    <input type="date" id="endBulanan" class="p-2 rounded border focus:ring focus:ring-purple-300">
+                                    <label for="endBulananDosenTetap" class="text-sm">End Date:</label>
+                                    <input type="date" id="endBulananDosenTetap" class="p-2 rounded border focus:ring focus:ring-purple-300">
 
-                                    <button id="downloadBulanan" class="mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition" onclick="downloadBulanan()">
+                                    <button id="downloadBulananDosenTetap" class="mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
+                                        Download Bulanan
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Karyawan Section -->
+                        <div id="karyawanSection" class="hidden">
+                            <!-- Harian Button -->
+                            <button id="harianButtonKaryawan" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2 my-5" onclick="toggleHarian('Karyawan')">
+                                <i class="fa-solid fa-calendar-days"></i>
+                                <span>Harian</span>
+                            </button>
+
+                            <!-- Mingguan Button with Date Range -->
+                            <div class="relative w-full">
+                                <button id="mingguanButtonKaryawan" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2 mb-5" onclick="toggleMingguan('Karyawan')">
+                                    <i class="fa-solid fa-calendar-week"></i>
+                                    <span>Mingguan</span>
+                                </button>
+
+                                <div id="mingguanDatesKaryawan" class="hidden mt-2 p-3 bg-white text-black rounded-lg shadow-lg flex flex-col space-y-3">
+                                    <label for="startMingguanKaryawan" class="text-sm">Start Date:</label>
+                                    <input type="date" id="startMingguanKaryawan" class="p-2 rounded border focus:ring focus:ring-purple-300">
+
+                                    <label for="endMingguanKaryawan" class="text-sm">End Date:</label>
+                                    <input type="date" id="endMingguanKaryawan" class="p-2 rounded border focus:ring focus:ring-purple-300">
+
+                                    <button id="downloadMingguanKaryawan" class="mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
+                                        Download Mingguan
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Bulanan Button with Date Range -->
+                            <div class="relative w-full">
+                                <button id="bulananButtonKaryawan" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2" onclick="toggleBulanan('Karyawan')">
+                                    <i class="fa-solid fa-calendar"></i>
+                                    <span>Bulanan</span>
+                                </button>
+
+                                <div id="bulananDatesKaryawan" class="hidden mt-2 p-3 bg-white text-black rounded-lg shadow-lg flex flex-col space-y-3">
+                                    <label for="startBulananKaryawan" class="text-sm">Start Date:</label>
+                                    <input type="date" id="startBulananKaryawan" class="p-2 rounded border focus:ring focus:ring-purple-300">
+
+                                    <label for="endBulananKaryawan" class="text-sm">End Date:</label>
+                                    <input type="date" id="endBulananKaryawan" class="p-2 rounded border focus:ring focus:ring-purple-300">
+
+                                    <button id="downloadBulananKaryawan" class="mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
                                         Download Bulanan
                                     </button>
                                 </div>
@@ -157,11 +248,10 @@ $token = $_SESSION['token'];
                         </div>
 
                         <!-- Close Button -->
-                        <button id="closePopup" class="mt-6 bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition">
-                            Close
-                        </button>
+                        <button id="closePopup" class="mt-6 bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition">Close</button>
                     </div>
                 </div>
+
 
                 <div class="tableOverflow mt-6 shadow-customTable rounded-lg">
                     <table class="bg-white border">
@@ -173,6 +263,7 @@ $token = $_SESSION['token'];
                                 <th class="px-6 py-4 font-medium uppercase tracking-wider">Jabatan</th>
                                 <th class="px-6 py-4 font-medium uppercase tracking-wider">Sakit</th>
                                 <th class="px-6 py-4 font-medium uppercase tracking-wider">Izin</th>
+                                <th class="px-6 py-4 font-medium uppercase tracking-wider">Alpha</th>
                                 <th class="px-6 py-4 font-medium uppercase tracking-wider">Cuti</th>
                                 <th class="px-6 py-4 font-medium uppercase tracking-wider rounded-tr-lg">Aksi</th>
                             </tr>
@@ -224,6 +315,12 @@ $token = $_SESSION['token'];
                         <p id="error-message" class="text-sm font-medium"></p>
                     </div>
                 </div>
+            </div>
+
+            <div id="popup" class="fixed top-5 right-5 bg-gradient-to-r from-purple-500 to-purple-700 text-white px-6 py-4 rounded-lg shadow-lg 
+                transition-all duration-500 transform translate-x-[120%] opacity-0 z-[9999]">
+                <span id="popup-message" class="font-semibold"></span>
+                <button onclick="closeNotificationPopup()" class="ml-4 text-white font-bold">&times;</button>
             </div>
         </div>
     </div>
@@ -388,16 +485,17 @@ $token = $_SESSION['token'];
                     <td class="px-6 py-2 text-center">${data_absensi.noinduk}</td>
                     <td class="px-6 py-2 text-center">${data_absensi.nama}</td>
                     <td class="px-6 py-2 text-center">${data_absensi.jabatan}</td>
-                    <td class="px-6 py-2 text-center">${data_absensi.xx}</td>
-                    <td class="px-6 py-2 text-center">${data_absensi.xx}</td>
-                    <td class="px-6 py-2 text-center">${data_absensi.xx}</td>
+                    <td class="px-6 py-2 text-center">${data_absensi.sakit}</td>
+                    <td class="px-6 py-2 text-center">${data_absensi.izin}</td>
+                    <td class="px-6 py-2 text-center">${data_absensi.alpha}</td>
+                    <td class="px-6 py-2 text-center">${data_absensi.cuti}</td>
                     <td class="px-6 py-2 text-center">
                         <a href="absensi/edit?id_pg=${data_absensi.id_pg}">
                         <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                         </a>
-                     </td>
+                    </td>
                 </tr>
             `);
                 });
@@ -508,118 +606,253 @@ $token = $_SESSION['token'];
     </script>
 
     <script>
-        // Variables for popup and buttons
+        // Variabel untuk popup dan tombol
         const downloadButton = document.getElementById('downloadButton');
         const downloadPopup = document.getElementById('downloadPopup');
         const closePopup = document.getElementById('closePopup');
-        const harianButton = document.getElementById('harianButton');
-        const mingguanButton = document.getElementById('mingguanButton');
-        const bulananButton = document.getElementById('bulananButton');
-        const mingguanDates = document.getElementById('mingguanDates');
-        const bulananDates = document.getElementById('bulananDates');
-        const downloadMingguan = document.getElementById('downloadMingguan');
-        const downloadBulanan = document.getElementById('downloadBulanan');
+        const rolePopup = document.getElementById('rolePopup');
+        const dosenTetapButton = document.getElementById('dosenTetapButton');
+        const karyawanButton = document.getElementById('karyawanButton');
+        const closeRolePopup = document.getElementById('closeRolePopup');
 
-        // Show the download popup
+        // Dosen Tetap Sections
+        const dosenTetapSection = document.getElementById('dosenTetapSection');
+        const harianButtonDosenTetap = document.getElementById('harianButtonDosenTetap');
+        const mingguanButtonDosenTetap = document.getElementById('mingguanButtonDosenTetap');
+        const bulananButtonDosenTetap = document.getElementById('bulananButtonDosenTetap');
+        const mingguanDatesDosenTetap = document.getElementById('mingguanDatesDosenTetap');
+        const bulananDatesDosenTetap = document.getElementById('bulananDatesDosenTetap');
+        const downloadMingguanDosenTetap = document.getElementById('downloadMingguanDosenTetap');
+        const downloadBulananDosenTetap = document.getElementById('downloadBulananDosenTetap');
+
+        // Karyawan Sections
+        const karyawanSection = document.getElementById('karyawanSection');
+        const harianButtonKaryawan = document.getElementById('harianButtonKaryawan');
+        const mingguanButtonKaryawan = document.getElementById('mingguanButtonKaryawan');
+        const bulananButtonKaryawan = document.getElementById('bulananButtonKaryawan');
+        const mingguanDatesKaryawan = document.getElementById('mingguanDatesKaryawan');
+        const bulananDatesKaryawan = document.getElementById('bulananDatesKaryawan');
+        const downloadMingguanKaryawan = document.getElementById('downloadMingguanKaryawan');
+        const downloadBulananKaryawan = document.getElementById('downloadBulananKaryawan');
+
+        // Menyembunyikan popups saat halaman pertama kali dimuat
+        downloadPopup.classList.add('hidden');
+        rolePopup.classList.add('hidden');
+        dosenTetapSection.classList.add('hidden');
+        karyawanSection.classList.add('hidden');
+
+        // Menampilkan Role Popup ketika tombol Download di-klik
         downloadButton.addEventListener('click', () => {
-            downloadPopup.classList.remove('hidden');
+            rolePopup.classList.remove('hidden'); // Tampilkan role selection popup
         });
 
-        // Close the download popup
+        // Menutup Role Popup ketika tombol Close di-klik
+        closeRolePopup.addEventListener('click', () => {
+            rolePopup.classList.add('hidden'); // Sembunyikan role selection popup
+        });
+
+        // Ketika "Dosen Tetap" dipilih
+        dosenTetapButton.addEventListener('click', () => {
+            rolePopup.classList.add('hidden'); // Menyembunyikan role popup
+            dosenTetapSection.classList.remove('hidden'); // Menampilkan dosen tetap section
+            karyawanSection.classList.add('hidden'); // Menyembunyikan karyawan section
+            downloadPopup.classList.remove('hidden'); // Menampilkan download popup
+
+            // Menampilkan pilihan Harian, Mingguan, dan Bulanan untuk Dosen Tetap
+            harianButtonDosenTetap.classList.remove('hidden');
+            mingguanButtonDosenTetap.classList.remove('hidden');
+            bulananButtonDosenTetap.classList.remove('hidden');
+        });
+
+        // Ketika "Karyawan" dipilih
+        karyawanButton.addEventListener('click', () => {
+            rolePopup.classList.add('hidden'); // Menyembunyikan role popup
+            karyawanSection.classList.remove('hidden'); // Menampilkan karyawan section
+            dosenTetapSection.classList.add('hidden'); // Menyembunyikan dosen tetap section
+            downloadPopup.classList.remove('hidden'); // Menampilkan download popup
+
+            // Menampilkan pilihan Harian, Mingguan, dan Bulanan untuk Karyawan
+            harianButtonKaryawan.classList.remove('hidden');
+            mingguanButtonKaryawan.classList.remove('hidden');
+            bulananButtonKaryawan.classList.remove('hidden');
+        });
+
+        // Menutup download popup
         closePopup.addEventListener('click', () => {
-            downloadPopup.classList.add('hidden');
-            mingguanDates.classList.add('hidden');
-            bulananDates.classList.add('hidden');
-            downloadMingguan.classList.add('hidden');
-            downloadBulanan.classList.add('hidden');
+            downloadPopup.classList.add('hidden'); // Menyembunyikan download popup
         });
 
-        function toggleHarian() {
-            window.location.href = 'api/user/download?filter=harian';
+        function showPopup(message) {
+            const popup = document.getElementById("popup");
+            const popupMessage = document.getElementById("popup-message");
+
+            if (popup && popupMessage) {
+                popupMessage.textContent = message;
+
+                popup.classList.remove("translate-x-[120%]", "opacity-0");
+                popup.classList.add("translate-x-0", "opacity-100");
+
+                setTimeout(() => closeNotificationPopup(), 3000);
+            }
         }
 
+        function closeNotificationPopup() {
+            const popup = document.getElementById("popup");
+
+            popup.classList.remove("translate-x-0", "opacity-100");
+            popup.classList.add("translate-x-[120%]", "opacity-0");
+        }
+
+        // Handle Harian filter for Dosen Tetap (Dummy API)
+        function toggleHarian(jabatan) {
+            if (jabatan === 'dosenTetap') {
+                window.location.href = 'api/user/download-dosen?filter=harian&jabatan=dosenTetap';
+            } else if (jabatan === 'Karyawan') {
+                window.location.href = 'api/user/download-karyawan?filter=harian&jabatan=Karyawan';
+            }
+        }
+
+        // Fungsi untuk menghitung selisih tanggal
         function getDateDifference(start, end) {
             const startDate = new Date(start);
             const endDate = new Date(end);
             const diffTime = Math.abs(endDate - startDate);
-            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Menghitung perbedaan dalam hari
         }
 
-        function toggleMingguan() {
-            const mingguanDates = document.getElementById('mingguanDates');
-            const startMingguan = document.getElementById('startMingguan');
-            const endMingguan = document.getElementById('endMingguan');
-            const downloadMingguan = document.getElementById('downloadMingguan');
 
-            mingguanDates.classList.toggle('hidden');
+        function toggleMingguan(jabatan) {
+            const jabatanPrefix = jabatan === 'dosenTetap' ? 'DosenTetap' : 'Karyawan';
+            const mingguanDatesElement = jabatan === 'dosenTetap' ? mingguanDatesDosenTetap : mingguanDatesKaryawan;
 
-            downloadMingguan.onclick = function() {
-                const start = startMingguan.value;
-                const end = endMingguan.value;
+            mingguanDatesElement.classList.remove('hidden'); // Tampilkan form tanggal mingguan
 
-                if (start && end) {
-                    const diffDays = getDateDifference(start, end);
+            if (jabatan === 'dosenTetap') {
+                downloadMingguanDosenTetap.onclick = function() {
+                    const start = document.getElementById(`startMingguan${jabatanPrefix}`);
+                    const end = document.getElementById(`endMingguan${jabatanPrefix}`);
 
-                    if (diffDays > 7) {
-                        alert("Rentang tanggal untuk mingguan tidak boleh lebih dari 7 hari.");
-                        return;
+                    if (start && end) {
+                        const startValue = start.value;
+                        const endValue = end.value;
+
+                        if (startValue && endValue) {
+                            const diffDays = getDateDifference(startValue, endValue);
+
+                            if (diffDays > 7) {
+                                alert("Rentang tanggal untuk mingguan tidak boleh lebih dari 7 hari.");
+                                return;
+                            }
+
+                            // Dummy API for Dosen Tetap (Redirecting to a dummy URL)
+                            window.location.href = `api/user/download-dosen?filter=mingguan&start=${startValue}&end=${endValue}&jabatan=${jabatanPrefix}`;
+                        } else {
+                            alert("Harap isi kedua tanggal untuk filter mingguan.");
+                        }
+                    } else {
+                        alert("Elemen input tanggal tidak ditemukan.");
                     }
+                };
+            } else {
+                downloadMingguanKaryawan.onclick = function() {
+                    const start = document.getElementById(`startMingguan${jabatanPrefix}`);
+                    const end = document.getElementById(`endMingguan${jabatanPrefix}`);
 
-                    window.location.href = `api/user/download?filter=mingguan&start=${start}&end=${end}`;
-                } else {
-                    alert("Harap isi kedua tanggal untuk filter mingguan.");
-                }
-            };
-        }
+                    if (start && end) {
+                        const startValue = start.value;
+                        const endValue = end.value;
 
-        function toggleBulanan() {
-            const bulananDates = document.getElementById('bulananDates');
-            const startBulanan = document.getElementById('startBulanan');
-            const endBulanan = document.getElementById('endBulanan');
-            const downloadBulanan = document.getElementById('downloadBulanan');
+                        if (startValue && endValue) {
+                            const diffDays = getDateDifference(startValue, endValue);
 
-            bulananDates.classList.toggle('hidden');
+                            if (diffDays > 7) {
+                                showPopup("Rentang tanggal untuk mingguan tidak boleh lebih dari 7 hari.");
+                                return;
+                            }
 
-            downloadBulanan.onclick = function() {
-                const start = startBulanan.value;
-                const end = endBulanan.value;
-
-                if (start && end) {
-                    const diffDays = getDateDifference(start, end);
-
-                    if (diffDays > 30) {
-                        alert("Rentang tanggal untuk bulanan tidak boleh lebih dari 30 hari.");
-                        return;
+                            // Actual API for Karyawan
+                            window.location.href = `api/user/download-karyawan?filter=mingguan&start=${startValue}&end=${endValue}&jabatan=${jabatanPrefix}`;
+                        } else {
+                            showPopup("Harap isi kedua tanggal untuk filter mingguan.");
+                        }
+                    } else {
+                        showPopup("Elemen input tanggal tidak ditemukan.");
                     }
+                };
+            }
+        }
+        // Handle Bulanan filter for Dosen Tetap (Dummy API)
+        function toggleBulanan(jabatan) {
+            const jabatanPrefix = jabatan === 'dosenTetap' ? 'DosenTetap' : 'Karyawan';
+            const bulananDatesElement = jabatan === 'dosenTetap' ? bulananDatesDosenTetap : bulananDatesKaryawan;
 
-                    window.location.href = `api/user/download?filter=bulanan&start=${start}&end=${end}`;
-                } else {
-                    alert("Harap isi kedua tanggal untuk filter bulanan.");
-                }
-            };
+            console.log(jabatanPrefix);
+
+            // Menampilkan form tanggal bulanan
+            bulananDatesElement.classList.remove('hidden');
+
+            if (jabatan === 'dosenTetap') {
+                downloadBulananDosenTetap.onclick = function() {
+                    const startElement = document.getElementById(`startBulanan${jabatanPrefix}`);
+                    const endElement = document.getElementById(`endBulanan${jabatanPrefix}`);
+
+                    if (startElement && endElement) {
+                        const start = startElement.value;
+                        const end = endElement.value;
+
+                        if (start && end) {
+                            const diffDays = getDateDifference(start, end);
+
+                            if (diffDays > 30) {
+                                showPopup("Rentang tanggal untuk bulanan tidak boleh lebih dari 30 hari.");
+                                return;
+                            }
+
+                            // Redirect ke Dummy API untuk Dosen Tetap
+                            window.location.href = `api/user/download-dosen?filter=bulanan&start=${start}&end=${end}&jabatan=${jabatanPrefix}`;
+                        } else {
+                            showPopup("Harap isi kedua tanggal untuk filter bulanan.");
+                        }
+                    } else {
+                        showPopup("Elemen tanggal tidak ditemukan.");
+                    }
+                };
+            } else {
+                downloadBulananKaryawan.onclick = function() {
+                    console.log("Download Button Karyawan diklik");
+                    const startElement = document.getElementById(`startBulanan${jabatanPrefix}`);
+                    const endElement = document.getElementById(`endBulanan${jabatanPrefix}`);
+
+                    if (startElement && endElement) {
+                        const start = startElement.value;
+                        const end = endElement.value;
+
+                        if (start && end) {
+                            const diffDays = getDateDifference(start, end);
+
+                            if (diffDays > 30) {
+                                showPopup("Rentang tanggal untuk bulanan tidak boleh lebih dari 30 hari.");
+                                return;
+                            }
+
+                            // Redirect ke API yang sesuai untuk Karyawan
+                            window.location.href = `api/user/download-karyawan?filter=bulanan&start=${start}&end=${end}&jabatan=${jabatanPrefix}`;
+                        } else {
+                            showPopup("Harap isi kedua tanggal untuk filter bulanan.");
+                        }
+                    } else {
+                        showPopup("Elemen tanggal tidak ditemukan.");
+                    }
+                };
+            }
         }
 
-        downloadMingguan.addEventListener('click', () => {
-            const start = document.getElementById('startMingguan').value;
-            const end = document.getElementById('endMingguan').value;
+        // Event Listeners for Mingguan and Bulanan buttons
+        mingguanButtonDosenTetap.addEventListener('click', () => toggleMingguan('dosenTetap'));
+        bulananButtonDosenTetap.addEventListener('click', () => toggleBulanan('dosenTetap'));
 
-            if (start && end) {
-                window.location.href = `api/user/download?filter=mingguan&start=${start}&end=${end}`;
-            } else {
-                alert('Please select both start and end dates for weekly download');
-            }
-        });
-
-        downloadBulanan.addEventListener('click', () => {
-            const start = document.getElementById('startBulanan').value;
-            const end = document.getElementById('endBulanan').value;
-
-            if (start && end) {
-                window.location.href = `api/user/download?filter=bulanan&start=${start}&end=${end}`;
-            } else {
-                alert('Please select both start and end dates for monthly download');
-            }
-        });
+        mingguanButtonKaryawan.addEventListener('click', () => toggleMingguan('karyawan'));
+        bulananButtonKaryawan.addEventListener('click', () => toggleBulanan('karyawan'));
     </script>
 
     <?php include('src/pages/navbar/profileInfo.php') ?>

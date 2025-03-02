@@ -149,8 +149,12 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
             <div class="relative w-full">
               <select name="jabatan" class="appearance-none w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar">
                 <option hidden>Pilih Jabatan</option>
-                <option value="Dosen Tetap">Dosen Tetap</option>
-                <option value="Dosen Tidak Tetap">Dosen Tidak Tetap</option>
+                <option value="Pimpinan">Pimpinan</option>
+                <option value="Dosen Struktural">Dosen Struktural</option>
+                <option value="Dosen Tetap FEB">Dosen Tetap FEB</option>
+                <option value="Dosen Tetap FTD">Dosen Tetap FTD</option>
+                <option value="Dosen Struktural">Karyawan</option>
+                <option value="Customer Service">Customer Service</option>
               </select>
 
               <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">

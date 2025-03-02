@@ -181,7 +181,7 @@ $current_page = $_SERVER['REQUEST_URI'];
 
 <body>
     <?php if ($_SESSION['role'] == 'admin') { ?>
-        <div id="sideNav" class="bg-white w-56 h-screen pt-3 transition duration-500 ease-linear <?php echo $sidebarClass; ?>" style="position: fixed;">
+        <div id="sideNav" class="bg-white w-56 h-screen pt-3 transition duration-500 ease-linear" style="position: fixed;">
             <div class="flex flex-col items-center p-3">
                 <div class="userIcon flex bg-gray-400 rounded-full h-24 w-24 mb-4 text-6xl text-white items-center justify-center">
                     <img src="/teknoid-absensi/public/logo.png" class="align-middle fa-solid fa-user text-center" />
@@ -239,7 +239,7 @@ $current_page = $_SERVER['REQUEST_URI'];
             </div>
         </div>
     <?php } elseif ($_SESSION['role'] == 'user') { ?>
-        <div id="sideNav" class="bg-white w-56 h-screen pt-3 transition duration-500 ease-linear <?php echo $sidebarClass; ?>" style="position: fixed;">
+        <div id="sideNav" class="bg-white w-56 h-screen pt-3 transition duration-500 ease-linear" style="position: fixed;">
             <div class="flex flex-col items-center p-3">
                 <div class="userIcon flex bg-gray-400 rounded-full h-24 w-24 mb-4 text-6xl text-white items-center justify-center">
                     <img src="/teknoid-absensi/public/logo.png" class="align-middle fa-solid fa-user text-center" />

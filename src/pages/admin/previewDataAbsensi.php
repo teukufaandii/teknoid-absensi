@@ -7,8 +7,8 @@ if (!isset($_SESSION['token'])) {
 }
 
 // Cek session akses admin
-if ($_SESSION['role'] !== 'admin') {
-    header('Location: ../unauthorized'); // Ganti dengan halaman yang sesuai
+if ($_SESSION['role'] !== 'admin' && $_SESSION['role'] !== 'user') {
+    header('Location: ../unauthorized');
     exit();
 }
 
@@ -16,6 +16,7 @@ $username = htmlspecialchars($_SESSION['name']);
 $role = $_SESSION['role'];
 $id = $_SESSION['user_id'];
 $token = $_SESSION['token'];
+
 
 if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
     $id_pg = $_GET['id_pg'];
@@ -35,6 +36,7 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
     $id_pg = null;
     $nama_pg = 'ID Pengguna tidak valid';
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -98,9 +100,72 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
                     </a>
                 </div>
 
+                <div class="flex justify-start mt-5">
+                    <button id="downloadButton" class="bg-purpleNavbar text-white px-4 py-2  rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
+                        Download
+                    </button>
+                </div>
+
                 <div id="loading" class="hidden text-center mt-4">
                     <p>Loading...</p>
                     <div class="loader"></div>
+                </div>
+
+                <!-- Popup Download -->
+                <div id="downloadPopup" class="hidden fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50 z-[9999]">
+                    <div class="bg-white w-[450px] p-6 rounded-lg shadow-lg flex flex-col justify-between z-[10000]">
+                        <h2 class="text-xl font-semibold mb-4 text-center">Filter Download Data <?php echo $nama_pg ?> </h2>
+                        <div class="space-y-4">
+                            <!-- Harian Button -->
+                            <button id="harianButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2" onclick="toggleHarian()">
+                                <i class="fa-solid fa-calendar-days"></i>
+                                <span>Harian</span>
+                            </button>
+                            <!-- Mingguan Button with Date Range -->
+                            <div class="relative w-full">
+                                <button id="mingguanButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2" onclick="toggleMingguan()">
+                                    <i class="fa-solid fa-calendar-week"></i>
+                                    <span>Mingguan</span>
+                                </button>
+
+                                <div id="mingguanDates" class="hidden mt-2 p-3 bg-white text-black rounded-lg shadow-lg flex flex-col space-y-3">
+                                    <label for="startMingguan" class="text-sm">Start Date:</label>
+                                    <input type="date" id="startMingguan" class="p-2 rounded border focus:ring focus:ring-purple-300">
+
+                                    <label for="endMingguan" class="text-sm">End Date:</label>
+                                    <input type="date" id="endMingguan" class="p-2 rounded border focus:ring focus:ring-purple-300">
+
+                                    <button id="downloadMingguan" class="mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition" onclick="downloadMingguan()">
+                                        Download Mingguan
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Bulanan Button with Date Range -->
+                            <div class="relative w-full">
+                                <button id="bulananButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2" onclick="toggleBulanan()">
+                                    <i class="fa-solid fa-calendar"></i>
+                                    <span>Bulanan</span>
+                                </button>
+
+                                <div id="bulananDates" class="hidden mt-2 p-3 bg-white text-black rounded-lg shadow-lg flex flex-col space-y-3">
+                                    <label for="startBulanan" class="text-sm">Start Date:</label>
+                                    <input type="date" id="startBulanan" class="p-2 rounded border focus:ring focus:ring-purple-300">
+
+                                    <label for="endBulanan" class="text-sm">End Date:</label>
+                                    <input type="date" id="endBulanan" class="p-2 rounded border focus:ring focus:ring-purple-300">
+
+                                    <button id="downloadBulanan" class="mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition" onclick="downloadBulanan()">
+                                        Download Bulanan
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Close Button -->
+                        <button id="closePopup" class="mt-6 bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition">
+                            Close
+                        </button>
+                    </div>
                 </div>
 
                 <div class="tableOverflow mt-6 shadow-customTable rounded-lg">
@@ -150,7 +215,7 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
             function loadDataAbsensi(page, search = '') {
                 $('#loading').removeClass('hidden');
                 $.ajax({
-                    url: '/teknoid-absensi/api/users/fetch-preview-detail',
+                    url: '../api/users/fetch-preview-detail',
                     type: 'GET',
                     data: {
                         id_pg: id_pg,
@@ -284,6 +349,122 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
 
             // Initial data load
             loadDataAbsensi(currentPage);
+        });
+    </script>
+
+    <script>
+        // Variables for popup and buttons
+        const id_pg = "<?= isset($_GET['id_pg']) ? $_GET['id_pg'] : '' ?>";
+        const downloadButton = document.getElementById('downloadButton');
+        const downloadPopup = document.getElementById('downloadPopup');
+        const closePopup = document.getElementById('closePopup');
+        const harianButton = document.getElementById('harianButton');
+        const mingguanButton = document.getElementById('mingguanButton');
+        const bulananButton = document.getElementById('bulananButton');
+        const mingguanDates = document.getElementById('mingguanDates');
+        const bulananDates = document.getElementById('bulananDates');
+        const downloadMingguan = document.getElementById('downloadMingguan');
+        const downloadBulanan = document.getElementById('downloadBulanan');
+
+        // Show the download popup
+        downloadButton.addEventListener('click', () => {
+            downloadPopup.classList.remove('hidden');
+        });
+
+        // Close the download popup
+        closePopup.addEventListener('click', () => {
+            downloadPopup.classList.add('hidden');
+            mingguanDates.classList.add('hidden');
+            bulananDates.classList.add('hidden');
+            downloadMingguan.classList.add('hidden');
+            downloadBulanan.classList.add('hidden');
+        });
+
+        function toggleHarian() {
+            window.location.href = `../api/user/download-data-user?filter=harian&id_pg=${id_pg}`;
+        }
+
+        function getDateDifference(start, end) {
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+            const diffTime = Math.abs(endDate - startDate);
+            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        }
+
+        function toggleMingguan() {
+            const mingguanDates = document.getElementById('mingguanDates');
+            const startMingguan = document.getElementById('startMingguan');
+            const endMingguan = document.getElementById('endMingguan');
+            const downloadMingguan = document.getElementById('downloadMingguan');
+
+            mingguanDates.classList.toggle('hidden');
+
+            downloadMingguan.onclick = function() {
+                const start = startMingguan.value;
+                const end = endMingguan.value;
+
+                if (start && end) {
+                    const diffDays = getDateDifference(start, end);
+
+                    if (diffDays > 7) {
+                        alert("Rentang tanggal untuk mingguan tidak boleh lebih dari 7 hari.");
+                        return;
+                    }
+
+                    window.location.href = `../api/user/download-data-user?filter=mingguan&start=${start}&end=${end}&id_pg=${id_pg}`;
+                } else {
+                    alert("Harap isi kedua tanggal untuk filter mingguan.");
+                }
+            };
+        }
+
+        function toggleBulanan() {
+            const bulananDates = document.getElementById('bulananDates');
+            const startBulanan = document.getElementById('startBulanan');
+            const endBulanan = document.getElementById('endBulanan');
+            const downloadBulanan = document.getElementById('downloadBulanan');
+
+            bulananDates.classList.toggle('hidden');
+
+            downloadBulanan.onclick = function() {
+                const start = startBulanan.value;
+                const end = endBulanan.value;
+
+                if (start && end) {
+                    const diffDays = getDateDifference(start, end);
+
+                    if (diffDays > 30) {
+                        alert("Rentang tanggal untuk bulanan tidak boleh lebih dari 30 hari.");
+                        return;
+                    }
+
+                    window.location.href = `../api/user/download-data-user?filter=bulanan&start=${start}&end=${end}&id_pg=${id_pg}`;
+                } else {
+                    alert("Harap isi kedua tanggal untuk filter bulanan.");
+                }
+            };
+        }
+
+        downloadMingguan.addEventListener('click', () => {
+            const start = document.getElementById('startMingguan').value;
+            const end = document.getElementById('endMingguan').value;
+
+            if (start && end) {
+                window.location.href = `../api/user/download-data-user?filter=mingguan&start=${start}&end=${end}&id_pg=${id_pg}`;
+            } else {
+                alert('Please select both start and end dates for weekly download');
+            }
+        });
+
+        downloadBulanan.addEventListener('click', () => {
+            const start = document.getElementById('startBulanan').value;
+            const end = document.getElementById('endBulanan').value;
+
+            if (start && end) {
+                window.location.href = `../api/user/download-data-user?filter=bulanan&start=${start}&end=${end}&id_pg=${id_pg}`;
+            } else {
+                alert('Please select both start and end dates for monthly download');
+            }
         });
     </script>
 

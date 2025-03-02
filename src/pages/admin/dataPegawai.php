@@ -77,7 +77,6 @@ $token = $_SESSION['token'];
       <!-- Main Content -->
       <main class="flex-1 p-6 bg-mainBgColor mainContent">
         <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Pegawai</h1>
-
         <!-- Search Bar & Button Tambah -->
         <div class="flex justify-between items-center mt-5">
           <a href="pegawai/add">
@@ -85,7 +84,6 @@ $token = $_SESSION['token'];
               Tambah <i class="fa-solid fa-circle-plus"></i>
             </button>
           </a>
-
           <div class="relative">
             <form method="GET">
               <input

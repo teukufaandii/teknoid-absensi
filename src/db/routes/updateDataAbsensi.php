@@ -23,12 +23,7 @@ if (empty($detailId) || empty($userId) || empty($absensiData)) {
 }
 
 try {
-    $stmt = $conn->prepare("
-    UPDATE tb_detail 
-    SET 
-        keterangan = ? 
-    WHERE id = ? AND id_pg = ?
-    ");
+    $stmt = $conn->prepare("UPDATE tb_detail SET keterangan = ? WHERE id = ? AND id_pg = ?");
 
     $stmt->bind_param(
         'sss',

@@ -149,7 +149,7 @@ $routes->add('not_found', new Route('/404', [
 ]));
 
 
-// Rute API
+// Routes API
 $routes->add('api_auth_login', new Route('/api/auth/login', [
     '_controller' => function () {
         include __DIR__ . '/src/db/routes/userLogin.php';
@@ -339,10 +339,24 @@ $routes->add('api_forgot_password', new Route('api/auth/reset', [
         return new Response(ob_get_clean());
     }
 ]));
-//untuk download data
-$routes->add('api_download_data', new Route('api/user/download', [
+//untuk download data keseluruhan
+$routes->add('api_download_data_karyawan', new Route('api/user/download-karyawan', [
     '_controller' => function () {
         include __DIR__ . '/src/db/routes/downloadAbsensi.php';
+        return new Response(ob_get_clean());
+    }
+]));
+//untuk download data dosen tetap feb ftd
+$routes->add('api_download_data_dosen', new Route('api/user/download-dosen', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/downloadDataDosen.php';
+        return new Response(ob_get_clean());
+    }
+]));
+//untuk download data per user
+$routes->add('api_download_data_user', new Route('api/user/download-data-user', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/downloadDataUser.php';
         return new Response(ob_get_clean());
     }
 ]));

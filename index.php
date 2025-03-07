@@ -260,12 +260,6 @@ $routes->add('api_hapus_pengguna', new Route('/api/users/delete-user', [
         return new Response(ob_get_clean());
     }
 ]));
-$routes->add('api_search_pengguna', new Route('/api/users/search-user', [
-    '_controller' => function () {
-        include __DIR__ . '/src/db/routes/searchPegawai.php';
-        return new Response(ob_get_clean());
-    }
-]));
 $routes->add('api_add_pengguna', new Route('api/users/add-user', [
     '_controller' => function () {
         include __DIR__ . '/src/db/routes/addDataPegawai.php';

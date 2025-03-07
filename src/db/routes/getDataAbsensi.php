@@ -17,7 +17,7 @@ $query = "
     LEFT JOIN tb_detail d ON p.id_pg = d.id_pg 
         AND MONTH(d.tanggal) = MONTH(CURRENT_DATE()) 
         AND YEAR(d.tanggal) = YEAR(CURRENT_DATE())
-    WHERE (p.nama LIKE ? OR p.noinduk LIKE ?)
+    WHERE (p.nama LIKE ? OR p.noinduk LIKE ? OR p.jabatan LIKE ?)
         AND p.role = ?
     GROUP BY p.id_pg
     LIMIT ?, ?
@@ -26,7 +26,7 @@ $query = "
 $stmt = $conn->prepare($query);
 $searchPattern = '%' . $search . '%';
 $role = 'user';
-$stmt->bind_param('sssii', $searchPattern, $searchPattern, $role, $start, $limit);
+$stmt->bind_param('ssssii', $searchPattern, $searchPattern, $searchPattern, $role, $start, $limit);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -35,9 +35,9 @@ while ($row = $result->fetch_assoc()) {
     $data_absensi[] = $row;
 }
 
-$totalQuery = "SELECT COUNT(*) as total FROM tb_pengguna WHERE (nama LIKE ? OR noinduk LIKE ?) AND role = ?";
+$totalQuery = "SELECT COUNT(*) as total FROM tb_pengguna WHERE (nama LIKE ? OR noinduk LIKE ? OR jabatan LIKE ?) AND role = ?";
 $totalStmt = $conn->prepare($totalQuery);
-$totalStmt->bind_param('ssi', $searchPattern, $searchPattern, $role);
+$totalStmt->bind_param('ssss', $searchPattern, $searchPattern, $searchPattern, $role);
 $totalStmt->execute();
 $totalResult = $totalStmt->get_result();
 $totalData = $totalResult->fetch_assoc()['total'];

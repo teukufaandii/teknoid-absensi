@@ -31,7 +31,37 @@ th {
     position: sticky;
     top: 0;
     z-index: 1;
+    cursor: pointer;
+    text-align: center;
+    padding: 10px; /* Tambahkan padding agar lebih rapi */
+    white-space: nowrap;
 }
+
+th .sort-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px; /* Jarak antara teks dan ikon */
+}
+
+th .sort-icons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    font-size: 12px; 
+    line-height:0px;
+}
+
+th .sort-icon {
+    opacity: 0.6;
+    cursor: pointer;
+    margin: -5px 0;
+}
+
+th .active-sort {
+    opacity: 1;
+}
+
 
 @media (max-width: 768px) {
     th, td {

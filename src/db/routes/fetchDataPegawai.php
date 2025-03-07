@@ -7,10 +7,10 @@ $start = isset($_GET['start']) ? intval($_GET['start']) : 0;
 $limit = 5;
 
 // Query untuk pencarian, menggunakan LIKE untuk mencari kata kunci
-$query = "SELECT * FROM tb_pengguna WHERE nama LIKE ? OR noinduk LIKE ? OR role LIKE ? LIMIT ?, ?";
+$query = "SELECT * FROM tb_pengguna WHERE nama LIKE ? OR noinduk LIKE ? OR role LIKE ? OR jabatan LIKE ? LIMIT ?, ?";
 $stmt = $conn->prepare($query);
 $searchPattern = '%' . $search . '%';
-$stmt->bind_param('sssii', $searchPattern, $searchPattern, $searchPattern, $start, $limit);
+$stmt->bind_param('ssssii', $searchPattern, $searchPattern, $searchPattern, $searchPattern, $start, $limit);
 $stmt->execute();
 $result = $stmt->get_result();  
 

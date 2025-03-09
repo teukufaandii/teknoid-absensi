@@ -272,12 +272,6 @@ $routes->add('api_get_anonim', new Route('api/anonim/get', [
         return new Response(ob_get_clean());
     }
 ]));
-$routes->add('api_search_anonim', new Route('api/anonim/search', [
-    '_controller' => function () {
-        include __DIR__ . '/src/db/routes/searchAnonim.php';
-        return new Response(ob_get_clean());
-    }
-]));
 $routes->add('api_delete_anonim', new Route('api/anonim/delete', [
     '_controller' => function () {
         include __DIR__ . '/src/db/routes/deleteDataAnonim.php';

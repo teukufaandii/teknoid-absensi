@@ -54,6 +54,7 @@ $dataQuery = "
     FROM tb_detail 
     INNER JOIN tb_pengguna ON tb_detail.id_pg = tb_pengguna.id_pg 
     WHERE tb_detail.id_pg = ? 
+    ORDER BY tb_detail.tanggal ASC
     LIMIT ?, ?
 ";
 $dataStmt = $conn->prepare($dataQuery);

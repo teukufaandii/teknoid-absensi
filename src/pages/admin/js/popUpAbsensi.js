@@ -1,5 +1,4 @@
 // Variabel untuk popup dan tombol
-const id_pg = downloadButton.getAttribute("data-id-pg") || "";
 const downloadButton = document.getElementById("downloadButton");
 const downloadPopup = document.getElementById("downloadPopup");
 const closePopup = document.getElementById("closePopup");

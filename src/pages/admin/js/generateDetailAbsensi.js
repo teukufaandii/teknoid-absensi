@@ -9,6 +9,7 @@ function showToast(type, message) {
     setTimeout(() => {
       successToast.classList.remove("block");
       successToast.classList.add("hidden");
+      location.reload(); 
     }, 3000);
   } else if (type === "error") {
     document.getElementById("error-message").innerText = message;

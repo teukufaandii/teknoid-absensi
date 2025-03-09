@@ -43,7 +43,7 @@ $(document).ready(function () {
       loadDataAbsensi(currentPage, searchTerm);
     } else if (data.length === 0) {
       tableBody.append(
-        '<tr><td colspan="8" class="text-center">Tidak ada data untuk <?php echo $nama_pg ?></td></tr>'
+        '<tr><td colspan="8" class="text-center">Tidak ada data preview</td></tr>'
       );
     } else {
       let counter = page * 10 + 1;

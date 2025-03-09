@@ -17,7 +17,7 @@ if ($option) {
         $startDate = date('Y-m-d', strtotime('monday this week'));
         $endDate = date('Y-m-d', strtotime('sunday this week'));
     } else {
-        exit('Ngawur lu?');
+        exit(json_encode(['status' => 'error', 'message' => 'Ngawur lu?']));
     }
 
     $dayoffQuery = "SELECT tanggal_mulai, tanggal_akhir FROM tb_dayoff WHERE tanggal_mulai <= ? AND tanggal_akhir >= ?";
@@ -31,7 +31,7 @@ if ($option) {
         $start = new DateTime($row['tanggal_mulai']);
         $end = new DateTime($row['tanggal_akhir']);
         $interval = new DateInterval('P1D');
-        $period = new DatePeriod($start, $interval, $end->modify('+1 day')); // Include the end date
+        $period = new DatePeriod($start, $interval, $end->modify('+1 day'));
 
         foreach ($period as $date) {
             $dayOffDates[] = $date->format('Y-m-d');
@@ -45,6 +45,9 @@ if ($option) {
         $insertQuery = "INSERT INTO tb_detail (id, id_pg, nomor_kartu, tanggal, keterangan) VALUES (?, ?, ?, ?, ?)";
         $insertStmt = $conn->prepare($insertQuery);
 
+        $dataExists = false;
+        $dataInserted = false;
+
         while ($user = $usersResult->fetch_assoc()) {
             $id_pg = $user['id_pg'];
             $nomor_kartu = $user['nomor_kartu'];
@@ -56,21 +59,39 @@ if ($option) {
                     continue;
                 }
 
-                $details_id = 'details_' . uniqid(); 
-                $keterangan = 'alpha';
-                $insertStmt->bind_param('sssss', $details_id, $id_pg, $nomor_kartu, $currentDate, $keterangan);
-                $insertStmt->execute();
+                // Cek apakah data sudah ada
+                $checkQuery = "SELECT COUNT(*) as total FROM tb_detail WHERE id_pg = ? AND tanggal = ?";
+                $checkStmt = $conn->prepare($checkQuery);
+                $checkStmt->bind_param('ss', $id_pg, $currentDate);
+                $checkStmt->execute();
+                $checkResult = $checkStmt->get_result();
+                $row = $checkResult->fetch_assoc();
+
+                if ($row['total'] > 0) {
+                    $dataExists = true;
+                } else {
+                    $details_id = 'details_' . uniqid();
+                    $keterangan = 'alpha';
+                    $insertStmt->bind_param('sssss', $details_id, $id_pg, $nomor_kartu, $currentDate, $keterangan);
+                    if ($insertStmt->execute()) {
+                        $dataInserted = true;
+                    }
+                }
 
                 $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
             }
         }
 
         $insertStmt->close();
-        echo json_encode(['status' => 'success', 'message' => 'Detail absensi berhasil dihasilkan.']);
+
+        if ($dataExists && !$dataInserted) {
+            echo json_encode(['status' => 'error', 'message' => 'Gagal generate, semua data dalam rentang tanggal sudah ada.']);
+        } elseif ($dataInserted) {
+            echo json_encode(['status' => 'success', 'message' => 'Detail absensi berhasil dihasilkan.']);
+        }
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Tidak ada pengguna dengan role user.']);
     }
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Hayolo mau ngapain di sini']);
 }
-?>

@@ -117,13 +117,15 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
                         <h2 class="text-xl font-semibold mb-4 text-center">Filter Download Data <?php echo $nama_pg ?> </h2>
                         <div class="space-y-4">
                             <!-- Harian Button -->
-                            <button id="harianButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2" onclick="toggleHarian()">
+                            <button id="harianButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2"
+                                onclick="toggleHarian()">
                                 <i class="fa-solid fa-calendar-days"></i>
                                 <span>Harian</span>
                             </button>
                             <!-- Mingguan Button with Date Range -->
                             <div class="relative w-full">
-                                <button id="mingguanButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2" onclick="toggleMingguan()">
+                                <button id="mingguanButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2"
+                                    onclick="toggleMingguan()">
                                     <i class="fa-solid fa-calendar-week"></i>
                                     <span>Mingguan</span>
                                 </button>
@@ -135,14 +137,16 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
                                     <label for="endMingguan" class="text-sm">End Date:</label>
                                     <input type="date" id="endMingguan" class="p-2 rounded border focus:ring focus:ring-purple-300">
 
-                                    <button id="downloadMingguan" class="mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition" onclick="downloadMingguan()">
+                                    <button id="downloadMingguan" class="mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition"
+                                        onclick="downloadMingguan()">
                                         Download Mingguan
                                     </button>
                                 </div>
                             </div>
                             <!-- Bulanan Button with Date Range -->
                             <div class="relative w-full">
-                                <button id="bulananButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2" onclick="toggleBulanan()">
+                                <button id="bulananButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2"
+                                    onclick="toggleBulanan()">
                                     <i class="fa-solid fa-calendar"></i>
                                     <span>Bulanan</span>
                                 </button>
@@ -154,7 +158,8 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
                                     <label for="endBulanan" class="text-sm">End Date:</label>
                                     <input type="date" id="endBulanan" class="p-2 rounded border focus:ring focus:ring-purple-300">
 
-                                    <button id="downloadBulanan" class="mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition" onclick="downloadBulanan()">
+                                    <button id="downloadBulanan" class="mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition"
+                                        onclick="downloadBulanan()">
                                         Download Bulanan
                                     </button>
                                 </div>
@@ -204,269 +209,12 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
             </main>
         </div>
     </div>
+
+    <script src="../src/pages/admin/js/renderDataPreview.js"></script>
     <script>
-        $(document).ready(function() {
-            let currentPage = 0;
-            let totalDataAbsensi = 0;
-            let searchTerm = '';
-            let id_pg = "<?php echo $_GET['id_pg']; ?>";
-
-            // Function to load "absensi" data
-            function loadDataAbsensi(page, search = '') {
-                $('#loading').removeClass('hidden');
-                $.ajax({
-                    url: '../api/users/fetch-preview-detail',
-                    type: 'GET',
-                    data: {
-                        id_pg: id_pg,
-                        start: page * 10,
-                        search: search
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        $('#loading').addClass('hidden');
-                        if (response.status === 'unauthorized') {
-                            window.location.href = 'unauthorized';
-                            return;
-                        }
-
-                        totalDataAbsensi = response.total;
-                        renderData(response.preview_data_absensi, page);
-                        updatePaginationButtons();
-                    },
-                    error: function() {
-                        $('#loading').addClass('hidden');
-                        Swal.fire('Error!', 'Terjadi kesalahan saat memuat data', 'error');
-                    }
-                });
-            }
-
-            // Function to render data into the table
-            function renderData(data, page) {
-                const tableBody = $('#preview-absensi-table-body');
-                tableBody.empty();
-
-                if (data.length === 0 && page > 0) {
-                    currentPage--; // Go to previous page if no data found
-                    loadDataAbsensi(currentPage, searchTerm);
-                } else if (data.length === 0) {
-                    tableBody.append('<tr><td colspan="8" class="text-center">Tidak ada data untuk <?php echo $nama_pg ?></td></tr>');
-                } else {
-                    let counter = page * 10 + 1;
-                    data.forEach((item) => {
-                        tableBody.append(`
-                    <tr class="bg-gray-100">
-                        <td class="px-6 py-2 text-center">${counter++}</td>
-                        <td class="px-6 py-2 text-center">${item.nama}</td>
-                        <td class="px-6 py-2 text-center">${item.tanggal ? item.tanggal.split('-').reverse().join('-') : '-'}</td>
-                        <td class="px-6 py-2 text-center">${item.scan_masuk}</td>
-                        <td class="px-6 py-2 text-center">${item.scan_keluar}</td>
-                        <td class="px-6 py-2 text-center">${item.durasi}</td>
-                        <td class="px-6 py-2 text-center">${item.keterangan}</td>
-                        <td class="px-6 py-2 text-center">
-                            <a href="../absensi/edit/preview?id_pg=${item.id_pg}&id=${item.id}">
-                                <button class="bg-purpleNavbar text-white px-3 py-2 rounded-xl hover:bg-purpleNavbarHover transition"><i class="fa-solid fa-pen-to-square"></i></button>
-                            </a>
-                        </td>
-                    </tr>
-                `);
-                    });
-                }
-            }
-
-            function updatePaginationButtons() {
-                const totalPages = Math.ceil(totalDataAbsensi / 10);
-
-                // Define the range of pages to display
-                const maxButtonsToShow = 5; // Maximum number of buttons to display
-                let startPage = Math.max(0, currentPage - Math.floor(maxButtonsToShow / 2));
-                let endPage = Math.min(totalPages, startPage + maxButtonsToShow);
-
-                if (endPage - startPage < maxButtonsToShow) {
-                    startPage = Math.max(0, endPage - maxButtonsToShow);
-                }
-
-                // Clear existing pagination buttons
-                $('#pagination-container .pagination-button').remove();
-
-                // Create pagination buttons dynamically
-                for (let i = startPage; i < endPage; i++) {
-                    const button = $(`<button class="min-w-9 px-3 py-2 bg-purpleNavbar text-white rounded-md hover:bg-purpleNavbarHover transition shadow-xl drop-shadow-xl pagination-button" data-page="${i}">${i + 1}</button>`);
-                    button.addClass(i === currentPage ? 'active-button' : 'inactive-button');
-                    button.insertBefore('#next-page'); // Insert before "Next" button
-                }
-
-                // Enable/Disable First, Prev, Next, and Last buttons based on the current page
-                $('#first-page').prop('disabled', currentPage === 0);
-                $('#prev-page').prop('disabled', currentPage === 0);
-                $('#next-page').prop('disabled', currentPage >= totalPages - 1);
-                $('#last-page').prop('disabled', currentPage >= totalPages - 1);
-            }
-
-            $('#first-page').on('click', function() {
-                if (currentPage > 0) {
-                    currentPage = 0;
-                    loadDataAbsensi(currentPage, searchTerm);
-                    updatePaginationButtons();
-                }
-            });
-
-            $('#last-page').on('click', function() {
-                const totalPages = Math.ceil(totalDataAbsensi / 10);
-                if (currentPage < totalPages - 1) {
-                    currentPage = totalPages - 1;
-                    loadDataAbsensi(currentPage, searchTerm);
-                    updatePaginationButtons();
-                }
-            });
-
-            // Event listener for "Previous" button
-            $('#prev-page').on('click', function() {
-                if (currentPage > 0) {
-                    loadDataAbsensi(--currentPage, searchTerm);
-                }
-            });
-
-            // Event listener for "Next" button
-            $('#next-page').on('click', function() {
-                if ((currentPage + 1) * 10 < totalDataAbsensi) {
-                    loadDataAbsensi(++currentPage, searchTerm);
-                }
-            });
-
-            $(document).on('click', '.pagination-button', function() {
-                currentPage = parseInt($(this).data('page'));
-                loadDataAbsensi(currentPage, searchTerm);
-                updatePaginationButtons();
-            });
-
-            // Event listener for search input
-            $('#searchInput').on('keyup', function() {
-                searchTerm = $(this).val();
-                currentPage = 0; // Reset to first page on search
-                loadDataAbsensi(currentPage, searchTerm);
-            });
-
-            // Initial data load
-            loadDataAbsensi(currentPage);
-        });
-    </script>
-
-    <script>
-        // Variables for popup and buttons
         const id_pg = "<?= isset($_GET['id_pg']) ? $_GET['id_pg'] : '' ?>";
-        const downloadButton = document.getElementById('downloadButton');
-        const downloadPopup = document.getElementById('downloadPopup');
-        const closePopup = document.getElementById('closePopup');
-        const harianButton = document.getElementById('harianButton');
-        const mingguanButton = document.getElementById('mingguanButton');
-        const bulananButton = document.getElementById('bulananButton');
-        const mingguanDates = document.getElementById('mingguanDates');
-        const bulananDates = document.getElementById('bulananDates');
-        const downloadMingguan = document.getElementById('downloadMingguan');
-        const downloadBulanan = document.getElementById('downloadBulanan');
-
-        // Show the download popup
-        downloadButton.addEventListener('click', () => {
-            downloadPopup.classList.remove('hidden');
-        });
-
-        // Close the download popup
-        closePopup.addEventListener('click', () => {
-            downloadPopup.classList.add('hidden');
-            mingguanDates.classList.add('hidden');
-            bulananDates.classList.add('hidden');
-            downloadMingguan.classList.add('hidden');
-            downloadBulanan.classList.add('hidden');
-        });
-
-        function toggleHarian() {
-            window.location.href = `../api/user/download-data-user?filter=harian&id_pg=${id_pg}`;
-        }
-
-        function getDateDifference(start, end) {
-            const startDate = new Date(start);
-            const endDate = new Date(end);
-            const diffTime = Math.abs(endDate - startDate);
-            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        }
-
-        function toggleMingguan() {
-            const mingguanDates = document.getElementById('mingguanDates');
-            const startMingguan = document.getElementById('startMingguan');
-            const endMingguan = document.getElementById('endMingguan');
-            const downloadMingguan = document.getElementById('downloadMingguan');
-
-            mingguanDates.classList.toggle('hidden');
-
-            downloadMingguan.onclick = function() {
-                const start = startMingguan.value;
-                const end = endMingguan.value;
-
-                if (start && end) {
-                    const diffDays = getDateDifference(start, end);
-
-                    if (diffDays > 7) {
-                        alert("Rentang tanggal untuk mingguan tidak boleh lebih dari 7 hari.");
-                        return;
-                    }
-
-                    window.location.href = `../api/user/download-data-user?filter=mingguan&start=${start}&end=${end}&id_pg=${id_pg}`;
-                } else {
-                    alert("Harap isi kedua tanggal untuk filter mingguan.");
-                }
-            };
-        }
-
-        function toggleBulanan() {
-            const bulananDates = document.getElementById('bulananDates');
-            const startBulanan = document.getElementById('startBulanan');
-            const endBulanan = document.getElementById('endBulanan');
-            const downloadBulanan = document.getElementById('downloadBulanan');
-
-            bulananDates.classList.toggle('hidden');
-
-            downloadBulanan.onclick = function() {
-                const start = startBulanan.value;
-                const end = endBulanan.value;
-
-                if (start && end) {
-                    const diffDays = getDateDifference(start, end);
-
-                    if (diffDays > 30) {
-                        alert("Rentang tanggal untuk bulanan tidak boleh lebih dari 30 hari.");
-                        return;
-                    }
-
-                    window.location.href = `../api/user/download-data-user?filter=bulanan&start=${start}&end=${end}&id_pg=${id_pg}`;
-                } else {
-                    alert("Harap isi kedua tanggal untuk filter bulanan.");
-                }
-            };
-        }
-
-        downloadMingguan.addEventListener('click', () => {
-            const start = document.getElementById('startMingguan').value;
-            const end = document.getElementById('endMingguan').value;
-
-            if (start && end) {
-                window.location.href = `../api/user/download-data-user?filter=mingguan&start=${start}&end=${end}&id_pg=${id_pg}`;
-            } else {
-                alert('Please select both start and end dates for weekly download');
-            }
-        });
-
-        downloadBulanan.addEventListener('click', () => {
-            const start = document.getElementById('startBulanan').value;
-            const end = document.getElementById('endBulanan').value;
-
-            if (start && end) {
-                window.location.href = `../api/user/download-data-user?filter=bulanan&start=${start}&end=${end}&id_pg=${id_pg}`;
-            } else {
-                alert('Please select both start and end dates for monthly download');
-            }
-        });
     </script>
+    <script src="../src/pages/admin/js/popUpPreview.js"></script>
 
     <?php include('src/pages/navbar/profileInfo.php') ?>
 

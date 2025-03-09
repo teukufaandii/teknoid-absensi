@@ -180,8 +180,7 @@ $token = $_SESSION['token'];
     </div>
   </div>
   <?php include('src/pages/navbar/profileInfo.php') ?>
+  <script src="src/pages/admin/js/renderDataPegawai.js"></script>
 </body>
-
-<script src="src/pages/admin/js/renderDataPegawai.js"></script>
 
 </html>

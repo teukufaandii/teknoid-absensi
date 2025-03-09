@@ -1,3 +1,26 @@
+function showToast(type, message) {
+  const successToast = document.getElementById("toast-success");
+  const errorToast = document.getElementById("toast-error");
+
+  if (type === "success") {
+    document.getElementById("success-message").innerText = message;
+    successToast.classList.remove("hidden");
+    successToast.classList.add("block");
+    setTimeout(() => {
+      successToast.classList.remove("block");
+      successToast.classList.add("hidden");
+    }, 3000);
+  } else if (type === "error") {
+    document.getElementById("error-message").innerText = message;
+    errorToast.classList.remove("hidden");
+    errorToast.classList.add("block");
+    setTimeout(() => {
+      errorToast.classList.remove("block");
+      errorToast.classList.add("hidden");
+    }, 3000);
+  }
+}
+
 $("#addButton").on("click", function () {
   Swal.fire({
     title: "Generate Detail Absen",

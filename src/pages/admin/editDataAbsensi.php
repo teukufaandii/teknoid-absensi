@@ -198,7 +198,7 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
     fetch(`../../api/users/fetch-preview-detail?id_pg=${userId}&id=${detailId}&start=0&limit=1`)
       .then(response => response.json())
       .then(data => {
-        console.log(data); 
+        // console.log(data); 
         if (data.status === 'success' && data.preview_data_absensi.length > 0) {
           const attendanceData = data.preview_data_absensi.find(item => item.id == detailId);
           if (attendanceData) {
@@ -217,7 +217,6 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
       })
       .catch(error => console.error('Error fetching data:', error));
   }
-
   document.addEventListener('DOMContentLoaded', fetchData);
 </script>
 

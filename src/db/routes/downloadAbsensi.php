@@ -59,21 +59,34 @@ switch ($filter) {
             END), 0) AS tidak_absen_datang,
 
             COALESCE(SUM(CASE 
-                WHEN d.scan_keluar BETWEEN '12:00:00' AND '16:00:00' OR d.scan_keluar IS NULL 
+                WHEN d.scan_keluar BETWEEN '12:00:01' AND '16:00:00' OR d.scan_keluar IS NULL 
                 THEN 1 ELSE 0 
             END), 0) AS tidak_absen_pulang,
             COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0) AS telat_datang, 
             -- Pulang cepat
-            0 AS pulang_cepat,
-            -- Hari Kerja
-            0 As jumlah_hari_kerja,
             COALESCE(SUM(CASE 
-                WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk > '07:00:00' OR d.scan_masuk IS NULL)) 
-                    OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk > '08:00:00' OR d.scan_masuk IS NULL)) 
+                WHEN d.scan_keluar > '12:00:00' AND d.scan_keluar < '16:00:00' 
                 THEN 1 ELSE 0 
-            END) + 
-            SUM(CASE WHEN d.scan_keluar < '16:00:00' OR d.scan_keluar IS NULL THEN 1 ELSE 0 END), 0) AS tidak_tepat_jumlah
-            
+            END), 0) AS pulang_cepat,
+            -- Hari Kerja
+            COALESCE(COUNT(d.tanggal), 0) AS jumlah_hari_kerja,
+            -- Tidak Tepat Jumlah
+                (
+                    COALESCE(SUM(CASE 
+                        WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk BETWEEN '07:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                            OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk BETWEEN '08:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                        THEN 1 ELSE 0 
+                    END), 0) 
+                    + COALESCE(SUM(CASE 
+                        WHEN d.scan_keluar BETWEEN '12:00:00' AND '16:00:00' OR d.scan_keluar IS NULL 
+                        THEN 1 ELSE 0 
+                    END), 0)
+                    + COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0)
+                    + COALESCE(SUM(CASE 
+                        WHEN d.scan_keluar > '12:00:00' AND d.scan_keluar < '16:00:00' THEN 1 
+                        ELSE 0 
+                    END), 0)
+                ) AS tidak_tepat_jumlah            
             FROM tb_detail d
             JOIN tb_pengguna p ON d.id_pg = p.id_pg
             WHERE DATE(d.tanggal) = CURDATE()
@@ -120,14 +133,29 @@ switch ($filter) {
                 END), 0) AS tidak_absen_pulang,
                 COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0) AS telat_datang, 
                 -- Pulang cepat
-                0 AS pulang_cepat,
-                -- Hari Kerja
-                0 As jumlah_hari_kerja,
                 COALESCE(SUM(CASE 
-                    WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk > '07:00:00' OR d.scan_masuk IS NULL)) 
-                        OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk > '08:00:00' OR d.scan_masuk IS NULL)) 
+                    WHEN d.scan_keluar > '12:00:00' AND d.scan_keluar < '16:00:00' 
                     THEN 1 ELSE 0 
-                END) + SUM(CASE WHEN d.scan_keluar < '16:00:00' OR d.scan_keluar IS NULL THEN 1 ELSE 0 END), 0) AS tidak_tepat_jumlah
+                END), 0) AS pulang_cepat,
+                -- Hari Kerja
+                COALESCE(COUNT(d.tanggal), 0) AS jumlah_hari_kerja,
+                -- Tidak Tepat Jumlah
+                (
+                    COALESCE(SUM(CASE 
+                        WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk BETWEEN '07:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                            OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk BETWEEN '08:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                        THEN 1 ELSE 0 
+                    END), 0) 
+                    + COALESCE(SUM(CASE 
+                        WHEN d.scan_keluar BETWEEN '12:00:00' AND '16:00:00' OR d.scan_keluar IS NULL 
+                        THEN 1 ELSE 0 
+                    END), 0)
+                    + COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0)
+                    + COALESCE(SUM(CASE 
+                        WHEN d.scan_keluar > '12:00:00' AND d.scan_keluar < '16:00:00' THEN 1 
+                        ELSE 0 
+                    END), 0)
+                ) AS tidak_tepat_jumlah
                 FROM tb_detail d
                 JOIN tb_pengguna p ON d.id_pg = p.id_pg
                 WHERE d.tanggal BETWEEN '$start' AND '$end'
@@ -172,14 +200,29 @@ switch ($filter) {
                 END), 0) AS tidak_absen_pulang,
                 COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0) AS telat_datang, 
                 -- Pulang cepat
-                0 AS pulang_cepat,
-                -- Hari Kerja
-                0 As jumlah_hari_kerja,
                 COALESCE(SUM(CASE 
-                    WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk > '07:00:00' OR d.scan_masuk IS NULL)) 
-                        OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk > '08:00:00' OR d.scan_masuk IS NULL)) 
+                    WHEN d.scan_keluar > '12:00:00' AND d.scan_keluar < '16:00:00' 
                     THEN 1 ELSE 0 
-                END) + SUM(CASE WHEN d.scan_keluar < '16:00:00' OR d.scan_keluar IS NULL THEN 1 ELSE 0 END), 0) AS tidak_tepat_jumlah
+                END), 0) AS pulang_cepat,
+                -- Hari Kerja
+                COALESCE(COUNT(d.tanggal), 0) AS jumlah_hari_kerja,
+                -- Tidak Tepat Jumlah
+                (
+                    COALESCE(SUM(CASE 
+                        WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk BETWEEN '07:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                            OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk BETWEEN '08:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                        THEN 1 ELSE 0 
+                    END), 0) 
+                    + COALESCE(SUM(CASE 
+                        WHEN d.scan_keluar BETWEEN '12:00:00' AND '16:00:00' OR d.scan_keluar IS NULL 
+                        THEN 1 ELSE 0 
+                    END), 0)
+                    + COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0)
+                    + COALESCE(SUM(CASE 
+                        WHEN d.scan_keluar > '12:00:00' AND d.scan_keluar < '16:00:00' THEN 1 
+                        ELSE 0 
+                    END), 0)
+                ) AS tidak_tepat_jumlah
                 FROM tb_detail d
                 JOIN tb_pengguna p ON d.id_pg = p.id_pg
                 WHERE YEARWEEK(d.tanggal, 1) = YEARWEEK(CURDATE(), 1)
@@ -225,17 +268,31 @@ switch ($filter) {
                     WHEN d.scan_keluar BETWEEN '12:00:00' AND '16:00:00' OR d.scan_keluar IS NULL 
                     THEN 1 ELSE 0 
                 END), 0) AS tidak_absen_pulang,
-                
                 COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0) AS telat_datang, 
                 -- Pulang cepat
-                0 AS pulang_cepat,
-                -- Hari Kerja
-                0 As jumlah_hari_kerja,
                 COALESCE(SUM(CASE 
-                    WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk > '07:00:00' OR d.scan_masuk IS NULL)) 
-                        OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk > '08:00:00' OR d.scan_masuk IS NULL)) 
+                    WHEN d.scan_keluar > '12:00:00' AND d.scan_keluar < '16:00:00' 
                     THEN 1 ELSE 0 
-                END) + SUM(CASE WHEN d.scan_keluar < '16:00:00' OR d.scan_keluar IS NULL THEN 1 ELSE 0 END), 0) AS tidak_tepat_jumlah
+                END), 0) AS pulang_cepat,
+                -- Hari Kerja
+                COALESCE(COUNT(d.tanggal), 0) AS jumlah_hari_kerja,
+                -- Tidak Tepat Jumlah
+                (
+                    COALESCE(SUM(CASE 
+                        WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk BETWEEN '07:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                            OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk BETWEEN '08:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                        THEN 1 ELSE 0 
+                    END), 0) 
+                    + COALESCE(SUM(CASE 
+                        WHEN d.scan_keluar BETWEEN '12:00:00' AND '16:00:00' OR d.scan_keluar IS NULL 
+                        THEN 1 ELSE 0 
+                    END), 0)
+                    + COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0)
+                    + COALESCE(SUM(CASE 
+                        WHEN d.scan_keluar > '12:00:00' AND d.scan_keluar < '16:00:00' THEN 1 
+                        ELSE 0 
+                    END), 0)
+                ) AS tidak_tepat_jumlah
                 FROM tb_detail d
                 JOIN tb_pengguna p ON d.id_pg = p.id_pg
                 WHERE d.tanggal BETWEEN '$start' AND '$end'
@@ -280,14 +337,29 @@ switch ($filter) {
                 END), 0) AS tidak_absen_pulang,
                 COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0) AS telat_datang, 
                 -- Pulang cepat
-                0 AS pulang_cepat,
-                -- Hari Kerja
-                0 As jumlah_hari_kerja,
                 COALESCE(SUM(CASE 
-                    WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk > '07:00:00' OR d.scan_masuk IS NULL)) 
-                        OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk > '08:00:00' OR d.scan_masuk IS NULL)) 
+                    WHEN d.scan_keluar > '12:00:00' AND d.scan_keluar < '16:00:00' 
                     THEN 1 ELSE 0 
-                END) + SUM(CASE WHEN d.scan_keluar < '16:00:00' OR d.scan_keluar IS NULL THEN 1 ELSE 0 END), 0) AS tidak_tepat_jumlah
+                END), 0) AS pulang_cepat,
+                -- Hari Kerja
+                COALESCE(COUNT(d.tanggal), 0) AS jumlah_hari_kerja,
+                -- Tidak Tepat Jumlah
+                (
+                    COALESCE(SUM(CASE 
+                        WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk BETWEEN '07:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                            OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk BETWEEN '08:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                        THEN 1 ELSE 0 
+                    END), 0) 
+                    + COALESCE(SUM(CASE 
+                        WHEN d.scan_keluar BETWEEN '12:00:00' AND '16:00:00' OR d.scan_keluar IS NULL 
+                        THEN 1 ELSE 0 
+                    END), 0)
+                    + COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0)
+                    + COALESCE(SUM(CASE 
+                        WHEN d.scan_keluar > '12:00:00' AND d.scan_keluar < '16:00:00' THEN 1 
+                        ELSE 0 
+                    END), 0)
+                ) AS tidak_tepat_jumlah
                 FROM tb_detail d
                 JOIN tb_pengguna p ON d.id_pg = p.id_pg
                 WHERE MONTH(d.tanggal) = MONTH(CURDATE()) 
@@ -335,14 +407,29 @@ switch ($filter) {
                 END), 0) AS tidak_absen_pulang,
                 COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0) AS telat_datang, 
                 -- Pulang cepat
-                0 AS pulang_cepat,
-                -- Hari Kerja
-                0 As jumlah_hari_kerja,
                 COALESCE(SUM(CASE 
-                    WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk > '07:00:00' OR d.scan_masuk IS NULL)) 
-                        OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk > '08:00:00' OR d.scan_masuk IS NULL)) 
+                    WHEN d.scan_keluar > '12:00:00' AND d.scan_keluar < '16:00:00' 
                     THEN 1 ELSE 0 
-                END) + SUM(CASE WHEN d.scan_keluar < '16:00:00' OR d.scan_keluar IS NULL THEN 1 ELSE 0 END), 0) AS tidak_tepat_jumlah
+                END), 0) AS pulang_cepat,
+                -- Hari Kerja
+                COALESCE(COUNT(d.tanggal), 0) AS jumlah_hari_kerja,
+                -- Tidak Tepat Jumlah
+                (
+                    COALESCE(SUM(CASE 
+                        WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk BETWEEN '07:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                            OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk BETWEEN '08:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                        THEN 1 ELSE 0 
+                    END), 0) 
+                    + COALESCE(SUM(CASE 
+                        WHEN d.scan_keluar BETWEEN '12:00:00' AND '16:00:00' OR d.scan_keluar IS NULL 
+                        THEN 1 ELSE 0 
+                    END), 0)
+                    + COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0)
+                    + COALESCE(SUM(CASE 
+                        WHEN d.scan_keluar > '12:00:00' AND d.scan_keluar < '16:00:00' THEN 1 
+                        ELSE 0 
+                    END), 0)
+                ) AS tidak_tepat_jumlah
                 FROM tb_detail d
                 JOIN tb_pengguna p ON d.id_pg = p.id_pg
                 WHERE DATE(d.tanggal) = CURDATE()

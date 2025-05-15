@@ -53,13 +53,12 @@ switch ($filter) {
 
             -- Tidak Tepat Waktu
             COALESCE(SUM(CASE 
-                WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk BETWEEN '07:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
-                    OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk BETWEEN '08:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                WHEN d.scan_masuk IS NULL AND d.keterangan = 'hadir'
                 THEN 1 ELSE 0 
             END), 0) AS tidak_absen_datang,
 
             COALESCE(SUM(CASE 
-                WHEN d.scan_keluar BETWEEN '12:00:01' AND '16:00:00' OR d.scan_keluar IS NULL 
+                WHEN d.scan_keluar IS NULL AND d.keterangan = 'hadir'
                 THEN 1 ELSE 0 
             END), 0) AS tidak_absen_pulang,
             COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0) AS telat_datang, 
@@ -122,13 +121,12 @@ switch ($filter) {
 
                 -- Tidak Tepat Waktu
                 COALESCE(SUM(CASE 
-                    WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk BETWEEN '07:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
-                        OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk BETWEEN '08:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                WHEN d.scan_masuk IS NULL AND d.keterangan = 'hadir'
                     THEN 1 ELSE 0 
                 END), 0) AS tidak_absen_datang,
 
                 COALESCE(SUM(CASE 
-                    WHEN d.scan_keluar BETWEEN '12:00:00' AND '16:00:00' OR d.scan_keluar IS NULL 
+                    WHEN d.scan_keluar IS NULL AND d.keterangan = 'hadir'
                     THEN 1 ELSE 0 
                 END), 0) AS tidak_absen_pulang,
                 COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0) AS telat_datang, 
@@ -189,13 +187,12 @@ switch ($filter) {
 
                 -- Tidak Tepat Waktu
                 COALESCE(SUM(CASE 
-                    WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk BETWEEN '07:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
-                        OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk BETWEEN '08:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                WHEN d.scan_masuk IS NULL AND d.keterangan = 'hadir'
                     THEN 1 ELSE 0 
                 END), 0) AS tidak_absen_datang,
 
                 COALESCE(SUM(CASE 
-                    WHEN d.scan_keluar BETWEEN '12:00:00' AND '16:00:00' OR d.scan_keluar IS NULL 
+                    WHEN d.scan_keluar IS NULL AND d.keterangan = 'hadir'
                     THEN 1 ELSE 0 
                 END), 0) AS tidak_absen_pulang,
                 COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0) AS telat_datang, 
@@ -259,13 +256,12 @@ switch ($filter) {
 
                 -- Tidak Tepat Waktu
                 COALESCE(SUM(CASE 
-                    WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk BETWEEN '07:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
-                        OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk BETWEEN '08:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                WHEN d.scan_masuk IS NULL AND d.keterangan = 'hadir'
                     THEN 1 ELSE 0 
                 END), 0) AS tidak_absen_datang,
 
                 COALESCE(SUM(CASE 
-                    WHEN d.scan_keluar BETWEEN '12:00:00' AND '16:00:00' OR d.scan_keluar IS NULL 
+                    WHEN d.scan_keluar IS NULL AND d.keterangan = 'hadir'
                     THEN 1 ELSE 0 
                 END), 0) AS tidak_absen_pulang,
                 COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0) AS telat_datang, 
@@ -326,13 +322,12 @@ switch ($filter) {
 
                 -- Tidak Tepat Waktu
                 COALESCE(SUM(CASE 
-                    WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk BETWEEN '07:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
-                        OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk BETWEEN '08:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                WHEN d.scan_masuk IS NULL AND d.keterangan = 'hadir'
                     THEN 1 ELSE 0 
                 END), 0) AS tidak_absen_datang,
 
                 COALESCE(SUM(CASE 
-                    WHEN d.scan_keluar BETWEEN '12:00:00' AND '16:00:00' OR d.scan_keluar IS NULL 
+                    WHEN d.scan_keluar IS NULL AND d.keterangan = 'hadir'
                     THEN 1 ELSE 0 
                 END), 0) AS tidak_absen_pulang,
                 COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0) AS telat_datang, 
@@ -396,13 +391,12 @@ switch ($filter) {
 
                 -- Tidak Tepat Waktu
                 COALESCE(SUM(CASE 
-                    WHEN (p.jabatan = 'Customer Service' AND (d.scan_masuk BETWEEN '07:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
-                        OR (p.jabatan <> 'Customer Service' AND (d.scan_masuk BETWEEN '08:00:01' AND '12:00:00' OR d.scan_masuk IS NULL)) 
+                WHEN d.scan_masuk IS NULL AND d.keterangan = 'hadir'
                     THEN 1 ELSE 0 
                 END), 0) AS tidak_absen_datang,
 
                 COALESCE(SUM(CASE 
-                    WHEN d.scan_keluar BETWEEN '12:00:00' AND '16:00:00' OR d.scan_keluar IS NULL 
+                    WHEN d.scan_keluar IS NULL AND d.keterangan = 'hadir'
                     THEN 1 ELSE 0 
                 END), 0) AS tidak_absen_pulang,
                 COALESCE(SUM(CASE WHEN d.scan_masuk > '08:00:00' THEN 1 ELSE 0 END), 0) AS telat_datang, 

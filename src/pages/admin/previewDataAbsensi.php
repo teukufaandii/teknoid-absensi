@@ -37,6 +37,23 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
     $nama_pg = 'ID Pengguna tidak valid';
 }
 
+$months = [
+    1 => 'Januari',
+    2 => 'Februari',
+    3 => 'Maret',
+    4 => 'April',
+    5 => 'Mei',
+    6 => 'Juni',
+    7 => 'Juli',
+    8 => 'Agustus',
+    9 => 'September',
+    10 => 'Oktober',
+    11 => 'November',
+    12 => 'Desember'
+];
+$currentMonth = date('n');
+$years = date('Y');
+
 ?>
 
 <!DOCTYPE html>
@@ -94,7 +111,7 @@ if (isset($_GET['id_pg']) && !empty($_GET['id_pg'])) {
             <!-- Main Content -->
             <main class="flex-1 p-6 bg-mainBgColor mainContent">
                 <div class="flex justify-between items-center border-b border-gray-500">
-                    <h1 class="text-lg sm:text-xl md:text-3xl py-2 font-Poppins font-semibold">Preview Data Absensi <?php echo $nama_pg ?></h1>
+                    <h1 class="text-lg sm:text-xl md:text-3xl py-2 font-Poppins font-semibold">Preview Data Absensi <?php echo $nama_pg ?> <?php echo $months[$currentMonth]; ?> <?php echo $years; ?> </h1>
                     <a href="../absensi">
                         <button class="bg-purpleNavbar text-white px-4 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200">Kembali</button>
                     </a>

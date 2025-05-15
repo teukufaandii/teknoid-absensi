@@ -28,8 +28,11 @@ $countQuery = "
     SELECT COUNT(*) AS total_rows 
     FROM tb_detail 
     INNER JOIN tb_pengguna ON tb_detail.id_pg = tb_pengguna.id_pg 
-    WHERE tb_detail.id_pg = ?
+    WHERE tb_detail.id_pg = ? 
+    AND MONTH(tb_detail.tanggal) = MONTH(CURRENT_DATE()) 
+    AND YEAR(tb_detail.tanggal) = YEAR(CURRENT_DATE())
 ";
+
 $countStmt = $conn->prepare($countQuery);
 $countStmt->bind_param("s", $id_pg);
 $countStmt->execute();
@@ -54,9 +57,12 @@ $dataQuery = "
     FROM tb_detail 
     INNER JOIN tb_pengguna ON tb_detail.id_pg = tb_pengguna.id_pg 
     WHERE tb_detail.id_pg = ? 
+    AND MONTH(tb_detail.tanggal) = MONTH(CURRENT_DATE()) 
+    AND YEAR(tb_detail.tanggal) = YEAR(CURRENT_DATE()) 
     ORDER BY tb_detail.tanggal ASC
     LIMIT ?, ?
 ";
+
 $dataStmt = $conn->prepare($dataQuery);
 $dataStmt->bind_param("sii", $id_pg, $start, $limit);
 $dataStmt->execute();
@@ -74,7 +80,7 @@ while ($row = $result->fetch_assoc()) {
     }
 
     $preview_data_absensi[] = [
-        'id' => $row["id"], 
+        'id' => $row["id"],
         'tanggal' => htmlspecialchars($row["tanggal"]),
         'jam_kerja' => htmlspecialchars($row["jam_kerja"]),
         'scan_masuk' => htmlspecialchars($scanMasuk),

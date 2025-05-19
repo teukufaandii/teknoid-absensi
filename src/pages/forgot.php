@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,20 +12,21 @@
     <link rel="stylesheet" href="src/pages/css/forgot.css">
     <link href="src/pages/css/font/poppins-font.css" rel="stylesheet">
 </head>
+
 <body class="flex justify-center items-center h-screen w-screen bg-gray-100">
     <div class="flex w-full h-full max-w-none bg-white shadow-lg">
         <div class="flex flex-col justify-center w-1/2 p-8">
-            <form class="max-w-md mx-auto w-full" method="POST" action="api/auth/forgot">
+            <form class="max-w-md mx-auto w-full" method="POST" action="/teknoid-absensi/api/auth/forgot">
                 <h2 class="text-3xl font-bold text-center mb-6">Lupa Kata Sandi</h2>
                 <img src="public/logo.png" alt="Logo" class="mb-6 m-auto w-40 h-40 justify-center object-cover items-center">
-                
+
                 <!-- Display success or error message -->
                 <?php if (isset($_GET['message']) && $_GET['message'] === 'success'): ?>
                     <div class="success-message">
                         Email terkirim, silahkan cek email anda.
                     </div>
                 <?php endif; ?>
-                
+
                 <?php if (isset($_GET['error'])): ?>
                     <div class="error-message">
                         <?php
@@ -38,7 +40,7 @@
                         ?>
                     </div>
                 <?php endif; ?>
-                
+
                 <div class="mb-4 relative">
                     <div class="floating-placeholder">
                         <input type="email" id="email" name="email" class="floating-input" placeholder="" required>
@@ -50,20 +52,20 @@
                 <!-- Back to Login Button -->
                 <div class="mb-4">
                     <a href="login" class="form-button back-to-login">
-                        <i class="fas fa-arrow-left"></i> Kembali 
+                        <i class="fas fa-arrow-left"></i> Kembali
                     </a>
                 </div>
             </form>
         </div>
         <div class="flex flex-col items-center justify-center w-1/2 bg-gray-200 p-8">
             <img src="public/loginPage.png" alt="Logo" class="mb-8 w-90 h-90 object-cover">
-            <p class="mt-4 text-center text-gray-600">&copy; 2024 TeknoGenius. All rights reserved.</p>
+            <p class="mt-4 text-center text-gray-600">&copy; 2025 TeknoGenius. All rights reserved.</p>
         </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const url = new URL(window.location);
-            
+
             if (url.searchParams.has('message') || url.searchParams.has('error')) {
                 url.searchParams.delete('message');
                 url.searchParams.delete('error');
@@ -72,4 +74,5 @@
         });
     </script>
 </body>
+
 </html>

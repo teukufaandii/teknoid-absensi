@@ -62,10 +62,10 @@
         </div>
         <div class="hidden md:flex flex-col items-center justify-center h-full w-1/2 bg-gray-200 p-8">
             <img src="public/loginPage.png" alt="Login Page" class="mb-8 w-90 h-90 object-cover">
-            <p class="mt-4 text-center text-gray-600">&copy; 2024 TeknoGenius. All rights reserved.</p>
+            <p class="mt-4 text-center text-gray-600">&copy; 2025 TeknoGenius. All rights reserved.</p>
         </div>
         <div class="md:hidden flex flex-col absolute bottom-0 items-center justify-center w-full bg-gray-200 p-4">
-            <p class="whitespace-nowrap text-sm text-center text-gray-600">&copy; 2024 TeknoGenius. All rights reserved.</p>
+            <p class="whitespace-nowrap text-sm text-center text-gray-600">&copy; 2025 TeknoGenius. All rights reserved.</p>
         </div>
     </div>
 

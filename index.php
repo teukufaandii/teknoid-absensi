@@ -168,6 +168,12 @@ $routes->add('api_auth_forgot', new Route('/api/auth/forgot', [
         return new Response(ob_get_clean());
     }
 ]));
+$routes->add('api_auth_forgot_password', new Route('/api/auth/forgot-password', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/userForgotPass.php';
+        return new Response(ob_get_clean());
+    }
+]));
 $routes->add('api_get_user', new Route('/api/users/get-users', [
     '_controller' => function () {
         include __DIR__ . '/src/db/routes/getAllUsers.php';

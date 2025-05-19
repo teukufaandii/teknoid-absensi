@@ -67,6 +67,7 @@ $years = date('Y');
     <link href="/teknoid-absensi/src/pages/css/font/poppins-font.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
         .active-button {
             background-color: #8C85FF;
@@ -119,7 +120,7 @@ $years = date('Y');
 
                 <div class="flex justify-start mt-5">
                     <button id="downloadButton" class="bg-purpleNavbar text-white px-4 py-2  rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition">
-                        Download
+                        <i class='bx bx-printer'></i> Print
                     </button>
                 </div>
 

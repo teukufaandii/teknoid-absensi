@@ -45,6 +45,15 @@ $years = date('Y');
     <script src="node_modules/chart.js/dist/chart.umd.js"></script>
     <script src="src/pages/js/chartUser.js"></script>
     <script src="src/pages/js/chartAdmin.js"></script>
+    <style>
+        .chart-container {
+            height: 600px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            background: white;
+            padding: 20px;
+        }
+    </style>
 
 <body>
     <div class="flex flex-col md:flex-row lg:flex-row h-screen">
@@ -77,8 +86,8 @@ $years = date('Y');
                         }
                         ?>
                     </div>
-                    <div class="w-full flex justify-center p-8 bg-white rounded-lg mt-8">
-                        <canvas id="absenceChartAdmin" class="w-full h-96 mb-4 md:mb-0 md:mr-20"></canvas>
+                    <div class="chart-container w-full flex justify-center bg-white rounded-lg mt-8">
+                        <canvas id="absenceChartAdmin"></canvas>
                     </div>
                 <?php elseif ($role === 'user'): ?>
                     <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Dashboard </h1>
@@ -105,8 +114,8 @@ $years = date('Y');
                         <div class="status-absen">
                             Status Absen Hari Ini:
                         </div>
-                        <div class="w-full flex justify-center p-8 bg-white rounded-lg">
-                            <canvas id="absenceChartUser" class="w-full h-96 mb-4 md:mb-0 md:mr-20"></canvas>
+                        <div class="chart-container w-full flex justify-center p-8 bg-white rounded-lg">
+                            <canvas id="absenceChartUser" class=""></canvas>
                         </div>
                     </div>
                 <?php endif; ?>

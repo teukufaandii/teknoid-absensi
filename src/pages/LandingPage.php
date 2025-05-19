@@ -35,7 +35,7 @@
         </div>
 
         <footer class="mt-12 text-gray-400 text-sm">
-            &copy; 2024 TeknoGenius. All rights reserved.
+            &copy; 2025 TeknoGenius. All rights reserved.
         </footer>
     </div>
 

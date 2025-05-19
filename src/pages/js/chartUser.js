@@ -30,7 +30,30 @@ document.addEventListener("DOMContentLoaded", function () {
       const izinData = getDataByKey("total_izin");
       const alphaData = getDataByKey("total_alpha");
 
+      // Set up the context and gradients
       const ctx = document.getElementById("absenceChartUser").getContext("2d");
+
+      // Create gradients for each dataset
+      const hadirGradient = ctx.createLinearGradient(0, 0, 0, 300);
+      hadirGradient.addColorStop(0, "rgba(75, 192, 92, 0.8)");
+      hadirGradient.addColorStop(1, "rgba(75, 192, 92, 0.2)");
+
+      const sakitGradient = ctx.createLinearGradient(0, 0, 0, 300);
+      sakitGradient.addColorStop(0, "rgba(54, 162, 235, 0.8)");
+      sakitGradient.addColorStop(1, "rgba(54, 162, 235, 0.2)");
+
+      const izinGradient = ctx.createLinearGradient(0, 0, 0, 300);
+      izinGradient.addColorStop(0, "rgba(255, 159, 64, 0.8)");
+      izinGradient.addColorStop(1, "rgba(255, 159, 64, 0.2)");
+
+      const alphaGradient = ctx.createLinearGradient(0, 0, 0, 300);
+      alphaGradient.addColorStop(0, "rgba(255, 99, 132, 0.8)");
+      alphaGradient.addColorStop(1, "rgba(255, 99, 132, 0.2)");
+
+      // Set chart font
+      Chart.defaults.font.family =
+        "'Poppins', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif";
+
       new Chart(ctx, {
         type: "bar",
         data: {
@@ -39,42 +62,87 @@ document.addEventListener("DOMContentLoaded", function () {
             {
               label: "Masuk",
               data: hadirData,
-              backgroundColor: "rgba(255, 99, 132, 0.2)",
-              borderColor: "rgb(255, 99, 132)",
+              backgroundColor: hadirGradient,
+              borderColor: "rgb(75, 192, 92)",
               borderWidth: 1,
+              borderRadius: 6,
+              hoverBackgroundColor: "rgba(75, 192, 92, 0.9)",
             },
             {
               label: "Sakit",
               data: sakitData,
-              backgroundColor: "rgba(255, 159, 64, 0.2)",
-              borderColor: "rgb(255, 159, 64)",
+              backgroundColor: sakitGradient,
+              borderColor: "rgb(54, 162, 235)",
               borderWidth: 1,
+              borderRadius: 6,
+              hoverBackgroundColor: "rgba(54, 162, 235, 0.9)",
             },
             {
               label: "Izin",
               data: izinData,
-              backgroundColor: "rgba(75, 192, 192, 0.2)",
-              borderColor: "rgb(75, 192, 192)",
+              backgroundColor: izinGradient,
+              borderColor: "rgb(255, 159, 64)",
               borderWidth: 1,
+              borderRadius: 6,
+              hoverBackgroundColor: "rgba(255, 159, 64, 0.9)",
             },
             {
               label: "Alpha",
               data: alphaData,
-              backgroundColor: "rgba(54, 162, 235, 0.2)",
-              borderColor: "rgb(75, 192, 192)",
+              backgroundColor: alphaGradient,
+              borderColor: "rgb(255, 99, 132)",
               borderWidth: 1,
+              borderRadius: 6,
+              hoverBackgroundColor: "rgba(255, 99, 132, 0.9)",
             },
           ],
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
+            legend: {
+              position: "top",
+              labels: {
+                usePointStyle: true,
+                padding: 20,
+                font: {
+                  size: 12,
+                },
+              },
+            },
             title: {
               display: true,
-              text: "Statistik Kehadiran Tahun Ini",
+              text: "Statistik Kehadiran Anda Tahun 2025",
               font: {
-                size: 18,
+                size: 20,
                 weight: "bold",
+              },
+              padding: {
+                top: 10,
+                bottom: 30,
+              },
+              color: "#333",
+            },
+            tooltip: {
+              backgroundColor: "rgba(0, 0, 0, 0.8)",
+              padding: 12,
+              titleFont: {
+                size: 14,
+              },
+              bodyFont: {
+                size: 13,
+              },
+              displayColors: false,
+              callbacks: {
+                label: function (context) {
+                  let label = context.dataset.label || "";
+                  if (label) {
+                    label += ": ";
+                  }
+                  label += context.parsed.y;
+                  return label;
+                },
               },
             },
           },
@@ -82,8 +150,16 @@ document.addEventListener("DOMContentLoaded", function () {
             y: {
               beginAtZero: true,
               max: 30,
+              grid: {
+                color: "rgba(200, 200, 200, 0.15)",
+                drawBorder: false,
+              },
               ticks: {
                 stepSize: 5,
+                font: {
+                  size: 12,
+                },
+                color: "#666",
               },
               title: {
                 display: true,
@@ -92,9 +168,39 @@ document.addEventListener("DOMContentLoaded", function () {
                   size: 14,
                   weight: "bold",
                 },
+                color: "#333",
+                padding: {
+                  bottom: 10,
+                },
+              },
+            },
+            x: {
+              grid: {
+                display: false,
+                drawBorder: false,
+              },
+              ticks: {
+                font: {
+                  size: 12,
+                },
+                color: "#666",
               },
             },
           },
+          animation: {
+            duration: 1500,
+            easing: "easeOutQuart",
+          },
+          layout: {
+            padding: {
+              top: 10,
+              right: 20,
+              bottom: 10,
+              left: 10,
+            },
+          },
+          barPercentage: 0.8,
+          categoryPercentage: 0.9,
         },
       });
     })

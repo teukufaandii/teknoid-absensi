@@ -22,7 +22,6 @@ if (empty($userId) || empty($userData)) {
 }
 
 try {
-    // Prepare the SQL statement
     $stmt = $conn->prepare("
         UPDATE tb_pengguna 
         SET 
@@ -55,7 +54,6 @@ try {
     echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
 }
 
-// Close the statement and connection
 $stmt->close();
 $conn->close();
 ?>

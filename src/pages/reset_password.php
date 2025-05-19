@@ -96,7 +96,7 @@ if (isset($_GET['token'])) {
         </div>
         <div class="flex flex-col items-center justify-center w-1/2 bg-gray-200 p-8">
             <img src="public/loginPage.png" alt="Logo" class="mb-8 w-90 h-90 object-cover">
-            <p class="mt-4 text-center text-gray-600">&copy; 2024 TeknoGenius. All rights reserved.</p>
+            <p class="mt-4 text-center text-gray-600">&copy; 2025 TeknoGenius. All rights reserved.</p>
         </div>
     </div>
 

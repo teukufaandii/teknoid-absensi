@@ -8,7 +8,7 @@ if (!isset($_SESSION['token'])) {
 
 // Cek session akses admin
 if ($_SESSION['role'] !== 'admin') {
-  header('Location: unauthorized'); 
+  header('Location: unauthorized');
   exit();
 }
 
@@ -48,10 +48,10 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
       <!-- Main Content -->
       <main class="flex-1 p-6 bg-mainBgColor mainContent">
         <div class="flex justify-between items-center border-b border-gray-500">
-            <h1 class="text-lg sm:text-xl md:text-3xl py-2 font-Poppins font-semibold">Edit Data Pegawai</h1>
-            <a href="../pegawai">
-                <button class="bg-purpleNavbar text-white px-4 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200">Kembali</button>
-            </a>
+          <h1 class="text-lg sm:text-xl md:text-3xl py-2 font-Poppins font-semibold">Edit Data Pegawai</h1>
+          <a href="../pegawai">
+            <button class="bg-purpleNavbar text-white px-4 py-2 rounded-lg hover:bg-purpleNavbarHover transition duration-200">Kembali</button>
+          </a>
         </div>
         <div class="w-full mx-auto py-6">
           <div class="mb-4">
@@ -108,13 +108,13 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
           <div class="mb-4">
             <label class="block text-gray-700 font-semibold mb-2">Jabatan</label>
             <div class="relative w-full">
-              <select name="jabatan" class="appearance-none w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar">
-                <option hidden>Pilih Jabatan</option>
+              <select name="jabatan" class="appearance-none w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar" required>
+                <option value="" disabled selected>Pilih Jabatan</option>
                 <option value="Pimpinan">Pimpinan</option>
                 <option value="Dosen Struktural">Dosen Struktural</option>
                 <option value="Dosen Tetap FEB">Dosen Tetap FEB</option>
                 <option value="Dosen Tetap FTD">Dosen Tetap FTD</option>
-                <option value="Dosen Struktural">Karyawan</option>
+                <option value="Karyawan">Karyawan</option>
                 <option value="Customer Service">Customer Service</option>
               </select>
 
@@ -206,45 +206,47 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
     });
   }
 
-    // Delete button functionality
-    $(document).on('click', '.delete-button', function() {
-      const id_pg = $(this).data('id');
-      deletedata_pegawai(id_pg);
-    });
+  // Delete button functionality
+  $(document).on('click', '.delete-button', function() {
+    const id_pg = $(this).data('id');
+    deletedata_pegawai(id_pg);
+  });
 
-    function deletedata_pegawai(id_pg) {
-      Swal.fire({
-        title: 'Konfirmasi',
-        text: "Apakah Anda yakin ingin menghapus data pegawai ini?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, hapus!',
-        cancelButtonText: 'Batal'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $.ajax({
-            url: '../api/users/delete-user',
-            type: 'POST',
-            data: JSON.stringify({ id_pg: id_pg }),
-            dataType: 'json',
-            success: function(response) {
-              if (response.status === 'success') {
-                Swal.fire('Berhasil!', response.message, 'success').then(() => {
-                  window.location.href = '/teknoid-absensi/pegawai'; // di production /teknoid-absensi ganti url asli
-                });
-              } else {
-                Swal.fire('Gagal!', response.message, 'error');
-              }
-            },
-            error: function() {
-              Swal.fire('Error!', 'Terjadi kesalahan saat menghapus data pegawai', 'error');
+  function deletedata_pegawai(id_pg) {
+    Swal.fire({
+      title: 'Konfirmasi',
+      text: "Apakah Anda yakin ingin menghapus data pegawai ini?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, hapus!',
+      cancelButtonText: 'Batal'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: '../api/users/delete-user',
+          type: 'POST',
+          data: JSON.stringify({
+            id_pg: id_pg
+          }),
+          dataType: 'json',
+          success: function(response) {
+            if (response.status === 'success') {
+              Swal.fire('Berhasil!', response.message, 'success').then(() => {
+                window.location.href = '/teknoid-absensi/pegawai'; // di production /teknoid-absensi ganti url asli
+              });
+            } else {
+              Swal.fire('Gagal!', response.message, 'error');
             }
-          });
-        }
-      });
-    }
+          },
+          error: function() {
+            Swal.fire('Error!', 'Terjadi kesalahan saat menghapus data pegawai', 'error');
+          }
+        });
+      }
+    });
+  }
 
 
   function fetchData() {

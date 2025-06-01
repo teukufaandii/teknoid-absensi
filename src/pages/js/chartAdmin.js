@@ -36,12 +36,12 @@ document.addEventListener("DOMContentLoaded", function () {
       alphaGradient.addColorStop(1, "rgba(255, 99, 132, 0.2)");
 
       const hadirGradient = ctx.createLinearGradient(0, 0, 0, 400);
-      hadirGradient.addColorStop(0, "rgba(75, 192, 92, 0.8)");
-      hadirGradient.addColorStop(1, "rgba(75, 192, 92, 0.2)");
+      hadirGradient.addColorStop(0, "rgba(75, 192, 192, 0.8)");
+      hadirGradient.addColorStop(1, "rgba(75, 192, 192, 0.2)");
 
       const telatGradient = ctx.createLinearGradient(0, 0, 0, 400);
-      telatGradient.addColorStop(0, "rgba(255, 159, 64, 0.8)");
-      telatGradient.addColorStop(1, "rgba(255, 159, 64, 0.2)");
+      telatGradient.addColorStop(0, "rgba(255, 206, 86, 0.8)");
+      telatGradient.addColorStop(1, "rgba(255, 206, 86, 0.2)");
 
       const sakitGradient = ctx.createLinearGradient(0, 0, 0, 400);
       sakitGradient.addColorStop(0, "rgba(54, 162, 235, 0.8)");
@@ -51,52 +51,64 @@ document.addEventListener("DOMContentLoaded", function () {
       Chart.defaults.font.family =
         "'Poppins', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif";
 
+      // Calculate dynamic max value
+      const maxValue = Math.max(...hadirData, ...alphaData, ...telatData, ...sakitData);
+      const dynamicMax = Math.ceil(maxValue / 1000) * 1000 + 500; // Round up with buffer
+
       new Chart(ctx, {
         type: "bar",
         data: {
           labels: labels,
           datasets: [
             {
+              label: "Hadir",
+              data: hadirData,
+              backgroundColor: hadirGradient,
+              borderColor: "rgb(75, 192, 192)",
+              borderWidth: 2,
+              borderRadius: 8,
+              hoverBackgroundColor: "rgba(75, 192, 192, 0.9)",
+              hoverBorderWidth: 3,
+            },
+            {
               label: "Alpha",
               data: alphaData,
               backgroundColor: alphaGradient,
               borderColor: "rgb(255, 99, 132)",
-              borderWidth: 1,
-              borderRadius: 6,
+              borderWidth: 2,
+              borderRadius: 8,
               hoverBackgroundColor: "rgba(255, 99, 132, 0.9)",
+              hoverBorderWidth: 3,
             },
             {
-              label: "Hadir",
-              data: hadirData,
-              backgroundColor: hadirGradient,
-              borderColor: "rgb(75, 192, 92)",
-              borderWidth: 1,
-              borderRadius: 6,
-              hoverBackgroundColor: "rgba(75, 192, 92, 0.9)",
-            },
-            {
-              label: "Telat",
+              label: "Terlambat",
               data: telatData,
               backgroundColor: telatGradient,
-              borderColor: "rgb(255, 159, 64)",
-              borderWidth: 1,
-              borderRadius: 6,
-              hoverBackgroundColor: "rgba(255, 159, 64, 0.9)",
+              borderColor: "rgb(255, 206, 86)",
+              borderWidth: 2,
+              borderRadius: 8,
+              hoverBackgroundColor: "rgba(255, 206, 86, 0.9)",
+              hoverBorderWidth: 3,
             },
             {
               label: "Sakit",
               data: sakitData,
               backgroundColor: sakitGradient,
               borderColor: "rgb(54, 162, 235)",
-              borderWidth: 1,
-              borderRadius: 6,
+              borderWidth: 2,
+              borderRadius: 8,
               hoverBackgroundColor: "rgba(54, 162, 235, 0.9)",
-            },
+              hoverBorderWidth: 3,
+            }
           ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          interaction: {
+            intersect: false,
+            mode: 'index'
+          },
           plugins: {
             legend: {
               position: "top",
@@ -106,11 +118,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 font: {
                   size: 12,
                 },
+                boxWidth: 12,
+                boxHeight: 12
               },
             },
             title: {
               display: true,
-              text: "Statistik Kehadiran Tahun 2025",
+              text: "Statistik Kehadiran Karyawan - Tahun 2025",
               font: {
                 size: 20,
                 weight: "bold",
@@ -130,37 +144,48 @@ document.addEventListener("DOMContentLoaded", function () {
               bodyFont: {
                 size: 13,
               },
-              displayColors: false,
+              cornerRadius: 8,
+              displayColors: true,
               callbacks: {
                 label: function (context) {
                   let label = context.dataset.label || "";
                   if (label) {
                     label += ": ";
                   }
-                  label += context.parsed.y;
+                  label += context.parsed.y.toLocaleString() + " orang";
                   return label;
                 },
+                footer: function(tooltipItems) {
+                  let total = 0;
+                  tooltipItems.forEach(item => {
+                    total += item.parsed.y;
+                  });
+                  return 'Total: ' + total.toLocaleString() + ' orang';
+                }
               },
             },
           },
           scales: {
             y: {
               beginAtZero: true,
-              max: 5000,
+              max: dynamicMax,
               grid: {
                 color: "rgba(200, 200, 200, 0.15)",
                 drawBorder: false,
               },
               ticks: {
-                stepSize: 500,
+                stepSize: Math.ceil(dynamicMax / 10),
                 font: {
                   size: 12,
                 },
                 color: "#666",
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
               },
               title: {
                 display: true,
-                text: "Jumlah Kehadiran",
+                text: "Jumlah Karyawan",
                 font: {
                   size: 14,
                   weight: "bold",
@@ -181,6 +206,20 @@ document.addEventListener("DOMContentLoaded", function () {
                   size: 12,
                 },
                 color: "#666",
+                maxRotation: 45,
+                minRotation: 0
+              },
+              title: {
+                display: true,
+                text: "Bulan",
+                font: {
+                  size: 14,
+                  weight: "bold",
+                },
+                color: "#333",
+                padding: {
+                  top: 10,
+                },
               },
             },
           },
@@ -198,6 +237,24 @@ document.addEventListener("DOMContentLoaded", function () {
           },
           barPercentage: 0.8,
           categoryPercentage: 0.9,
+          elements: {
+            bar: {
+              borderRadius: 6,
+              borderSkipped: false,
+            }
+          },
+          // Responsive options
+          onResize: function(chart, size) {
+            if (size.width < 768) {
+              chart.options.plugins.legend.position = 'bottom';
+              chart.options.plugins.legend.labels.padding = 10;
+              chart.options.scales.x.ticks.maxRotation = 45;
+            } else {
+              chart.options.plugins.legend.position = 'top';
+              chart.options.plugins.legend.labels.padding = 20;
+              chart.options.scales.x.ticks.maxRotation = 0;
+            }
+          }
         },
       });
     })

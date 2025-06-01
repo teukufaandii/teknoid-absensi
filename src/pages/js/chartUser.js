@@ -33,26 +33,30 @@ document.addEventListener("DOMContentLoaded", function () {
       // Set up the context and gradients
       const ctx = document.getElementById("absenceChartUser").getContext("2d");
 
-      // Create gradients for each dataset
-      const hadirGradient = ctx.createLinearGradient(0, 0, 0, 300);
-      hadirGradient.addColorStop(0, "rgba(75, 192, 92, 0.8)");
-      hadirGradient.addColorStop(1, "rgba(75, 192, 92, 0.2)");
+      // Create gradients for each dataset with better colors
+      const hadirGradient = ctx.createLinearGradient(0, 0, 0, 400);
+      hadirGradient.addColorStop(0, "rgba(46, 204, 113, 0.8)");
+      hadirGradient.addColorStop(1, "rgba(46, 204, 113, 0.2)");
 
-      const sakitGradient = ctx.createLinearGradient(0, 0, 0, 300);
-      sakitGradient.addColorStop(0, "rgba(54, 162, 235, 0.8)");
-      sakitGradient.addColorStop(1, "rgba(54, 162, 235, 0.2)");
+      const sakitGradient = ctx.createLinearGradient(0, 0, 0, 400);
+      sakitGradient.addColorStop(0, "rgba(52, 152, 219, 0.8)");
+      sakitGradient.addColorStop(1, "rgba(52, 152, 219, 0.2)");
 
-      const izinGradient = ctx.createLinearGradient(0, 0, 0, 300);
-      izinGradient.addColorStop(0, "rgba(255, 159, 64, 0.8)");
-      izinGradient.addColorStop(1, "rgba(255, 159, 64, 0.2)");
+      const izinGradient = ctx.createLinearGradient(0, 0, 0, 400);
+      izinGradient.addColorStop(0, "rgba(241, 196, 15, 0.8)");
+      izinGradient.addColorStop(1, "rgba(241, 196, 15, 0.2)");
 
-      const alphaGradient = ctx.createLinearGradient(0, 0, 0, 300);
-      alphaGradient.addColorStop(0, "rgba(255, 99, 132, 0.8)");
-      alphaGradient.addColorStop(1, "rgba(255, 99, 132, 0.2)");
+      const alphaGradient = ctx.createLinearGradient(0, 0, 0, 400);
+      alphaGradient.addColorStop(0, "rgba(231, 76, 60, 0.8)");
+      alphaGradient.addColorStop(1, "rgba(231, 76, 60, 0.2)");
 
       // Set chart font
       Chart.defaults.font.family =
         "'Poppins', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif";
+
+      // Calculate dynamic max value
+      const maxValue = Math.max(...hadirData, ...sakitData, ...izinData, ...alphaData);
+      const dynamicMax = Math.max(30, Math.ceil(maxValue / 5) * 5 + 5); // Minimum 30, with buffer
 
       new Chart(ctx, {
         type: "bar",
@@ -63,43 +67,51 @@ document.addEventListener("DOMContentLoaded", function () {
               label: "Masuk",
               data: hadirData,
               backgroundColor: hadirGradient,
-              borderColor: "rgb(75, 192, 92)",
-              borderWidth: 1,
-              borderRadius: 6,
-              hoverBackgroundColor: "rgba(75, 192, 92, 0.9)",
+              borderColor: "rgb(46, 204, 113)",
+              borderWidth: 2,
+              borderRadius: 8,
+              hoverBackgroundColor: "rgba(46, 204, 113, 0.9)",
+              hoverBorderWidth: 3,
             },
             {
               label: "Sakit",
               data: sakitData,
               backgroundColor: sakitGradient,
-              borderColor: "rgb(54, 162, 235)",
-              borderWidth: 1,
-              borderRadius: 6,
-              hoverBackgroundColor: "rgba(54, 162, 235, 0.9)",
+              borderColor: "rgb(52, 152, 219)",
+              borderWidth: 2,
+              borderRadius: 8,
+              hoverBackgroundColor: "rgba(52, 152, 219, 0.9)",
+              hoverBorderWidth: 3,
             },
             {
               label: "Izin",
               data: izinData,
               backgroundColor: izinGradient,
-              borderColor: "rgb(255, 159, 64)",
-              borderWidth: 1,
-              borderRadius: 6,
-              hoverBackgroundColor: "rgba(255, 159, 64, 0.9)",
+              borderColor: "rgb(241, 196, 15)",
+              borderWidth: 2,
+              borderRadius: 8,
+              hoverBackgroundColor: "rgba(241, 196, 15, 0.9)",
+              hoverBorderWidth: 3,
             },
             {
               label: "Alpha",
               data: alphaData,
               backgroundColor: alphaGradient,
-              borderColor: "rgb(255, 99, 132)",
-              borderWidth: 1,
-              borderRadius: 6,
-              hoverBackgroundColor: "rgba(255, 99, 132, 0.9)",
-            },
+              borderColor: "rgb(231, 76, 60)",
+              borderWidth: 2,
+              borderRadius: 8,
+              hoverBackgroundColor: "rgba(231, 76, 60, 0.9)",
+              hoverBorderWidth: 3,
+            }
           ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          interaction: {
+            intersect: false,
+            mode: 'index'
+          },
           plugins: {
             legend: {
               position: "top",
@@ -109,11 +121,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 font: {
                   size: 12,
                 },
+                boxWidth: 12,
+                boxHeight: 12
               },
             },
             title: {
               display: true,
-              text: "Statistik Kehadiran Anda Tahun 2025",
+              text: "Statistik Kehadiran Pribadi - Tahun 2025",
               font: {
                 size: 20,
                 weight: "bold",
@@ -133,23 +147,31 @@ document.addEventListener("DOMContentLoaded", function () {
               bodyFont: {
                 size: 13,
               },
-              displayColors: false,
+              cornerRadius: 8,
+              displayColors: true,
               callbacks: {
                 label: function (context) {
                   let label = context.dataset.label || "";
                   if (label) {
                     label += ": ";
                   }
-                  label += context.parsed.y;
+                  label += context.parsed.y + " hari";
                   return label;
                 },
+                footer: function(tooltipItems) {
+                  let total = 0;
+                  tooltipItems.forEach(item => {
+                    total += item.parsed.y;
+                  });
+                  return 'Total: ' + total + ' hari';
+                }
               },
             },
           },
           scales: {
             y: {
               beginAtZero: true,
-              max: 30,
+              max: dynamicMax,
               grid: {
                 color: "rgba(200, 200, 200, 0.15)",
                 drawBorder: false,
@@ -160,10 +182,13 @@ document.addEventListener("DOMContentLoaded", function () {
                   size: 12,
                 },
                 color: "#666",
+                callback: function(value) {
+                  return value;
+                }
               },
               title: {
                 display: true,
-                text: "Jumlah Kehadiran",
+                text: "Jumlah Hari",
                 font: {
                   size: 14,
                   weight: "bold",
@@ -184,6 +209,20 @@ document.addEventListener("DOMContentLoaded", function () {
                   size: 12,
                 },
                 color: "#666",
+                maxRotation: 45,
+                minRotation: 0
+              },
+              title: {
+                display: true,
+                text: "Bulan",
+                font: {
+                  size: 14,
+                  weight: "bold",
+                },
+                color: "#333",
+                padding: {
+                  top: 10,
+                },
               },
             },
           },
@@ -201,6 +240,24 @@ document.addEventListener("DOMContentLoaded", function () {
           },
           barPercentage: 0.8,
           categoryPercentage: 0.9,
+          elements: {
+            bar: {
+              borderRadius: 6,
+              borderSkipped: false,
+            }
+          },
+          // Responsive options
+          onResize: function(chart, size) {
+            if (size.width < 768) {
+              chart.options.plugins.legend.position = 'bottom';
+              chart.options.plugins.legend.labels.padding = 10;
+              chart.options.scales.x.ticks.maxRotation = 45;
+            } else {
+              chart.options.plugins.legend.position = 'top';
+              chart.options.plugins.legend.labels.padding = 20;
+              chart.options.scales.x.ticks.maxRotation = 0;
+            }
+          }
         },
       });
     })

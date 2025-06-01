@@ -53,7 +53,79 @@ $years = date('Y');
             background: white;
             padding: 20px;
         }
+
+        /* Enhanced Card Styles */
+        .dashboard-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            pointer-events: none;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Updated card icon styles - positioned at top right */
+        .card-icon {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        /* Adjust card content to make room for icon */
+        .card-content {
+            padding-right: 70px;
+            /* Make space for icon */
+            position: relative;
+            z-index: 5;
+        }
+
+        .card-stats {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 400px;
+                padding: 16px;
+            }
+
+            .card-icon {
+                width: 40px;
+                height: 40px;
+                top: 12px;
+                right: 12px;
+            }
+
+            .card-content {
+                padding-right: 55px;
+            }
+        }
     </style>
+</head>
 
 <body>
     <div class="flex flex-col md:flex-row lg:flex-row h-screen">
@@ -70,21 +142,53 @@ $years = date('Y');
                     <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold"> Dashboard </h1>
                     <?php echo '<h1 class="text-base sm:text-lg md:text-2xl mt-6 font-Poppins font-normal"> Data Bulan <strong> ' . $months[date('n')] . ' </strong> </h1>'; ?>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-                        <?php
-                        $cards = [
-                            ['title' => 'Total Hadir', 'id' => 'total-hadir'],
-                            ['title' => 'Total Tidak Hadir', 'id' => 'total-absen'],
-                            ['title' => 'Total Terlambat Hadir', 'id' => 'total-telat'],
-                            ['title' => 'Total Karyawan', 'id' => 'total-karyawan'],
-                        ];
-                        foreach ($cards as $card) {
-                            echo "
-                            <div class='bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag'>
-                                <h2 class='text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1'>{$card['title']}</h2>
-                                <p id='{$card['id']}' class='text-white text-xs sm:text-sm'>Loading...</p>
-                            </div>";
-                        }
-                        ?>
+                        <div class='dashboard-card bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag'>
+                            <div class="card-icon">
+                                <i class="fas fa-user-check text-white text-xl"></i>
+                            </div>
+                            <div class="card-content">
+                                <h2 class='text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1'>Total Hadir</h2>
+                                <p id='total-hadir' class='text-white text-xl sm:text-2xl font-bold'>Loading...</p>
+                                <div class="card-stats text-white">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class='dashboard-card bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag'>
+                            <div class="card-icon">
+                                <i class="fas fa-user-times text-white text-xl"></i>
+                            </div>
+                            <div class="card-content">
+                                <h2 class='text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1'>Total Tidak Hadir</h2>
+                                <p id='total-absen' class='text-white text-xl sm:text-2xl font-bold'>Loading...</p>
+                                <div class="card-stats text-white">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class='dashboard-card bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag'>
+                            <div class="card-icon">
+                                <i class="fas fa-clock text-white text-xl"></i>
+                            </div>
+                            <div class="card-content">
+                                <h2 class='text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1'>Total Terlambat Hadir</h2>
+                                <p id='total-telat' class='text-white text-xl sm:text-2xl font-bold'>Loading...</p>
+                                <div class="card-stats text-white">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class='dashboard-card bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag'>
+                            <div class="card-icon">
+                                <i class="fas fa-users text-white text-xl"></i>
+                            </div>
+                            <div class="card-content">
+                                <h2 class='text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1'>Total Karyawan</h2>
+                                <p id='total-karyawan' class='text-white text-xl sm:text-2xl font-bold'>Loading...</p>
+                                <div class="card-stats text-white">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="chart-container w-full flex justify-center bg-white rounded-lg mt-8">
                         <canvas id="absenceChartAdmin"></canvas>
@@ -94,21 +198,49 @@ $years = date('Y');
                     <?php echo '<h1 class="text-base sm:text-lg md:text-2xl mt-6 font-Poppins font-normal"> Data Bulan <strong> ' . $months[date('n')] . ' </strong> </h1>'; ?>
                     <div class="separator">
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-                            <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
-                                <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 pb-1 border-white text-white">Total Masuk</h2>
-                                <p id="totalMasuk" class="text-white text-xs sm:text-sm">Loading...</p>
+                            <div class="dashboard-card bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
+                                <div class="card-icon">
+                                    <i class="fas fa-sign-in-alt text-white text-xl"></i>
+                                </div>
+                                <div class="card-content">
+                                    <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 pb-1 border-white text-white">Total Masuk</h2>
+                                    <p id="totalMasuk" class="text-white text-xl sm:text-2xl font-bold">Loading...</p>
+                                    <div class="card-stats text-white">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
-                                <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Total Sakit</h2>
-                                <p id="totalSakit" class="text-white text-xs sm:text-sm">Loading...</p>
+                            <div class="dashboard-card bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
+                                <div class="card-icon">
+                                    <i class="fas fa-thermometer-half text-white text-xl"></i>
+                                </div>
+                                <div class="card-content">
+                                    <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Total Sakit</h2>
+                                    <p id="totalSakit" class="text-white text-xl sm:text-2xl font-bold">Loading...</p>
+                                    <div class="card-stats text-white">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
-                                <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Total Izin</h2>
-                                <p id="totalIzin" class="text-white text-xs sm:text-sm">Loading...</p>
+                            <div class="dashboard-card bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
+                                <div class="card-icon">
+                                    <i class="fas fa-calendar-alt text-white text-xl"></i>
+                                </div>
+                                <div class="card-content">
+                                    <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Total Izin</h2>
+                                    <p id="totalIzin" class="text-white text-xl sm:text-2xl font-bold">Loading...</p>
+                                    <div class="card-stats text-white">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
-                                <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Total Cuti</h2>
-                                <p id="totalCuti" class="text-white text-xs sm:text-sm">Loading...</p>
+                            <div class="dashboard-card bg-gradient-to-r from-dashboardBoxPurple to-dashboardBoxBlue p-4 pb-10 rounded-lg shadow-dashboardTag">
+                                <div class="card-icon">
+                                    <i class="fas fa-umbrella-beach text-white text-xl"></i>
+                                </div>
+                                <div class="card-content">
+                                    <h2 class="text-sm sm:text-lg font-medium mb-2 border-b-2 border-white text-white pb-1">Total Cuti</h2>
+                                    <p id="totalCuti" class="text-white text-xl sm:text-2xl font-bold">Loading...</p>
+                                    <div class="card-stats text-white">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="status-absen">

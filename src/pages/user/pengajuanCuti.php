@@ -78,12 +78,15 @@ $conn->close();
                 </div>
             </div>
 
-            <div class="container mx-auto p-4">
-                <h1 class="text-center text-2xl font-bold mb-4">Pengajuan Cuti</h1>
-                <div class="flex justify-center">
-                    <button id="openModal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Buka Pengajuan Cuti
-                    </button>
+            <!-- Container yang dipusatkan -->
+            <div class="flex-1 flex items-center justify-center">
+                <div class="container mx-auto p-4">
+                    <h1 class="text-center text-2xl font-bold mb-4">Pengajuan Cuti</h1>
+                    <div class="flex justify-center">
+                        <button id="openModal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Buka Pengajuan Cuti
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -106,7 +109,7 @@ $conn->close();
         });
     </script>
 
-        <?php include('src/pages/navbar/profileInfo.php') ?>
+    <?php include('src/pages/navbar/profileInfo.php') ?>
 </body>
 
 </html>

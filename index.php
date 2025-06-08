@@ -90,6 +90,13 @@ $routes->add('pegawai_tambah', new Route('/pegawai/add', [
         return new Response(ob_get_clean());
     }
 ]));
+$routes->add('dayoff_tambah', new Route('/dayoff/add', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/pages/admin/addDayOff.php';
+        return new Response(ob_get_clean());
+    }
+]));
 $routes->add('anonim', new Route('/anonim', [
     '_controller' => function () {
         ob_start();

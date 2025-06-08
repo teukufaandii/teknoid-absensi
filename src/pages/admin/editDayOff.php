@@ -141,7 +141,7 @@ $id_libur = $_GET['id'] ?? '';
                                     Swal.fire('Error', response.error, 'error');
                                 } else {
                                     Swal.fire('Berhasil!', 'Data Anda berhasil diperbarui.', 'success').then(() => {
-                                        window.location.href = '/teknoid-absensi/dayoff/edit?id=' + id_libur;
+                                        window.location.href = '/teknoid-absensi/dayoff';
                                     });
                                 }
                             },

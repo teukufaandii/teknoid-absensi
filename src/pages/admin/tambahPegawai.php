@@ -344,8 +344,7 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
             console.error('Error:', error);
             Swal.fire({
               icon: 'error',
-              title: 'Terjadi kesalahan',
-              text: 'Coba lagi nanti.'
+              title: 'Email Sudah Terdaftar',
             });
           });
       }

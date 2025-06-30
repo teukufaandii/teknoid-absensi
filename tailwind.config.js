@@ -1,8 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./*.php", // Matches PHP files in the root directory
-    "./src/**/*.php", // Matches PHP files within the src directory and its subdirectories
+    "./*.php", 
+    "./src/**/*.php", 
   ],
   theme: {
     extend: {
@@ -20,7 +20,7 @@ module.exports = {
         greenButtonHover: "#74c38b",
       },
       boxShadow: {
-        customTable: "0 0 20px 0 rgba(0, 0, 0, 0.3)", // Define your custom box-shadow
+        customTable: "0 0 20px 0 rgba(0, 0, 0, 0.3)", 
         dashboardTag: "0 7px 20px -1px rgba(0, 0, 0, 0.5)",
       },
     },

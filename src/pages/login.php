@@ -35,7 +35,7 @@
                         } elseif ($_GET['error'] === 'invalidrole') {
                             echo 'Role pengguna tidak valid. Silakan hubungi administrator.';
                         } else {
-                            echo 'Terjadi kesalahan. Silakan coba lagi.';
+                            echo 'Kata Sandi Salah';
                         }
                         ?>
                     </div>

@@ -17,6 +17,9 @@ $role = $_SESSION['role'];
 $id = $_SESSION['user_id'];
 $token = $_SESSION['token'];
 
+
+//pindahkan ketikda sudah ketemu lokasi api nya 
+include 'src/db/db_connect.php';
 ?>
 
 <!DOCTYPE html>
@@ -79,7 +82,13 @@ $token = $_SESSION['token'];
                 <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Anonim</h1>
 
                 <!-- Search Bar & Button Tambah -->
-                <div class="flex justify-end items-center mt-5">
+                <div class="flex justify-between items-center mt-5">
+                    <div class="flex justify-start items-center space-x-4">
+                <!--button hapus semua data anonim --> 
+                        <form method="POST" action="api/user/truncate-anonim" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua data anonim?');">
+                            <button class="bg-purpleNavbar text-white px-4 py-2 rounded-xl text-base font-medium hover:bg-purpleNavbarHover transition" type="submit" name="hapus_anonim">Hapus Semua</button>
+                        </form>
+                    </div>
                     <div class="relative">
                         <form method="GET">
                             <input

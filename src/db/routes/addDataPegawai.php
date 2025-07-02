@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $tempat_lahir = $input['tempatLahir'];
     $tanggal_lahir = $input['tanggalLahir'];
     $jenis_kelamin = isset($input['jenis_kelamin']) ? $input['jenis_kelamin'] : null;
+    $kampus = $input['lokasi_kampus'];
     $jabatan = $input['jabatan'];
     $role = $input['role'];
     
@@ -27,11 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         mysqli_query($conn, $deleteQuery);
     }
 
-    $query = "INSERT INTO tb_pengguna (id_pg, nomor_kartu, nama, email, password, noinduk, tempat_lahir, tanggal_lahir, jenis_kelamin, jabatan, role) VALUES (UUID(), '$nomor_kartu', '$nama', '$email', '$password', '$noinduk', '$tempat_lahir', '$tanggal_lahir', '$jenis_kelamin', '$jabatan', '$role')";
+    $query = "INSERT INTO tb_pengguna (id_pg, nomor_kartu, nama, email, password, noinduk, tempat_lahir, tanggal_lahir, jenis_kelamin, kampus, jabatan, role) VALUES (UUID(), '$nomor_kartu', '$nama', '$email', '$password', '$noinduk', '$tempat_lahir', '$tanggal_lahir', '$jenis_kelamin',  '$kampus',  '$jabatan', '$role')";
 
     if (mysqli_query($conn, $query)) {
         echo json_encode(['success' => true]);
-    } elseif (!$nomor_kartu || !$nama || !$email || !$password || !$noinduk || !$tempat_lahir || !$tanggal_lahir || !$jenis_kelamin || !$jabatan || !$role) {
+    } elseif (!$nomor_kartu || !$nama || !$email || !$password || !$noinduk || !$tempat_lahir || !$tanggal_lahir || !$jenis_kelamin || !$kampus || !$jabatan || !$role) {
         echo json_encode(['success' => false, 'message' => 'Semua field harus diisi']);
         exit();
     } elseif (!mysqli_query($conn, $query)) {

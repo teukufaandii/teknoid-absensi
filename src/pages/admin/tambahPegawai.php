@@ -153,6 +153,23 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
             </div>
 
             <div class="mb-4">
+              <label class="block text-gray-700 font-semibold mb-2">Lokasi Kampus <span class="text-red-500">*</span></label>
+              <div class="relative w-full">
+                <select name="lokasi_kampus" class="appearance-none w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar" required>
+                  <option value="" hidden>Pilih Lokasi Kampus</option>
+                  <option value="Pimpinan">Ciputat</option>
+                  <option value="Dosen Struktural">Karawaci</option>
+                </select>
+                <div class="text-red-600 text-sm hidden error-message" id="error-lokasi_kampus">Lokasi kampus harus dipilih</div>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-4">
               <label class="block text-gray-700 font-semibold mb-2">Jabatan <span class="text-red-500">*</span></label>
               <div class="relative w-full">
                 <select name="jabatan" class="appearance-none w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar" required>
@@ -247,6 +264,10 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
       {
         name: 'tanggalLahir',
         label: 'Tanggal Lahir'
+      },
+      {
+        name: 'lokasi_kampus',
+        label: 'Lokasi Kampus'
       }
     ];
 
@@ -300,7 +321,8 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
       tanggalLahir: document.querySelector('input[name="tanggalLahir"]').value.trim(),
       jenis_kelamin: document.querySelector('input[name="gender"]:checked').value,
       jabatan: document.querySelector('select[name="jabatan"]').value,
-      role: document.querySelector('select[name="role"]').value
+      role: document.querySelector('select[name="role"]').value,
+      lokasi_kampus: document.querySelector('select[name="lokasi_kampus"]').value
     };
 
     Swal.fire({
@@ -344,7 +366,8 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
             console.error('Error:', error);
             Swal.fire({
               icon: 'error',
-              title: 'Email Sudah Terdaftar',
+              title: 'Terjadi kesalahan',
+              text: 'Coba lagi nanti.'
             });
           });
       }
@@ -352,4 +375,4 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
   }
 </script>
 
-</html>
+</html> 

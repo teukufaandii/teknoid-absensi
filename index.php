@@ -333,6 +333,14 @@ $routes->add('api_get_absen_status', new Route('api/user/get-status', [
         return new Response(ob_get_clean());
     }
 ]));
+$routes->add('api_truncate_anonim', new Route('api/user/truncate-anonim', [
+    '_controller' => function () {
+        include __DIR__ . '/src/db/routes/truncate_anonim.php';
+        return new Response(ob_get_clean());
+    }
+]));
+
+
 //forgot password
 $routes->add('api_forgot_password', new Route('api/auth/reset', [
     '_controller' => function () {

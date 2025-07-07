@@ -131,7 +131,7 @@ function getDateDifference(start, end) {
   const startDate = new Date(start);
   const endDate = new Date(end);
   const diffTime = Math.abs(endDate - startDate);
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Menghitung perbedaan dalam hari
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 }
 
 function toggleMingguan(jabatan) {

@@ -229,7 +229,7 @@ $current_page = $_SERVER['REQUEST_URI'];
                             <span id="rekap-icon" class="sideNav-icon flex items-center justify-center w-8 h-8 border-none rounded-lg">
                                 <i class="fa-solid fa-question"></i>
                             </span>
-                            <span class="ml-2 font-medium sideNav-text whitespace-nowrap">Tidak Dikenal</span>
+                            <span class="ml-2 font-medium sideNav-text whitespace-nowrap z-50">Tidak Dikenal</span>
                         </a>
                     </li>
                 </ul>

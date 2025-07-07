@@ -9,7 +9,7 @@ $(document).ready(function () {
       url: "api/users/get-absensi",
       type: "GET",
       data: {
-        start: page * 5,
+        start: page * 10,
         search: search,
       },
       dataType: "json",
@@ -19,8 +19,9 @@ $(document).ready(function () {
           window.location.href = "unauthorized";
           return;
         }
-
+        
         totalDataAbsensi = response.total;
+        console.log(totalDataAbsensi);
         currentPage = page;
         renderData(response.data_absensi);
         updatePaginationButtons();
@@ -47,7 +48,7 @@ $(document).ready(function () {
       tableBody.append(`
                     <tr class="bg-gray-100">
                         <td class="px-6 py-2 text-center">${
-                          index + 1 + currentPage * 5
+                          index + 1 + currentPage * 10
                         }</td>
                         <td class="px-6 py-2 text-center">${
                           data_absensi.noinduk
@@ -110,7 +111,7 @@ $(document).ready(function () {
   }
 
   function updatePaginationButtons() {
-    const totalPages = Math.ceil(totalDataAbsensi / 5);
+    const totalPages = Math.ceil(totalDataAbsensi / 10);
     const paginationContainer = $("#pagination-container");
 
     // Clear previous buttons and add new ones
@@ -141,7 +142,7 @@ $(document).ready(function () {
   });
 
   $("#last-page").on("click", function () {
-    const totalPages = Math.ceil(totalDataAbsensi / 5);
+    const totalPages = Math.ceil(totalDataAbsensi / 10);
     if (currentPage < totalPages - 1) {
       loadDataAbsensi(totalPages - 1, searchTerm);
     }
@@ -154,7 +155,7 @@ $(document).ready(function () {
   });
 
   $("#next-page").on("click", function () {
-    if ((currentPage + 1) * 5 < totalDataAbsensi) {
+    if ((currentPage + 1) * 10 < totalDataAbsensi) {
       loadDataAbsensi(++currentPage, searchTerm);
     }
   });

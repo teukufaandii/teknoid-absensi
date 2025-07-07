@@ -236,6 +236,13 @@ $routes->add('api_get_absensi', new Route('/api/users/get-absensi', [
         return new Response(ob_get_clean());
     }
 ]));
+$routes->add('api_get_marquee', new Route('/api/users/get-marquee', [
+    '_controller' => function () {
+        ob_start();
+        include __DIR__ . '/src/db/routes/marqueeAbsensi.php';
+        return new Response(ob_get_clean());
+    }
+]));
 $routes->add('api_generate_absensi_detail', new Route('/api/users/generate-absensi-details', [
     '_controller' => function () {
         include __DIR__ . '/src/db/routes/generateAbsenceDetails.php';

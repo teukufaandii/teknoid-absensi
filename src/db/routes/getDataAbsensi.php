@@ -3,7 +3,7 @@ include 'src/db/db_connect.php';
 
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $start = isset($_GET['start']) ? intval($_GET['start']) : 0;
-$limit = 5;
+$limit = 10;
 
 $query = "
     SELECT 

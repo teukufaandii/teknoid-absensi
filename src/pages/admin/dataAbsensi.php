@@ -98,8 +98,12 @@ $years = date('Y');
 
             <!-- Main Content -->
             <main class="flex-1 p-6 bg-mainBgColor mainContent">
-
-                <h1 class="text-lg sm:text-xl md:text-3xl border-b border-gray-500 py-2 font-Poppins font-semibold">Data Absensi <?php echo $months[$currentMonth]; ?> <?php echo $years; ?></h1>
+                <div class="flex justify-between border-b items-center border-gray-500">
+                    <h1 class="text-lg sm:text-xl md:text-3xl py-2 font-Poppins font-semibold">
+                        Data Absensi <?php echo $months[$currentMonth]; ?> <?php echo $years; ?>
+                    </h1>
+                    <div id="marquee-container"></div>
+                </div>
                 <div class="flex justify-between items-center mt-5">
                     <div class="flex justify-start items-center space-x-4">
                         <!-- Print Button -->
@@ -392,7 +396,23 @@ $years = date('Y');
             </div>
         </div>
     </div>
-    <script src="src/pages/admin/js/renderDataAbsensi.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "api/users/get-marquee",
+                method: "GET",
+                success: function(data) {
+                    console.log("DATA MARQUEE:", data);
+                    $("#marquee-container").html(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Gagal memuat marquee:", error);
+                }
+            });
+        });
+    </script>
+    <script src="src/pages/admin/js/renderDataAbsensi.js">
+    </script>
     <script src="src/pages/admin/js/generateDetailAbsensi.js"></script>
     <script src="src/pages/admin/js/popUpAbsensi.js"></script>
     <?php include('src/pages/navbar/profileInfo.php') ?>

@@ -4,7 +4,7 @@ include 'src/db/db_connect.php';
 // Ambil query pencarian dari GET request
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $start = isset($_GET['start']) ? intval($_GET['start']) : 0;
-$limit = 5;
+$limit = 10;
 
 // Query untuk pencarian, menggunakan LIKE untuk mencari kata kunci
 $query = "SELECT * FROM tb_pengguna WHERE nama LIKE ? OR noinduk LIKE ? OR role LIKE ? OR jabatan LIKE ? LIMIT ?, ?";

@@ -140,27 +140,7 @@ $years = date('Y');
                                 <i class="fa-solid fa-calendar-days"></i>
                                 <span>Harian</span>
                             </button>
-                            <!-- Mingguan Button with Date Range -->
-                            <div class="relative w-full">
-                                <button id="mingguanButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2"
-                                    onclick="toggleMingguan()">
-                                    <i class="fa-solid fa-calendar-week"></i>
-                                    <span>Mingguan</span>
-                                </button>
 
-                                <div id="mingguanDates" class="hidden mt-2 p-3 bg-white text-black rounded-lg shadow-lg flex flex-col space-y-3">
-                                    <label for="startMingguan" class="text-sm">Start Date:</label>
-                                    <input type="date" id="startMingguan" class="p-2 rounded border focus:ring focus:ring-purple-300">
-
-                                    <label for="endMingguan" class="text-sm">End Date:</label>
-                                    <input type="date" id="endMingguan" class="p-2 rounded border focus:ring focus:ring-purple-300">
-
-                                    <button id="downloadMingguan" class="mt-3 w-full bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition"
-                                        onclick="downloadMingguan()">
-                                        Download Mingguan
-                                    </button>
-                                </div>
-                            </div>
                             <!-- Bulanan Button with Date Range -->
                             <div class="relative w-full">
                                 <button id="bulananButton" class="w-full bg-purpleNavbar text-white px-4 py-3 rounded-lg hover:bg-purpleNavbarHover transition flex justify-center items-center space-x-2"

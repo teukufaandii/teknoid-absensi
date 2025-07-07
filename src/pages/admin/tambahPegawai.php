@@ -157,8 +157,8 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
               <div class="relative w-full">
                 <select name="lokasi_kampus" class="appearance-none w-full border-2 border-gray-200 px-4 py-2 rounded-lg focus:outline-none focus:border-purpleNavbar" required>
                   <option value="" hidden>Pilih Lokasi Kampus</option>
-                  <option value="Pimpinan">Ciputat</option>
-                  <option value="Dosen Struktural">Karawaci</option>
+                  <option value="Ciputat">Ciputat</option>
+                  <option value="Karawaci">Karawaci</option>
                 </select>
                 <div class="text-red-600 text-sm hidden error-message" id="error-lokasi_kampus">Lokasi kampus harus dipilih</div>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
@@ -179,7 +179,7 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
                   <option value="Dosen Tetap FEB">Dosen Tetap FEB</option>
                   <option value="Dosen Tetap FTD">Dosen Tetap FTD</option>
                   <option value="Karyawan">Karyawan</option>
-                  <option value="Customer Service">Customer Service</option>
+                  <option value="Cleaning Service">Cleaning Service</option>
                 </select>
                 <div class="text-red-600 text-sm hidden error-message" id="error-jabatan">Jabatan harus dipilih</div>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
@@ -375,4 +375,4 @@ $nomorKartu = isset($_GET['nomor_kartu']) ? htmlspecialchars($_GET['nomor_kartu'
   }
 </script>
 
-</html> 
+</html>

@@ -115,7 +115,7 @@ $id_pg = isset($_GET['id_pg']) ? htmlspecialchars($_GET['id_pg']) : null;
                 <option value="Dosen Tetap FEB">Dosen Tetap FEB</option>
                 <option value="Dosen Tetap FTD">Dosen Tetap FTD</option>
                 <option value="Karyawan">Karyawan</option>
-                <option value="Customer Service">Customer Service</option>
+                <option value="Cleaning Service">Cleaning Service</option>
               </select>
 
               <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">

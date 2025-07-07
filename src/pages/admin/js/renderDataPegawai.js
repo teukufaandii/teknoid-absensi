@@ -2,7 +2,7 @@ $(document).ready(function () {
   let currentPage = 0;
   let searchTerm = "";
   let totalDataPegawai = 0;
-  const dataPerPage = 5;
+  const dataPerPage = 10;
 
   function loadDataPegawai(page, search = "") {
     $("#loading").removeClass("hidden");

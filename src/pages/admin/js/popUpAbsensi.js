@@ -115,7 +115,6 @@ function closeNotificationPopup() {
   popup.classList.add("translate-x-[120%]", "opacity-0");
 }
 
-// Handle Harian filter for Dosen Tetap (Dummy API)
 function toggleHarian(jabatan) {
   if (jabatan === "dosenTetap") {
     window.location.href =

@@ -9,9 +9,15 @@ $nomor_kartu = $_GET['nomor_kartu'];
 // Menghapus data dari tabel temprfid
 mysqli_query($conn, "DELETE FROM temprfid");
 
-$current_time = date("H:i:s");
-$current_date = date("Y-m-d");
+//$current_time = date("H:i:s");
+// $current_date = date("Y-m-d");
 $current_day = date("l");
+
+//dummy data untuk testing
+$current_time = "17:00:00";
+$current_date = "2025-07-14";
+$current_day = date("l", strtotime($current_date));
+
 
 // Jika hari Minggu, tidak memproses absen
 if ($current_day == 'Sunday') {
@@ -81,10 +87,12 @@ if ($user_result && mysqli_num_rows($user_result) > 0) {
                     echo "Gagal saat memperbarui scan keluar: " . mysqli_error($conn);
                 }
             }
-        } else { //case jika tidak di generate apakah diperlukan? 
+        } //hapus bagian  ini jika tidak ingin menggunakan insert untuk scan masuk
+        else {                
+            $details_id = 'details_' . uniqid();
             $jam_kerja = 'Hari Kerja';
-            $insert_query = "INSERT INTO tb_detail(nomor_kartu, id_pg, scan_masuk, tanggal, jam_kerja, durasi, keterangan) 
-                            VALUES ('$nomor_kartu', '$id_pg', '$current_time', '$current_date', '$jam_kerja', NULL, 'hadir')";
+            $insert_query = "INSERT INTO tb_detail(id, nomor_kartu, id_pg, scan_masuk, tanggal, jam_kerja, durasi, keterangan) 
+                            VALUES ('$details_id','$nomor_kartu', '$id_pg', '$current_time', '$current_date', '$jam_kerja', NULL, 'hadir')";
             $insert_result = mysqli_query($conn, $insert_query);
 
             if ($insert_result) {
@@ -93,7 +101,10 @@ if ($user_result && mysqli_num_rows($user_result) > 0) {
                 echo "Gagal saat menyimpan waktu: " . mysqli_error($conn);
             }
         }
+        //sampai sini
 
+
+        
         //untuk pengaturan hari dosen struktural, karyawan, pimpinan, dan cs
     } elseif ($jabatan == 'Dosen Struktural' || $jabatan == 'Karyawan' || $jabatan == 'Pimpinan' || $jabatan == 'Cleaning Service') {
         $cut_off_time = "12:00:00";
@@ -169,10 +180,11 @@ if ($user_result && mysqli_num_rows($user_result) > 0) {
                     echo "Anda sudah scan masuk hari ini.";
                     exit;
                 }
-
+                //hapus bagian  ini jika tidak ingin menggunakan insert untuk scan masuk
+                $details_id = 'details_' . uniqid();
                 $jam_kerja = 'Hari Kerja';
-                $insert_query = "INSERT INTO tb_detail(nomor_kartu, id_pg, scan_masuk, tanggal, jam_kerja, durasi, keterangan) 
-                                    VALUES ('$nomor_kartu', '$id_pg', '$current_time', '$current_date', '$jam_kerja', NULL, 'hadir')";
+                $insert_query = "INSERT INTO tb_detail(id, nomor_kartu, id_pg, scan_masuk, tanggal, jam_kerja, durasi, keterangan) 
+                                    VALUES ('$details_id','$nomor_kartu', '$id_pg', '$current_time', '$current_date', '$jam_kerja', NULL, 'hadir')";
                 $insert_result = mysqli_query($conn, $insert_query);
 
                 if ($insert_result) {
@@ -180,10 +192,12 @@ if ($user_result && mysqli_num_rows($user_result) > 0) {
                 } else {
                     echo "Gagal saat menyimpan waktu: " . mysqli_error($conn);
                 }
+                //sampai sini 
             } else {
+                $details_id = 'details_' . uniqid();
                 $scan_keluar = $current_time;
-                $insert_query_keluar = "INSERT INTO tb_detail(nomor_kartu, id_pg, scan_masuk, tanggal, jam_kerja, durasi, keterangan) 
-                                            VALUES ('$nomor_kartu', '$id_pg', NULL, '$current_date', 'Hari Kerja', NULL, 'hadir')";
+                $insert_query_keluar = "INSERT INTO tb_detail(id, nomor_kartu, id_pg, scan_masuk, tanggal, jam_kerja, durasi, keterangan) 
+                                            VALUES ('$details_id','$nomor_kartu', '$id_pg', NULL, '$current_date', 'Hari Kerja', NULL, 'hadir')";
                 $update_query_keluar = "UPDATE tb_detail SET scan_keluar = '$scan_keluar' WHERE nomor_kartu = '$nomor_kartu' AND DATE(tanggal) = '$current_date'";
 
                 if (mysqli_query($conn, $insert_query_keluar) && mysqli_query($conn, $update_query_keluar)) {
